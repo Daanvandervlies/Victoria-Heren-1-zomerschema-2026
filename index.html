@@ -970,6 +970,26 @@ function downloadPDF(){
   doc.save('VIC_H1_Schema_'+nm.replace(/ /g,'_')+'.pdf');
 }
 
+function chkPW(){
+  var v=document.getElementById('pwi').value;
+  if(v==='VictoriaH1@2026'){
+    document.getElementById('pwpage').style.display='none';
+    document.getElementById('mainwrap').style.display='block';
+    try{localStorage.setItem('vich1_ok','1');}catch(e){}
+  } else {
+    document.getElementById('pwe').style.display='block';
+    document.getElementById('pwi').value='';
+  }
+}
+(function(){
+  try{
+    if(localStorage.getItem('vich1_ok')==='1'){
+      document.getElementById('pwpage').style.display='none';
+      document.getElementById('mainwrap').style.display='block';
+    }
+  }catch(e){}
+})();
+
 
 rsb(0);
 </script>

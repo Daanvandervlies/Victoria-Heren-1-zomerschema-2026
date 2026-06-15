@@ -955,16 +955,20 @@ function downloadPDF(){
   doc.text('% kracht = percentage van 1RM  |  Klachten? Neem contact op met Daan (fysiotherapeut)',M+3,y+17);
 
   // Footer
+  var appURL='https://daanvandervlies.github.io/Victoria-Heren-1-zomerschema-2026/';
   var nPages=doc.getNumberOfPages();
   for(var p=1;p<=nPages;p++){
     doc.setPage(p);
     doc.setFillColor(17,17,17);
-    doc.rect(0,289,W,8,'F');
+    doc.rect(0,286,W,11,'F');
     doc.setTextColor(100,100,100);
     doc.setFont('helvetica','normal');
     doc.setFontSize(6.5);
-    doc.text('Victoria Heren 1  ·  Zomerschema 2026  ·  Eleven Rotterdam',M,294);
-    doc.text(p+' / '+nPages,W-M,294,{align:'right'});
+    doc.text('Victoria Heren 1  ·  Zomerschema 2026  ·  Eleven Rotterdam',M,291);
+    doc.setTextColor(244,99,58);
+    doc.textWithLink('Volledig schema: '+appURL,M,295,{url:appURL});
+    doc.setTextColor(100,100,100);
+    doc.text(p+' / '+nPages,W-M,291,{align:'right'});
   }
 
   doc.save('VIC_H1_Schema_'+nm.replace(/ /g,'_')+'.pdf');

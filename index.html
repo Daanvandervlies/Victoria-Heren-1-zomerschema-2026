@@ -110,6 +110,15 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
 </style>
 </head>
 <body>
+<div class="pws" id="pws">
+  <div class="pwb">
+    <div class="pwt">Victoria Heren 1</div>
+    <div class="pws2">Zomerschema 2026 &middot; Eleven Rotterdam</div>
+    <input class="pwi" id="pwi" type="password" placeholder="Wachtwoord" maxlength="30" onkeydown="if(event.key==='Enter')chkPW()">
+    <button class="pwbtn" type="button" onclick="chkPW()">Inloggen</button>
+    <div class="pwe" id="pwe">Onbekend wachtwoord. Vraag het na bij Daan.</div>
+  </div>
+</div>
 <div class="wrap">
 
 <div class="hdr">
@@ -955,6 +964,19 @@ function downloadPDF(){
 
   doc.save('VIC_H1_Schema_'+nm.replace(/ /g,'_')+'.pdf');
 }
+
+function chkPW(){
+  var v=document.getElementById('pwi').value;
+  if(v==='VictoriaH1@2026'){
+    document.getElementById('pws').style.display='none';
+    try{localStorage.setItem('vich1_auth','1');}catch(e){}
+  } else {
+    document.getElementById('pwe').style.display='block';
+    document.getElementById('pwi').value='';
+  }
+}
+try{if(localStorage.getItem('vich1_auth')==='1'){document.getElementById('pws').style.display='none';}}catch(e){}
+
 
 rsb(0);
 </script>

@@ -2,13 +2,15 @@
 <html lang="nl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
 <title>Victoria H1 — Zomerschema 2026</title>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-height:100vh;padding:1rem}
+body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-height:100vh;padding:1rem;-webkit-text-size-adjust:100%}
+* {-webkit-tap-highlight-color:transparent;touch-action:manipulation}
 .wrap{max-width:640px;margin:0 auto}
 .hdr{background:#111;border-radius:12px;padding:.875rem 1.125rem;margin-bottom:.75rem;display:flex;align-items:center;gap:12px;border:1px solid #1f1f1f}
 .hic{width:38px;height:38px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid #2a2a2a;overflow:hidden}
@@ -21,23 +23,23 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
 .step.active{background:#F4633A;color:#fff;border-color:#F4633A}
 .step.done{color:#F4633A;border-color:#F4633A44;cursor:pointer}
 .step.done:hover{background:#F4633A15}
-.pane{display:none}.pane.show{display:block}
+.pane{display:none!important}.pane.show{display:block!important}
 .card{background:#111;border:1px solid #1f1f1f;border-radius:12px;padding:.875rem 1.125rem;margin-bottom:.75rem}
 .card-title{font-size:11px;font-weight:600;color:#F4633A;text-transform:uppercase;letter-spacing:.6px;margin-bottom:.625rem}
 .fl{margin-bottom:.625rem}
 .fl label{display:block;font-size:10px;color:#aaa;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
-.fi{width:100%;padding:8px 10px;border:1px solid #2a2a2a;border-radius:8px;background:#1a1a1a;color:#e8e8e8;font-size:12px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .15s}
+.fi{width:100%;padding:10px 10px;border:1px solid #2a2a2a;border-radius:8px;background:#1a1a1a;color:#e8e8e8;font-size:16px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .15s;-webkit-appearance:none;appearance:none}
 .fi:focus{border-color:#F4633A}
 .g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
 .chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
 .chip{padding:5px 13px;border-radius:16px;font-size:11px;cursor:pointer;color:#999;background:#1a1a1a;border:1px solid #2a2a2a;user-select:none;transition:all .12s}
 .chip:hover{border-color:#F4633A;color:#F4633A}
 .chip.on{background:#F4633A;color:#fff;border-color:#F4633A}
-.btn{background:#F4633A;color:#fff;border:none;border-radius:8px;padding:9px 20px;font-size:12px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s}
+.btn{background:#F4633A;color:#fff;border:none;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;min-height:44px;-webkit-appearance:none}
 .btn:hover{background:#d94f28}
-.btn2{background:transparent;color:#666;border:1px solid #2a2a2a;border-radius:8px;padding:8px 16px;font-size:12px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s}
+.btn2{background:transparent;color:#666;border:1px solid #2a2a2a;border-radius:8px;padding:11px 16px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;min-height:44px;-webkit-appearance:none}
 .btn2:hover{color:#e8e8e8;border-color:#444}
-.brow{display:flex;gap:8px;margin-top:.625rem}
+.brow{display:flex;gap:8px;margin-top:.625rem;position:relative;z-index:1}
 .tip{font-size:11px;color:#bbb;background:#1a1a1a;border-radius:8px;padding:9px 11px;border-left:3px solid #F4633A;margin-bottom:.75rem;line-height:1.6}
 /* Week tabs */
 .wtabs{display:flex;flex-direction:row;gap:4px;margin-bottom:.875rem;width:100%}
@@ -53,7 +55,7 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
 .dayrow{display:grid;grid-template-columns:32px 1fr;border-top:1px solid #1f1f1f}
 .dayrow:first-child{border-top:none}
 .daylbl{padding:7px 4px;font-size:9px;color:#aaa;text-transform:uppercase;font-weight:600;background:#151515;border-right:1px solid #1f1f1f;display:flex;align-items:center;justify-content:center;letter-spacing:.3px}
-.daycont{padding:9px 12px;cursor:pointer;transition:background .1s;position:relative;padding-right:32px;border-left:2px solid transparent}
+.daycont{padding:12px 12px;cursor:pointer;transition:background .1s;position:relative;padding-right:32px;border-left:2px solid transparent;min-height:44px}
 .daycont:hover{background:#161616}
 .daycont::after{content:'›';position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:18px;color:#333;font-weight:300}
 .daycont.rest{cursor:default;padding-right:12px}
@@ -107,10 +109,26 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
 .done-btn{display:inline-block;padding:5px 14px;border-radius:8px;font-size:11px;cursor:pointer;border:1px solid #2a2a2a;background:#1a1a1a;color:#999;user-select:none;transition:all .1s;font-family:'DM Sans',sans-serif}
 .done-btn:hover{border-color:#27AE60;color:#27AE60}
 .done-btn.done{background:#27AE6020;border-color:#27AE6060;color:#27AE60}
+#pwpage{min-height:100vh;background:#0a0a0a;display:flex;align-items:center;justify-content:center;padding:1rem}
+#mainwrap{display:none}
 </style>
 </head>
 <body>
-<div class="wrap" id="mainwrap" style="display:none">
+<div id="pwpage">
+  <div style="background:#111;border:1px solid #222;border-radius:14px;padding:2rem 1.5rem;max-width:300px;width:100%;text-align:center;box-sizing:border-box">
+    <img src="data:image/png;base64,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" alt="Victoria" style="width:90px;height:auto;object-fit:contain;margin:0 auto 1.25rem;display:block">
+    <div style="font-size:18px;font-weight:700;color:#F4633A;margin-bottom:4px;font-family:sans-serif">Victoria Heren 1</div>
+    <div style="font-size:12px;color:#555;margin-bottom:24px;font-family:sans-serif">Zomerschema 2026 &nbsp;&middot;&nbsp; Eleven Rotterdam</div>
+    <input id="pwi" type="password" placeholder="Wachtwoord" maxlength="30"
+      onkeydown="if(event.key==='Enter')chkPW()"
+      style="width:100%;padding:12px;border:1px solid #2a2a2a;border-radius:8px;background:#1a1a1a;color:#e8e8e8;font-size:16px;outline:none;font-family:sans-serif;text-align:center;letter-spacing:2px;margin-bottom:12px;box-sizing:border-box">
+    <button type="button" onclick="chkPW()"
+      style="width:100%;background:#F4633A;color:#fff;border:none;border-radius:8px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;font-family:sans-serif;box-sizing:border-box">Inloggen</button>
+    <div id="pwe" style="font-size:11px;color:#E24B4A;margin-top:10px;display:none;font-family:sans-serif">Onbekend wachtwoord. Vraag het na bij Daan.</div>
+  </div>
+</div>
+<div id="mainwrap">
+<div class="wrap">
 
 <div class="hdr">
   <div class="hic"><img src="data:image/png;base64,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" alt="Victoria logo"></div>
@@ -130,10 +148,10 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
     <div class="g2">
       <div class="fl"><label>Geboortedatum</label><input class="fi" type="date" oninput="D.gbd=this.value"></div>
       <div class="fl"><label>Positie</label><div class="chips" id="CP">
-        <div class="chip" onclick="p1('pos','Aanvaller')">Aanvaller</div>
-        <div class="chip" onclick="p1('pos','Middenvelder')">Middenvelder</div>
-        <div class="chip" onclick="p1('pos','Verdediger')">Verdediger</div>
-        <div class="chip" onclick="p1('pos','Keeper')">Keeper</div>
+        <button class="chip" onclick="p1('pos','Aanvaller')">Aanvaller</button>
+        <button class="chip" onclick="p1('pos','Middenvelder')">Middenvelder</button>
+        <button class="chip" onclick="p1('pos','Verdediger')">Verdediger</button>
+        <button class="chip" onclick="p1('pos','Keeper')">Keeper</button>
       </div></div>
     </div>
     <div class="g2">
@@ -142,46 +160,46 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
     </div>
     <div class="fl"><label>Rusthartslag (spm) — voor nauwkeurige hartslagzones</label><input class="fi" type="number" placeholder="60" oninput="D.rust=this.value"></div>
   </div>
-  <div class="brow"><button class="btn" onclick="go(1)">Volgende →</button></div>
+  <div class="brow"><button type="button" ontouchstart="" class="btn" onclick="go(1)">Volgende →</button></div>
 </div>
 
 <!-- STAP 1: ACHTERGROND -->
 <div id="P1" class="pane">
   <div class="card"><div class="card-title">Achtergrond</div>
     <div class="fl"><label>Vorig seizoen gespeeld bij</label><div class="chips" id="CVS">
-      <div class="chip" onclick="p1('vs','Hoofdklasse')">Hoofdklasse</div>
-      <div class="chip" onclick="p1('vs','Promotieklasse')">Promotieklasse</div>
-      <div class="chip" onclick="p1('vs','JO19')">JO19</div>
-      <div class="chip" onclick="p1('vs','Pauze')">Pauze</div>
-      <div class="chip" onclick="p1('vs','Overig')">Overig</div>
+      <button class="chip" onclick="p1('vs','Hoofdklasse')">Hoofdklasse</button>
+      <button class="chip" onclick="p1('vs','Promotieklasse')">Promotieklasse</button>
+      <button class="chip" onclick="p1('vs','JO19')">JO19</button>
+      <button class="chip" onclick="p1('vs','Pauze')">Pauze</button>
+      <button class="chip" onclick="p1('vs','Overig')">Overig</button>
     </div>
     <div id="VS_overig" style="display:none;margin-top:6px">
       <input class="fi" placeholder="Licht toe..." oninput="D.vs_overig=this.value">
     </div></div>
     <div class="fl"><label>Krachtervarng</label><div class="chips" id="CK">
-      <div class="chip" onclick="p1('kra','Beginner')">Beginner</div>
-      <div class="chip" onclick="p1('kra','Gemiddeld')">Gemiddeld</div>
-      <div class="chip" onclick="p1('kra','Gevorderd')">Gevorderd</div>
+      <button class="chip" onclick="p1('kra','Beginner')">Beginner</button>
+      <button class="chip" onclick="p1('kra','Gemiddeld')">Gemiddeld</button>
+      <button class="chip" onclick="p1('kra','Gevorderd')">Gevorderd</button>
     </div>
     <div id="beginner-warn" style="display:none;margin-top:6px;background:#F4633A12;border-left:3px solid #F4633A;padding:7px 10px;border-radius:0 7px 7px 0;font-size:11px;color:#e8e8e8;line-height:1.6">
       Wij adviseren je contact op te nemen met Daan voordat je start met de krachttrainingen. Hij helpt je op weg met de techniek.
     </div></div>
     <div class="fl"><label>Trainingsdoel</label><div class="chips" id="CD">
-      <div class="chip" onclick="pm('doe','Conditie')">Conditie</div>
-      <div class="chip" onclick="pm('doe','Kracht')">Kracht</div>
-      <div class="chip" onclick="pm('doe','Snelheid')">Snelheid</div>
-      <div class="chip" onclick="pm('doe','Explosiviteit')">Explosiviteit</div>
+      <button class="chip" onclick="pm('doe','Conditie')">Conditie</button>
+      <button class="chip" onclick="pm('doe','Kracht')">Kracht</button>
+      <button class="chip" onclick="pm('doe','Snelheid')">Snelheid</button>
+      <button class="chip" onclick="pm('doe','Explosiviteit')">Explosiviteit</button>
     </div></div>
   </div>
-  <div class="brow"><button class="btn2" onclick="go(0)">← Terug</button><button class="btn" onclick="go(2)">Volgende →</button></div>
+  <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(0)">← Terug</button><button type="button" ontouchstart="" class="btn" onclick="go(2)">Volgende →</button></div>
 </div>
 
 <!-- STAP 2: BLESSURES -->
 <div id="P2" class="pane">
   <div class="card"><div class="card-title">Blessurehistorie</div>
     <div class="fl"><label>Heb je op dit moment klachten?</label><div class="chips" id="CN">
-      <div class="chip" onclick="setNu('j')">Ja</div>
-      <div class="chip" onclick="setNu('n')">Nee</div>
+      <button class="chip" onclick="setNu('j')">Ja</button>
+      <button class="chip" onclick="setNu('n')">Nee</button>
     </div></div>
     <div id="klacht-warn" style="display:none;margin-top:6px;background:#F4633A12;border-left:3px solid #F4633A;padding:7px 10px;border-radius:0 7px 7px 0;font-size:11px;color:#e8e8e8;line-height:1.6">
       Neem contact op met Daan (fysiotherapeut) voordat je start met trainen. Hij beoordeelt of het veilig is om het schema te volgen.
@@ -189,33 +207,33 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
     <div id="NB" style="display:none" class="fl">
       <label>Welke regio?</label>
       <div class="chips" id="CKN">
-        <div class="chip" onclick="pm('kln','Hamstring')">Hamstring</div>
-        <div class="chip" onclick="pm('kln','Knie')">Knie</div>
-        <div class="chip" onclick="pm('kln','Enkel')">Enkel</div>
-        <div class="chip" onclick="pm('kln','Lies')">Lies</div>
-        <div class="chip" onclick="pm('kln','Lage rug')">Lage rug</div>
-        <div class="chip" onclick="pm('kln','Bovenrug')">Bovenrug</div>
-        <div class="chip" onclick="pm('kln','Schouder')">Schouder</div>
+        <button class="chip" onclick="pm('kln','Hamstring')">Hamstring</button>
+        <button class="chip" onclick="pm('kln','Knie')">Knie</button>
+        <button class="chip" onclick="pm('kln','Enkel')">Enkel</button>
+        <button class="chip" onclick="pm('kln','Lies')">Lies</button>
+        <button class="chip" onclick="pm('kln','Lage rug')">Lage rug</button>
+        <button class="chip" onclick="pm('kln','Bovenrug')">Bovenrug</button>
+        <button class="chip" onclick="pm('kln','Schouder')">Schouder</button>
       </div>
     </div>
     <div class="fl" style="margin-top:8px">
       <label>Regelmatig terugkerende blessures <span style="font-size:9px;color:#555">(meerdere mogelijk)</span></label>
       <div class="chips" id="CH">
-        <div class="chip" onclick="pm('his','Hamstring')">Hamstring</div>
-        <div class="chip" onclick="pm('his','Knie')">Knie</div>
-        <div class="chip" onclick="pm('his','Enkel')">Enkel</div>
-        <div class="chip" onclick="pm('his','Lies')">Lies</div>
-        <div class="chip" onclick="pm('his','Lage rug')">Lage rug</div>
-        <div class="chip" onclick="pm('his','Bovenrug')">Bovenrug</div>
-        <div class="chip" onclick="pm('his','Schouder')">Schouder</div>
-        <div class="chip" onclick="p1H()">Geen</div>
+        <button class="chip" onclick="pm('his','Hamstring')">Hamstring</button>
+        <button class="chip" onclick="pm('his','Knie')">Knie</button>
+        <button class="chip" onclick="pm('his','Enkel')">Enkel</button>
+        <button class="chip" onclick="pm('his','Lies')">Lies</button>
+        <button class="chip" onclick="pm('his','Lage rug')">Lage rug</button>
+        <button class="chip" onclick="pm('his','Bovenrug')">Bovenrug</button>
+        <button class="chip" onclick="pm('his','Schouder')">Schouder</button>
+        <button class="chip" onclick="p1H()">Geen</button>
       </div>
     </div>
     <div class="fl" style="margin-top:8px"><label>Aanvullende toelichting (optioneel)</label>
       <textarea class="fi" rows="2" placeholder="Bijv. linker knie, 2 maanden geleden..." oninput="D.not=this.value" style="resize:vertical"></textarea>
     </div>
   </div>
-  <div class="brow"><button class="btn2" onclick="go(1)">← Terug</button><button class="btn" onclick="go(3)">Volgende →</button></div>
+  <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(1)">← Terug</button><button type="button" ontouchstart="" class="btn" onclick="go(3)">Volgende →</button></div>
 </div>
 
 <!-- STAP 3: TESTWAARDEN -->
@@ -225,7 +243,7 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
     Het gewicht dat je maximaal ~10 keer kunt uitvoeren met goede techniek — niet 15×, niet 6×. Gebruik het gewicht dat je de afgelopen weken voor een zwaar setje van ~10 reps gebruikte. Laat leeg als je de oefening niet hebt getest.</div>
     <div id="RF"></div>
   </div>
-  <div class="brow"><button class="btn2" onclick="go(2)">← Terug</button><button class="btn" onclick="go(4)">Genereer schema →</button></div>
+  <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(2)">← Terug</button><button type="button" class="btn" onclick="go(4)">Genereer schema →</button></div>
 </div>
 
 <!-- STAP 4: SCHEMA -->
@@ -236,7 +254,7 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
 <!-- MODAL -->
 <div id="MO" class="modal">
   <div class="mbox">
-    <div class="mhead"><div class="mtitle" id="MT"></div><button class="mclose" onclick="cM()">×</button></div>
+    <div class="mhead"><div class="mtitle" id="MT"></div><button type="button" class="mclose" onclick="cM()">×</button></div>
     <div id="MC"></div>
   </div>
 </div>
@@ -366,7 +384,7 @@ function bSch(){
         <div class="dayrow"><div class="daylbl" style="color:#378ADD">Zo</div><div class="daycont" onclick="oM('hi',${wk})"><span class="dtag th">HIIT</span><div class="dsub">3×6 sprints van ${hS}s · 100% effort · 30s rust</div></div></div>
       </div>
     </div>
-    <div class="brow"><button class="btn2" onclick="go(3)">← Aanpassen</button><button type="button" onclick="downloadPDF()" style="background:#111;border:1.5px solid #F4633A;color:#F4633A;padding:9px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-family:DM Sans,sans-serif;margin-left:8px">&#11015; Download PDF</button></div><div style="font-size:11px;color:#555;margin-top:8px">Wil je de details van een training bekijken? Klik op een sessie hierboven om het volledige schema te openen.</div>`;
+    <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(3)">← Aanpassen</button><button type=\"button\" onclick=\"downloadPDF()\" style=\"background:#111;border:1.5px solid #F4633A;color:#F4633A;margin-left:8px\">&#11015; Download schema</button></div>`;
 }
 
 function oM(tp,wk){
@@ -424,7 +442,7 @@ function bSchKeeper(nm,leef,wk,WT,WC){
         <div class="dayrow"><div class="daylbl">Zo</div><div class="daycont rest"><span class="dtag tr">${t('rust_dag')}</span></div></div>
       </div>
     </div>
-    <div class="brow"><button class="btn2" onclick="go(3)">← Aanpassen</button><button type="button" onclick="downloadPDF()" style="background:#111;border:1.5px solid #F4633A;color:#F4633A;padding:9px 16px;border-radius:8px;font-size:12px;cursor:pointer;font-family:DM Sans,sans-serif;margin-left:8px">&#11015; Download PDF</button></div><div style="font-size:11px;color:#555;margin-top:8px">Wil je de details van een training bekijken? Klik op een sessie hierboven om het volledige schema te openen.</div>`;
+    <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(3)">← Aanpassen</button><button type=\"button\" onclick=\"downloadPDF()\" style=\"background:#111;border:1.5px solid #F4633A;color:#F4633A;margin-left:8px\">&#11015; Download schema</button></div>`;
 }
 
 function mKA_keeper(b,wk,p){
@@ -614,372 +632,307 @@ function sDn(k){D['dn_'+k]=!D['dn_'+k];const[t,w]=k.split('_');oM(t,parseInt(w))
 function cM(){document.getElementById('MO').className='modal';}
 
 function downloadPDF(){
-  if(!window.jspdf){alert('PDF bibliotheek laadt nog, probeer opnieuw.');return;}
-  var jsPDF=window.jspdf.jsPDF;
-  var doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
-  var nm=D.naam||'Speler';
-  var pos=D.pos||'Middenvelder';
-  var leef=D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):25;
-  var isK=pos==='Keeper';
-  var WT=['Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht','Verplicht'];
-  var bl_set=new Set([].concat(D.kln||[]).concat(D.his||[]));
-  var W=210,M=14;
-  var y=0;
+  const {jsPDF} = window.jspdf;
+  const doc = new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  const nm = D.naam||'Speler';
+  const pos = D.pos||'Middenvelder';
+  const leef = D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):25;
+  const isK = pos==='Keeper';
+  const WP=[55,60,65,70,72,58];
+  const WT=['Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht','Verplicht'];
+  const bl_set = new Set([...(D.kln||[]),...(D.his||[])]);
 
-  function newPage(){doc.addPage();y=0;}
-  function check(n){if(y+n>282)newPage();}
+  // Colors
+  const ORG=[244,99,58], BLU=[55,138,221], DRK=[17,17,17], GRY=[180,180,180], LGT=[230,230,230];
+  const W=210, M=14;
+  let y=15;
 
-  function secHeader(txt,r,g,b){
-    check(10);
-    doc.setFillColor(r,g,b);
-    doc.rect(M,y,W-M*2,8,'F');
-    doc.setTextColor(255,255,255);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(9);
-    doc.text(txt,M+3,y+5.5);
-    y+=10;
-  }
+  function pageCheck(needed){if(y+needed>280){doc.addPage();y=15;}}
 
-  function exRow(num,naam,sets){
-    check(8);
-    if(num%2===0){doc.setFillColor(248,248,248);}else{doc.setFillColor(255,255,255);}
-    doc.rect(M,y,W-M*2,7,'F');
-    doc.setTextColor(80,80,80);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8);
-    doc.text(String(num),M+2,y+5);
-    doc.setFont('helvetica','normal');
-    doc.setTextColor(20,20,20);
-    doc.text(naam,M+9,y+5);
-    doc.setTextColor(244,99,58);
-    doc.setFont('helvetica','bold');
-    doc.text(sets,W-M-2,y+5,{align:'right'});
-    y+=7.5;
-  }
-
-  function extraRow(naam,sets){
-    check(7);
-    doc.setFillColor(245,240,255);
-    doc.rect(M,y,W-M*2,6.5,'F');
-    doc.setTextColor(140,100,180);
-    doc.setFont('helvetica','normal');
-    doc.setFontSize(7.5);
-    doc.text('+ '+naam,M+9,y+4.5);
-    doc.setFont('helvetica','bold');
-    doc.text(sets,W-M-2,y+4.5,{align:'right'});
-    y+=7;
-  }
-
-  function loopSection(title,lines){
-    var needed=10+lines.length*7;
-    check(needed);
-    doc.setFillColor(235,243,255);
-    doc.rect(M,y,W-M*2,8,'F');
-    doc.setTextColor(55,138,221);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(9);
-    doc.text(title,M+3,y+5.5);
-    y+=9;
-    for(var i=0;i<lines.length;i++){
-      doc.setFillColor(i%2===0?252:255,i%2===0?252:255,i%2===0?252:255);
-      doc.rect(M,y,W-M*2,6.5,'F');
-      doc.setTextColor(50,50,50);
-      doc.setFont('helvetica','normal');
-      doc.setFontSize(8);
-      doc.text(lines[i],M+5,y+4.5);
-      y+=7;
-    }
-    y+=3;
-  }
-
-  // ═══════════════════════════════════════
-  // PAGINA 1 — SCHEMA
-  // ═══════════════════════════════════════
-  doc.setFillColor(17,17,17);
-  doc.rect(0,0,W,26,'F');
+  // Header
+  doc.setFillColor(...DRK);
+  doc.rect(0,0,W,28,'F');
   doc.setTextColor(244,99,58);
   doc.setFont('helvetica','bold');
-  doc.setFontSize(14);
-  doc.text('Victoria Heren 1 — Zomerschema 2026',M,11);
-  doc.setTextColor(200,200,200);
+  doc.setFontSize(16);
+  doc.text('Victoria Heren 1 — Zomerschema 2026',M,12);
+  doc.setTextColor(...LGT);
   doc.setFont('helvetica','normal');
-  doc.setFontSize(8.5);
-  doc.text(nm+'  ·  '+pos+'  ·  '+leef+' jaar  ·  23 juni – 3 augustus',M,19);
-  y=32;
+  doc.setFontSize(9);
+  doc.text(`${nm}  ·  ${pos}  ·  ${leef} jaar  ·  23 juni – 3 augustus`,M,20);
+  y=36;
 
-  // Weekschema
-  secHeader('WEEKSCHEMA',30,30,30);
-  var dagL=['Ma','Di','Wo','Do','Vr','Za','Zo'];
-  var sessV=['Kracht A','Duurtraining','Rust','Kracht B','Loopintervaltraining','Rust','HIIT'];
-  var sessK=['Kracht A','Mobiliteit','Rust','Kracht B','Rust','Loopinterval','Rust'];
-  var sess=isK?sessK:sessV;
-  var tagR={'Kracht A':244,'Kracht B':244,'Duurtraining':55,'Loopintervaltraining':55,'Loopinterval':55,'HIIT':55,'Mobiliteit':55,'Rust':200};
-  var tagG={'Kracht A':99,'Kracht B':99,'Duurtraining':138,'Loopintervaltraining':138,'Loopinterval':138,'HIIT':138,'Mobiliteit':138,'Rust':200};
-  var tagB={'Kracht A':58,'Kracht B':58,'Duurtraining':221,'Loopintervaltraining':221,'Loopinterval':221,'HIIT':221,'Mobiliteit':221,'Rust':200};
+  // --- WEEKOVERZICHT ---
+  doc.setFillColor(30,30,30);
+  doc.rect(M,y,W-M*2,7,'F');
+  doc.setTextColor(...ORG);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.text('WEEKOVERZICHT',M+2,y+5);
+  y+=10;
 
-  for(var i=0;i<7;i++){
-    check(9);
-    var isRust=sess[i]==='Rust';
-    doc.setFillColor(isRust?245:250,isRust?245:250,isRust?245:255);
-    doc.rect(M,y,W-M*2,8,'F');
-    doc.setFillColor(tagR[sess[i]]||200,tagG[sess[i]]||200,tagB[sess[i]]||200);
-    doc.rect(M,y,3,8,'F');
-    doc.setTextColor(80,80,80);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8.5);
-    doc.text(dagL[i],M+5,y+5.5);
-    doc.setFont('helvetica','normal');
-    doc.setTextColor(20,20,20);
-    doc.text(sess[i],M+18,y+5.5);
-    y+=9;
-  }
-  y+=5;
+  const dagK=['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  const sessVeld=['Kracht A','Duurtraining','Rust','Kracht B','Loopintervaltraining','Rust','HIIT'];
+  const sessKeep=['Kracht A','Mobiliteit','Rust','Kracht B','Rust','Loopinterval','Rust'];
+  const sess = isK?sessKeep:sessVeld;
+  const typeClr={
+    'Kracht A':ORG,'Kracht B':ORG,
+    'Duurtraining':BLU,'Loopintervaltraining':BLU,'Loopinterval':BLU,'HIIT':BLU,'Mobiliteit':BLU,
+    'Rust':GRY
+  };
 
-  // Kracht A
-  var squat=bl_set.has('Knie')?'Goblet squat':'Back squat + miniband';
-  var oefsA=isK
-    ?[['Hang high pull','3×6 · 60-90s rust'],['Goblet squat','3×8'],['Nordic hamstring curl','3×5 excentrisch'],['Hamstring catch','3×6/been'],['Lateral bounds','3×8/kant'],['Single leg RDL','3×10/been'],['Copenhagen plank','3×20-30s']]
-    :[[squat==='Goblet squat'?'Goblet squat':'Hang high pull','3×6 · 60-90s rust'],[squat,'3×8'],['Romanian deadlift','3×8'],['Lunge snapdown + sprong','3×8'],['Reverse lunge hiplock','3×12'],['Pogojumps','3×20']];
-  // correct: first item should always be hang high pull
-  if(!isK){
-    oefsA[0]=['Hang high pull','3×6 · 60-90s rust'];
-    oefsA[1]=[squat,'3×8'];
-  }
-
-  secHeader(isK?'KRACHT A — KEEPER':'KRACHT A — ONDERLICHAAM + EXPLOSIEF',244,99,58);
-  for(var i=0;i<oefsA.length;i++){exRow(i+1,oefsA[i][0],oefsA[i][1]);}
-
-  var extrasA=[];
-  if(bl_set.has('Lies')){extrasA.push(['Copenhagen plank','3×20-30s'],['Dead bug','3×10/kant']);}
-  if(bl_set.has('Knie')){extrasA.push(['TKE band','3×15/been'],['Step downs','3×10/been']);}
-  if(bl_set.has('Lage rug')){extrasA.push(['Bekkenkantelingen ruglig','3×30s'],['Dead bug','3×30s']);}
-  if(bl_set.has('Bovenrug')){extrasA.push(['Bird dog','3×10/kant'],['Prone Y-T-W','3×10']);}
-  if(bl_set.has('Schouder')){extrasA.push(['Ext. rotatie band','3×15/arm'],['Shoulder taps','3×10/kant']);}
-  if(bl_set.has('Hamstring')){extrasA.push(['Nordic hamstring curl','3×5'],['Single leg RDL','3×10/been']);}
-  if(bl_set.has('Enkel')){extrasA.push(['Calf raises SL','3×15/been'],['Band eversie/inversie','3×15/kant']);}
-  if(extrasA.length>0){
-    check(8);
-    doc.setFillColor(235,225,255);
-    doc.rect(M,y,W-M*2,7,'F');
-    doc.setTextColor(120,80,180);
+  for(let i=0;i<7;i++){
+    const isRust=sess[i]==='Rust';
+    doc.setFillColor(isRust?20:25,isRust?20:25,isRust?20:25);
+    doc.rect(M,y,W-M*2,7,isRust?'F':'F');
+    doc.setTextColor(...(typeClr[sess[i]]||GRY));
     doc.setFont('helvetica','bold');
     doc.setFontSize(8);
-    doc.text('PERSOONLIJK EXTRA BLOK — blessurehistorie',M+3,y+5);
+    doc.text(dagK[i],M+2,y+5);
+    doc.setFont('helvetica','normal');
+    doc.text(sess[i],M+14,y+5);
     y+=8;
-    for(var i=0;i<extrasA.length;i++){extraRow(extrasA[i][0],extrasA[i][1]);}
   }
   y+=4;
 
-  // Kracht B
-  check(20);
-  var oefsB=isK
+  // --- 6 WEKEN TABEL ---
+  pageCheck(50);
+  doc.setFillColor(30,30,30);
+  doc.rect(M,y,W-M*2,7,'F');
+  doc.setTextColor(...ORG);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.text('6-WEKEN PROGRESSIE',M+2,y+5);
+  y+=10;
+
+  for(let wk=0;wk<6;wk++){
+    pageCheck(16);
+    const hard=(wk>=4)||(pos==='Aanvaller'&&wk>=3);
+    const vF=wk>=3;
+    let vR=vF?12:21;
+    if(!vF&&pos==='Aanvaller')vR=24;
+    if(!vF&&pos==='Verdediger')vR=18;
+    const hS=wk<=1?4:wk<=3?5:6;
+
+    doc.setFillColor(35,35,35);
+    doc.rect(M,y,W-M*2,6,'F');
+    doc.setTextColor(...ORG);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.text(`Week ${wk+1}  —  ${WT[wk]}`,M+2,y+4.5);
+    y+=7;
+
+    if(isK){
+      const sprintM=wk<=1?10:wk<=2?12:15;
+      const blokken=wk<=1?2:3;
+      const sprintN=wk>=4?8:6;
+      const shuffleN=wk>=3?8:6;
+      const rpe=wk===0?6:wk<=1?7:wk<=2?7:wk===3?8:9;
+      doc.setTextColor(...LGT);doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+      doc.text(`Ma: Kracht A keeper  |  Di: Mobiliteit  |  Do: Kracht B keeper  |  Za: Loopinterval  (RPE ${rpe})`,M+2,y+3.5);
+      y+=5;
+      doc.setTextColor(...GRY);doc.setFontSize(7);
+      doc.text(`Loop: ${blokken}× blok — ${sprintN}× sprint ${sprintM}m + ${shuffleN}× shuffle 5m · 30s rust`,M+4,y+3);
+      y+=5;
+    } else {
+      const eT=hard?'6×[2,5min@70%·1min@80%·30s@90%·herstel]':'6×[2,5min@70%·1,5min@80%·herstel]';
+      const vT=vF?`${vR}×60s/30s · 3 blokken`:`${vR}×40s/20s · 3 blokken`;
+      doc.setTextColor(...LGT);doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+      doc.text(`Ma: Kracht A  |  Di: Duurtraining  |  Do: Kracht B  |  Vr: Loopinterval  |  Zo: HIIT (${hS}s sprints)`,M+2,y+3.5);
+      y+=5;
+      doc.setTextColor(...GRY);doc.setFontSize(7);
+      doc.text(`Duur: ${eT}  |  Interval: ${vT}`,M+4,y+3);
+      y+=5;
+    }
+    y+=2;
+  }
+  y+=4;
+
+  // --- KRACHT A ---
+  pageCheck(20);
+  doc.setFillColor(30,30,30);
+  doc.rect(M,y,W-M*2,7,'F');
+  doc.setTextColor(...ORG);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.text(isK?'KRACHT A — KEEPER':'KRACHT A — ONDERLICHAAM + EXPLOSIEF',M+2,y+5);
+  y+=10;
+
+  const oefsA = isK
+    ?[['Hang high pull','3×6 · 60-90s rust'],['Goblet squat','3×8'],['Nordic hamstring curl','3×5 eccentrisch'],['Hamstring catch','3×6/been'],['Lateral bounds','3×8/kant'],['Single leg RDL','3×10/been'],['Copenhagen plank','3×20-30s']]
+    :[['Hang high pull','3×6 · 60-90s rust'],[(bl_set.has('Knie')?'Goblet squat':'Back squat + miniband'),'3×8'],['Romanian deadlift','3×8'],['Lunge snapdown + sprong','3×8'],['Reverse lunge hiplock','3×12'],['Pogojumps','3×20']];
+
+  oefsA.forEach(([nm2,s])=>{
+    pageCheck(7);
+    doc.setTextColor(...LGT);doc.setFont('helvetica','bold');doc.setFontSize(8);
+    doc.text('·',M+2,y+3.5);
+    doc.setFont('helvetica','normal');
+    doc.text(nm2,M+6,y+3.5);
+    doc.setTextColor(...GRY);
+    doc.text(s,M+6+doc.getTextWidth(nm2)+2,y+3.5);
+    y+=6;
+  });
+
+  // Blessure extra's A
+  const extrasA=[];
+  if(bl_set.has('Lies'))extrasA.push(['Copenhagen plank','3×20-30s'],['Dead bug','3×10/kant']);
+  if(bl_set.has('Knie'))extrasA.push(['TKE band','3×15/been'],['Step downs','3×10/been']);
+  if(bl_set.has('Lage rug'))extrasA.push(['Bekkenkantelingen ruglig','3×30s'],['Dead bug','3×30s']);
+  if(bl_set.has('Bovenrug'))extrasA.push(['Bird dog','3×10/kant'],['Prone Y-T-W','3×10']);
+  if(bl_set.has('Schouder'))extrasA.push(['Ext. rotatie band','3×15/arm'],['Shoulder taps push-up','3×10/kant']);
+  if(bl_set.has('Hamstring'))extrasA.push(['Nordic hamstring curl','3×5'],['Single leg RDL','3×10/been']);
+  if(bl_set.has('Enkel'))extrasA.push(['Calf raises SL','3×15/been'],['Band eversie/inversie','3×15/kant']);
+
+  if(extrasA.length){
+    pageCheck(10);
+    doc.setFillColor(40,30,50);
+    doc.rect(M,y,W-M*2,6,'F');
+    doc.setTextColor(177,162,202);doc.setFont('helvetica','bold');doc.setFontSize(7.5);
+    doc.text('PERSOONLIJK EXTRA BLOK (BLESSUREHISTORIE)',M+2,y+4.5);
+    y+=7;
+    extrasA.forEach(([nm2,s])=>{
+      pageCheck(6);
+      doc.setTextColor(177,162,202);doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+      doc.text(`· ${nm2}  ${s}`,M+4,y+3.5);
+      y+=5.5;
+    });
+  }
+  y+=4;
+
+  // --- KRACHT B ---
+  pageCheck(20);
+  doc.setFillColor(30,30,30);
+  doc.rect(M,y,W-M*2,7,'F');
+  doc.setTextColor(...ORG);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(9);
+  doc.text(isK?'KRACHT B — KEEPER':'KRACHT B — BOVENLICHAAM + FUNCTIONEEL + CORE',M+2,y+5);
+  y+=10;
+
+  const oefsB = isK
     ?[['Suspension strap pull','3×12'],['MB overhead throw','3×10'],['Pallof press staand','3×12/kant'],['Dead bug','3×10/kant'],['Prone Y-T-W','3×10'],['Shoulder taps push-up','3×10/kant'],['Wrist curls + extensions','3×15']]
     :[['Suspension strap pull','3×12'],['Half kneeling MB lateral throw','3×10'],['Pallof lunges','3×12'],['Bird dog row','3×10/kant'],['Crabwalk zijwaarts','3×10m'],['Crabwalk achteruit','3×10m'],['Box jumps','3×6 · 60-90s rust']];
-  secHeader(isK?'KRACHT B — KEEPER':'KRACHT B — BOVENLICHAAM + FUNCTIONEEL + CORE',244,99,58);
-  for(var i=0;i<oefsB.length;i++){exRow(i+1,oefsB[i][0],oefsB[i][1]);}
-  if(extrasA.length>0){
-    check(8);
-    doc.setFillColor(235,225,255);
-    doc.rect(M,y,W-M*2,7,'F');
-    doc.setTextColor(120,80,180);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8);
-    doc.text('PERSOONLIJK EXTRA BLOK — blessurehistorie',M+3,y+5);
-    y+=8;
-    for(var i=0;i<extrasA.length;i++){extraRow(extrasA[i][0],extrasA[i][1]);}
-  }
 
-  // ═══════════════════════════════════════
-  // PAGINA 2 — LOOPTRAININGEN
-  // ═══════════════════════════════════════
-  newPage();
-  doc.setFillColor(17,17,17);
-  doc.rect(0,0,W,22,'F');
-  doc.setTextColor(55,138,221);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(13);
-  doc.text('Looptrainingen',M,11);
-  doc.setTextColor(200,200,200);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(8);
-  doc.text(nm+'  ·  '+pos,M,18);
-  y=28;
-
-  if(!isK){
-    var posNoteV1=pos==='Aanvaller'?'aanvaller: 24 reps (8/blok)':pos==='Verdediger'?'verdediger: 18 reps (6/blok)':'middenvelder: 21 reps (7/blok)';
-    var posNoteV2=pos==='Aanvaller'?'aanvaller: kortere intervallen':pos==='Verdediger'?'verdediger: rustpauze 2,5 min':'middenvelder: standaard';
-    loopSection('DUURTRAINING — dinsdag',[
-      'Warming-up:  3 min @ 50%  ·  3 min @ 60%',
-      'Herhaal 6× (geen rust tussen blokken):',
-      '   2,5 min @ 70%',
-      '   1,5 min @ 80%  (week 5-6 ook: + 30 sec @ 90%)',
-      '   2,5 min @ 40%  (herstel)',
-      'Cool down:  3 min @ 40%'
-    ]);
-    loopSection('LOOPINTERVALTRAINING — vrijdag ('+posNoteV1+')',[
-      'Warming-up:  3 min @ 50%  ·  3 min @ 60%  ·  3 min @ 65%  ·  2 min @ 40%',
-      'Week 1-3:  Herhaal 3×',
-      '   40 sec @ 90%  ·  20 sec @ 10%',
-      '   2 min @ 40% rust tussen blokken',
-      'Week 4-6:  Herhaal 3×  ('+posNoteV2+')',
-      '   60 sec @ 90%  ·  30 sec @ 10%',
-      '   2 min @ 40% rust tussen blokken',
-      'Cool down:  3 min @ 40%'
-    ]);
-    loopSection('HIIT — zondag',[
-      'Warming-up:  3 min @ 50%  ·  3 min @ 60%  ·  3 min @ 65%  ·  2 min @ 40%',
-      'Week 1-2: sprints van 4 sec  |  Week 3-4: sprints van 5 sec  |  Week 5-6: sprints van 6 sec',
-      'Herhaal 3×:',
-      '   6 × sprint  ·  30 sec rust na elke sprint',
-      '   2 min @ 40% rustig joggen tussen sets',
-      'Cool down:  3 min @ 40%'
-    ]);
-  } else {
-    loopSection('MOBILITEIT — dinsdag',[
-      'Heup 90/90 stretch  ·  2×60s per kant',
-      'Thoracale rotatie  ·  2×10 per kant',
-      'Hip flexor stretch (half kneeling)  ·  2×45s per kant',
-      'Ankle circles + dorsiflexie  ·  2×10 per kant',
-      'Schouder capsule stretch  ·  2×30s per kant',
-      'Frog stretch  ·  2×30s',
-      'Active leg swings  ·  2×15 per kant'
-    ]);
-    loopSection('KEEPERSLOOPINTERVAL — zaterdag',[
-      'Warming-up:  3 min @ 50%  ·  3 min @ 60%  ·  3 min @ 65%  ·  2 min @ 40%',
-      'Week 1:  2 blokken — 6× sprint 10m + 6× shuffle 5m · 30s rust · RPE 6',
-      'Week 2:  2 blokken — 6× sprint 12m + 6× shuffle 5m · 30s rust · RPE 7',
-      'Week 3:  3 blokken — 6× sprint 12m + 6× shuffle 5m · 30s rust · RPE 7',
-      'Week 4:  3 blokken — 6× sprint 15m + 8× shuffle 5m · 30s rust · RPE 8',
-      'Week 5-6:  3 blokken — 8× sprint 15m + 8× shuffle 5m · 30s rust · RPE 9',
-      'Cool down:  3 min @ 40%'
-    ]);
-  }
-
-  // ═══════════════════════════════════════
-  // PAGINA 3 — 6 WEKEN PROGRESSIE
-  // ═══════════════════════════════════════
-  newPage();
-  doc.setFillColor(17,17,17);
-  doc.rect(0,0,W,22,'F');
-  doc.setTextColor(244,99,58);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(13);
-  doc.text('6-weken progressie',M,11);
-  doc.setTextColor(200,200,200);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(8);
-  doc.text(nm+'  ·  '+pos,M,18);
-  y=28;
-
-  var colW=(W-M*2)/7;
-  var wkCR=[120,55,55,244,244,244];
-  var wkCG=[120,138,138,99,99,99];
-  var wkCB=[120,221,221,58,58,58];
-
-  // Header
-  check(12);
-  doc.setFillColor(25,25,25);
-  doc.rect(M,y,W-M*2,10,'F');
-  doc.setTextColor(150,150,150);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(8);
-  doc.text('',M+2,y+7);
-  for(var i=0;i<6;i++){
-    doc.setTextColor(wkCR[i],wkCG[i],wkCB[i]);
-    doc.text('Week '+(i+1),M+colW+i*colW+colW/2,y+7,{align:'center'});
-  }
-  y+=11;
-
-  var tableRows=isK
-    ?[['Type'].concat(WT),
-      ['% kracht','55%','60%','65%','70%','72%','58%'],
-      ['Kracht A','Keeper A','Keeper A','Keeper A','Keeper A','Keeper A','Keeper A'],
-      ['Kracht B','Keeper B','Keeper B','Keeper B','Keeper B','Keeper B','Keeper B'],
-      ['Interval','2 blok 6x10m','2 blok 6x12m','3 blok 6x12m','3 blok 6x15m','3 blok 8x15m','3 blok 8x15m']]
-    :[['Type'].concat(WT),
-      ['% kracht','55%','60%','65%','70%','72%','58%'],
-      ['Duurloop','6x[70-80%]','6x[70-80%]','6x[70-80%]','6x[70-80-90%]','6x[70-80-90%]','6x[70-80-90%]'],
-      ['Interval','21x40s/20s','21x40s/20s','21x40s/20s','12x60s/30s','12x60s/30s','12x60s/30s'],
-      ['HIIT','4 sec','4 sec','5 sec','5 sec','6 sec','6 sec']];
-
-  for(var ri=0;ri<tableRows.length;ri++){
-    var r=tableRows[ri];
-    check(12);
-    if(ri%2===0){doc.setFillColor(248,248,248);}else{doc.setFillColor(255,255,255);}
-    doc.rect(M,y,W-M*2,10,'F');
-    doc.setDrawColor(230,230,230);
-    doc.rect(M,y,W-M*2,10,'S');
-    doc.setTextColor(60,60,60);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8);
-    doc.text(r[0],M+2,y+7);
-    for(var ci=0;ci<6;ci++){
-      var val=r[ci+1]||'';
-      if(ri===0){doc.setTextColor(wkCR[ci],wkCG[ci],wkCB[ci]);doc.setFont('helvetica','bold');doc.setFontSize(7.5);}
-      else{doc.setTextColor(30,30,30);doc.setFont('helvetica','normal');doc.setFontSize(8);}
-      doc.text(val,M+colW+ci*colW+colW/2,y+7,{align:'center'});
-    }
-    y+=10;
-  }
-  y+=8;
-
-  // Legenda
-  check(20);
-  doc.setFillColor(245,245,245);
-  doc.rect(M,y,W-M*2,18,'F');
-  doc.setTextColor(80,80,80);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(8);
-  doc.text('Toelichting:',M+3,y+6);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7.5);
-  doc.text('Week 1: volledig optioneel  |  Week 2-3: duurtraining mag ingeruild voor zomersport  |  Week 4-6: alles verplicht',M+3,y+12);
-  doc.text('% kracht = percentage van 1RM  |  Klachten? Neem contact op met Daan (fysiotherapeut)',M+3,y+17);
-
-  // Footer
-  var appURL='https://daanvandervlies.github.io/Victoria-Heren-1-zomerschema-2026/';
-  var nPages=doc.getNumberOfPages();
-  for(var p=1;p<=nPages;p++){
-    doc.setPage(p);
-    doc.setFillColor(17,17,17);
-    doc.rect(0,286,W,11,'F');
-    doc.setTextColor(100,100,100);
+  oefsB.forEach(([nm2,s])=>{
+    pageCheck(7);
+    doc.setTextColor(...LGT);doc.setFont('helvetica','bold');doc.setFontSize(8);
+    doc.text('·',M+2,y+3.5);
     doc.setFont('helvetica','normal');
-    doc.setFontSize(6.5);
-    doc.text('Victoria Heren 1  ·  Zomerschema 2026  ·  Eleven Rotterdam',M,291);
-    doc.setTextColor(244,99,58);
-    doc.textWithLink('Volledig schema openen: '+appURL,M,295,{url:appURL});
-    doc.setTextColor(100,100,100);
-    doc.text(p+' / '+nPages,W-M,291,{align:'right'});
+    doc.text(nm2,M+6,y+3.5);
+    doc.setTextColor(...GRY);
+    doc.text(s,M+6+doc.getTextWidth(nm2)+2,y+3.5);
+    y+=6;
+  });
+
+  // Blessure extra's B
+  const extrasB=[...extrasA];
+  if(extrasB.length){
+    pageCheck(10);
+    doc.setFillColor(40,30,50);
+    doc.rect(M,y,W-M*2,6,'F');
+    doc.setTextColor(177,162,202);doc.setFont('helvetica','bold');doc.setFontSize(7.5);
+    doc.text('PERSOONLIJK EXTRA BLOK (BLESSUREHISTORIE)',M+2,y+4.5);
+    y+=7;
+    extrasB.forEach(([nm2,s])=>{
+      pageCheck(6);
+      doc.setTextColor(177,162,202);doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+      doc.text(`· ${nm2}  ${s}`,M+4,y+3.5);
+      y+=5.5;
+    });
+  }
+  y+=4;
+
+  // --- LOOPTRAININGEN SAMENVATTING ---
+  if(!isK){
+    pageCheck(60);
+    doc.setFillColor(30,30,30);
+    doc.rect(M,y,W-M*2,7,'F');
+    doc.setTextColor(...BLU);
+    doc.setFont('helvetica','bold');doc.setFontSize(9);
+    doc.text('LOOPTRAININGEN',M+2,y+5);
+    y+=10;
+
+    // Duurtraining
+    doc.setTextColor(...LGT);doc.setFont('helvetica','bold');doc.setFontSize(8);
+    doc.text('Duurtraining (dinsdag)',M+2,y+4);y+=6;
+    doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+    doc.setTextColor(...GRY);
+    doc.text('Wk 1-4:  WU 3min@50%+3min@60%  |  Herhaal 6×: 2,5min@70% · 1,5min@80% · 2,5min@40%  |  CD 3min@40%',M+4,y+3);y+=5.5;
+    doc.text('Wk 5-6:  WU 3min@50%+3min@60%  |  Herhaal 6×: 2,5min@70% · 1min@80% · 30s@90% · 2,5min@40%  |  CD 3min@40%',M+4,y+3);y+=7;
+
+    // Loopinterval
+    doc.setTextColor(...LGT);doc.setFont('helvetica','bold');doc.setFontSize(8);
+    doc.text('Loopintervaltraining (vrijdag)',M+2,y+4);y+=6;
+    doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...GRY);
+    doc.text('Wk 1-3:  WU 3+3+3+2min  |  Herhaal 3×: 7× [40s@90% · 20s@10%]  |  2min@40% rust  |  CD 3min@40%',M+4,y+3);y+=5.5;
+    const posNote=pos==='Aanvaller'?'  (aanvaller: 8 reps/blok)':pos==='Verdediger'?'  (verdediger: 6 reps/blok)':'';
+    doc.text(`Wk 4-6:  WU 3+3+3+2min  |  Herhaal 3×: 4× [60s@90% · 30s@10%]${posNote}  |  CD 3min@40%`,M+4,y+3);y+=7;
+
+    // HIIT
+    doc.setTextColor(...LGT);doc.setFont('helvetica','bold');doc.setFontSize(8);
+    doc.text('HIIT — Explosieve sprints (zondag)',M+2,y+4);y+=6;
+    doc.setFont('helvetica','normal');doc.setFontSize(7.5);doc.setTextColor(...GRY);
+    doc.text('Wk 1-2: sprints van 4s  |  Wk 3-4: sprints van 5s  |  Wk 5-6: sprints van 6s',M+4,y+3);y+=5;
+    doc.text('Structuur altijd: WU 3+3+3+2min  |  Herhaal 3×: 6× sprint + 30s rust  |  2min@40% tussen sets  |  CD 3min@40%',M+4,y+3);y+=7;
+  } else {
+    // Keeper loopinterval samenvatting
+    pageCheck(30);
+    doc.setFillColor(30,30,30);
+    doc.rect(M,y,W-M*2,7,'F');
+    doc.setTextColor(...BLU);doc.setFont('helvetica','bold');doc.setFontSize(9);
+    doc.text('KEEPERSLOOPINTERVAL (ZATERDAG)',M+2,y+5);y+=10;
+    const kLines=[
+      'Wk 1: 2 blokken — 6× sprint 10m + 6× shuffle 5m · 30s rust/actie · RPE 6',
+      'Wk 2: 2 blokken — 6× sprint 12m + 6× shuffle 5m · 30s rust/actie · RPE 7',
+      'Wk 3: 3 blokken — 6× sprint 12m + 6× shuffle 5m · 30s rust/actie · RPE 7',
+      'Wk 4: 3 blokken — 6× sprint 15m + 8× shuffle 5m · 30s rust/actie · RPE 8',
+      'Wk 5-6: 3 blokken — 8× sprint 15m + 8× shuffle 5m · 30s rust/actie · RPE 9',
+    ];
+    kLines.forEach(l=>{
+      pageCheck(6);
+      doc.setTextColor(...GRY);doc.setFont('helvetica','normal');doc.setFontSize(7.5);
+      doc.text(l,M+4,y+3);y+=5.5;
+    });
   }
 
-  doc.save('VIC_H1_Schema_'+nm.replace(/ /g,'_')+'.pdf');
+  // --- FOOTER ---
+  const pages = doc.getNumberOfPages();
+  for(let i=1;i<=pages;i++){
+    doc.setPage(i);
+    doc.setFillColor(17,17,17);
+    doc.rect(0,287,W,10,'F');
+    doc.setTextColor(100,100,100);
+    doc.setFont('helvetica','normal');doc.setFontSize(7);
+    doc.text('Victoria Heren 1 — Zomerschema 2026 — Eleven Rotterdam — Klachten? Neem contact op met Daan (fysiotherapeut)',M,292);
+    doc.text(`${i}/${pages}`,W-M,292,{align:'right'});
+  }
+
+  doc.save(`VIC_H1_Schema_${nm.replace(/ /g,'_')}.pdf`);
 }
+
 
 function chkPW(){
   var v=document.getElementById('pwi').value;
   if(v==='VictoriaH1@2026'){
     document.getElementById('pwpage').style.display='none';
     document.getElementById('mainwrap').style.display='block';
-    try{localStorage.setItem('vich1_auth','1');}catch(e){}
+    try{localStorage.setItem('vich1_ok','1');}catch(e){}
   } else {
     document.getElementById('pwe').style.display='block';
     document.getElementById('pwi').value='';
-    document.getElementById('pwi').focus();
   }
 }
 (function(){
   try{
-    if(localStorage.getItem('vich1_auth')==='1'){
+    if(localStorage.getItem('vich1_ok')==='1'){
       document.getElementById('pwpage').style.display='none';
       document.getElementById('mainwrap').style.display='block';
     }
   }catch(e){}
 })();
 
-
 rsb(0);
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" async></script>
+</div>
 </body>
 </html>

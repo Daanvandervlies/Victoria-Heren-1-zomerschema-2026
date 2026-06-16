@@ -639,340 +639,266 @@ function downloadPDF(){
   var pos=D.pos||'Middenvelder';
   var leef=D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):25;
   var isK=pos==='Keeper';
+  var WP=[55,60,65,70,72,58];
   var WT=['Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht','Verplicht'];
   var bl_set=new Set([].concat(D.kln||[]).concat(D.his||[]));
-  var W=210,M=14;
-  var y=0;
-
-  function newPage(){doc.addPage();y=0;}
-  function check(n){if(y+n>282)newPage();}
-
-  function secHeader(txt,r,g,b){
-    check(10);
-    doc.setFillColor(r,g,b);
-    doc.rect(M,y,W-M*2,8,'F');
-    doc.setTextColor(255,255,255);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(9);
-    doc.text(txt,M+3,y+5.5);
-    y+=10;
-  }
-
-  function exRow(num,naam,sets){
-    check(8);
-    if(num%2===0){doc.setFillColor(248,248,248);}else{doc.setFillColor(255,255,255);}
-    doc.rect(M,y,W-M*2,7,'F');
-    doc.setTextColor(80,80,80);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8);
-    doc.text(String(num),M+2,y+5);
-    doc.setFont('helvetica','normal');
-    doc.setTextColor(20,20,20);
-    doc.text(naam,M+9,y+5);
-    doc.setTextColor(244,99,58);
-    doc.setFont('helvetica','bold');
-    doc.text(sets,W-M-2,y+5,{align:'right'});
-    y+=7.5;
-  }
-
-  function extraRow(naam,sets){
-    check(7);
-    doc.setFillColor(245,240,255);
-    doc.rect(M,y,W-M*2,6.5,'F');
-    doc.setTextColor(140,100,180);
-    doc.setFont('helvetica','normal');
-    doc.setFontSize(7.5);
-    doc.text('+ '+naam,M+9,y+4.5);
-    doc.setFont('helvetica','bold');
-    doc.text(sets,W-M-2,y+4.5,{align:'right'});
-    y+=7;
-  }
-
-  function loopSection(title,lines){
-    var needed=10+lines.length*7;
-    check(needed);
-    doc.setFillColor(235,243,255);
-    doc.rect(M,y,W-M*2,8,'F');
-    doc.setTextColor(55,138,221);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(9);
-    doc.text(title,M+3,y+5.5);
-    y+=9;
-    for(var i=0;i<lines.length;i++){
-      doc.setFillColor(i%2===0?252:255,i%2===0?252:255,i%2===0?252:255);
-      doc.rect(M,y,W-M*2,6.5,'F');
-      doc.setTextColor(50,50,50);
-      doc.setFont('helvetica','normal');
-      doc.setFontSize(8);
-      doc.text(lines[i],M+5,y+4.5);
-      y+=7;
-    }
-    y+=3;
-  }
-
-  // ═══════════════════════════════════════
-  // PAGINA 1 — SCHEMA
-  // ═══════════════════════════════════════
-  doc.setFillColor(17,17,17);
-  doc.rect(0,0,W,26,'F');
-  doc.setTextColor(244,99,58);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(14);
-  doc.text('Victoria Heren 1 — Zomerschema 2026',M,11);
-  doc.setTextColor(200,200,200);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(8.5);
-  doc.text(nm+'  ·  '+pos+'  ·  '+leef+' jaar  ·  23 juni – 3 augustus',M,19);
-  y=32;
-
-  // Weekschema
-  secHeader('WEEKSCHEMA',30,30,30);
-  var dagL=['Ma','Di','Wo','Do','Vr','Za','Zo'];
-  var sessV=['Kracht A','Duurtraining','Rust','Kracht B','Loopintervaltraining','Rust','HIIT'];
-  var sessK=['Kracht A','Mobiliteit','Rust','Kracht B','Rust','Loopinterval','Rust'];
-  var sess=isK?sessK:sessV;
-  var tagR={'Kracht A':244,'Kracht B':244,'Duurtraining':55,'Loopintervaltraining':55,'Loopinterval':55,'HIIT':55,'Mobiliteit':55,'Rust':200};
-  var tagG={'Kracht A':99,'Kracht B':99,'Duurtraining':138,'Loopintervaltraining':138,'Loopinterval':138,'HIIT':138,'Mobiliteit':138,'Rust':200};
-  var tagB={'Kracht A':58,'Kracht B':58,'Duurtraining':221,'Loopintervaltraining':221,'Loopinterval':221,'HIIT':221,'Mobiliteit':221,'Rust':200};
-
-  for(var i=0;i<7;i++){
-    check(9);
-    var isRust=sess[i]==='Rust';
-    doc.setFillColor(isRust?245:250,isRust?245:250,isRust?245:255);
-    doc.rect(M,y,W-M*2,8,'F');
-    doc.setFillColor(tagR[sess[i]]||200,tagG[sess[i]]||200,tagB[sess[i]]||200);
-    doc.rect(M,y,3,8,'F');
-    doc.setTextColor(80,80,80);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8.5);
-    doc.text(dagL[i],M+5,y+5.5);
-    doc.setFont('helvetica','normal');
-    doc.setTextColor(20,20,20);
-    doc.text(sess[i],M+18,y+5.5);
-    y+=9;
-  }
-  y+=5;
-
-  // Kracht A
-  var squat=bl_set.has('Knie')?'Goblet squat':'Back squat + miniband';
-  var oefsA=isK
-    ?[['Hang high pull','3×6 · 60-90s rust'],['Goblet squat','3×8'],['Nordic hamstring curl','3×5 excentrisch'],['Hamstring catch','3×6/been'],['Lateral bounds','3×8/kant'],['Single leg RDL','3×10/been'],['Copenhagen plank','3×20-30s']]
-    :[[squat==='Goblet squat'?'Goblet squat':'Hang high pull','3×6 · 60-90s rust'],[squat,'3×8'],['Romanian deadlift','3×8'],['Lunge snapdown + sprong','3×8'],['Reverse lunge hiplock','3×12'],['Pogojumps','3×20']];
-  // correct: first item should always be hang high pull
-  if(!isK){
-    oefsA[0]=['Hang high pull','3×6 · 60-90s rust'];
-    oefsA[1]=[squat,'3×8'];
-  }
-
-  secHeader(isK?'KRACHT A — KEEPER':'KRACHT A — ONDERLICHAAM + EXPLOSIEF',244,99,58);
-  for(var i=0;i<oefsA.length;i++){exRow(i+1,oefsA[i][0],oefsA[i][1]);}
-
-  var extrasA=[];
-  if(bl_set.has('Lies')){extrasA.push(['Copenhagen plank','3×20-30s'],['Dead bug','3×10/kant']);}
-  if(bl_set.has('Knie')){extrasA.push(['TKE band','3×15/been'],['Step downs','3×10/been']);}
-  if(bl_set.has('Lage rug')){extrasA.push(['Bekkenkantelingen ruglig','3×30s'],['Dead bug','3×30s']);}
-  if(bl_set.has('Bovenrug')){extrasA.push(['Bird dog','3×10/kant'],['Prone Y-T-W','3×10']);}
-  if(bl_set.has('Schouder')){extrasA.push(['Ext. rotatie band','3×15/arm'],['Shoulder taps','3×10/kant']);}
-  if(bl_set.has('Hamstring')){extrasA.push(['Nordic hamstring curl','3×5'],['Single leg RDL','3×10/been']);}
-  if(bl_set.has('Enkel')){extrasA.push(['Calf raises SL','3×15/been'],['Band eversie/inversie','3×15/kant']);}
-  if(extrasA.length>0){
-    check(8);
-    doc.setFillColor(235,225,255);
-    doc.rect(M,y,W-M*2,7,'F');
-    doc.setTextColor(120,80,180);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8);
-    doc.text('PERSOONLIJK EXTRA BLOK — blessurehistorie',M+3,y+5);
-    y+=8;
-    for(var i=0;i<extrasA.length;i++){extraRow(extrasA[i][0],extrasA[i][1]);}
-  }
-  y+=4;
-
-  // Kracht B
-  check(20);
-  var oefsB=isK
-    ?[['Suspension strap pull','3×12'],['MB overhead throw','3×10'],['Pallof press staand','3×12/kant'],['Dead bug','3×10/kant'],['Prone Y-T-W','3×10'],['Shoulder taps push-up','3×10/kant'],['Wrist curls + extensions','3×15']]
-    :[['Suspension strap pull','3×12'],['Half kneeling MB lateral throw','3×10'],['Pallof lunges','3×12'],['Bird dog row','3×10/kant'],['Crabwalk zijwaarts','3×10m'],['Crabwalk achteruit','3×10m'],['Box jumps','3×6 · 60-90s rust']];
-  secHeader(isK?'KRACHT B — KEEPER':'KRACHT B — BOVENLICHAAM + FUNCTIONEEL + CORE',244,99,58);
-  for(var i=0;i<oefsB.length;i++){exRow(i+1,oefsB[i][0],oefsB[i][1]);}
-  if(extrasA.length>0){
-    check(8);
-    doc.setFillColor(235,225,255);
-    doc.rect(M,y,W-M*2,7,'F');
-    doc.setTextColor(120,80,180);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8);
-    doc.text('PERSOONLIJK EXTRA BLOK — blessurehistorie',M+3,y+5);
-    y+=8;
-    for(var i=0;i<extrasA.length;i++){extraRow(extrasA[i][0],extrasA[i][1]);}
-  }
-
-  // ═══════════════════════════════════════
-  // PAGINA 2 — LOOPTRAININGEN
-  // ═══════════════════════════════════════
-  newPage();
-  doc.setFillColor(17,17,17);
-  doc.rect(0,0,W,22,'F');
-  doc.setTextColor(55,138,221);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(13);
-  doc.text('Looptrainingen',M,11);
-  doc.setTextColor(200,200,200);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(8);
-  doc.text(nm+'  ·  '+pos,M,18);
-  y=28;
-
-  if(!isK){
-    var posNoteV1=pos==='Aanvaller'?'aanvaller: 24 reps (8/blok)':pos==='Verdediger'?'verdediger: 18 reps (6/blok)':'middenvelder: 21 reps (7/blok)';
-    var posNoteV2=pos==='Aanvaller'?'aanvaller: kortere intervallen':pos==='Verdediger'?'verdediger: rustpauze 2,5 min':'middenvelder: standaard';
-    loopSection('DUURTRAINING — dinsdag',[
-      'Warming-up:  3 min @ 50%  ·  3 min @ 60%',
-      'Herhaal 6× (geen rust tussen blokken):',
-      '   2,5 min @ 70%',
-      '   1,5 min @ 80%  (week 5-6 ook: + 30 sec @ 90%)',
-      '   2,5 min @ 40%  (herstel)',
-      'Cool down:  3 min @ 40%'
-    ]);
-    loopSection('LOOPINTERVALTRAINING — vrijdag ('+posNoteV1+')',[
-      'Warming-up:  3 min @ 50%  ·  3 min @ 60%  ·  3 min @ 65%  ·  2 min @ 40%',
-      'Week 1-3:  Herhaal 3×',
-      '   40 sec @ 90%  ·  20 sec @ 10%',
-      '   2 min @ 40% rust tussen blokken',
-      'Week 4-6:  Herhaal 3×  ('+posNoteV2+')',
-      '   60 sec @ 90%  ·  30 sec @ 10%',
-      '   2 min @ 40% rust tussen blokken',
-      'Cool down:  3 min @ 40%'
-    ]);
-    loopSection('HIIT — zondag',[
-      'Warming-up:  3 min @ 50%  ·  3 min @ 60%  ·  3 min @ 65%  ·  2 min @ 40%',
-      'Week 1-2: sprints van 4 sec  |  Week 3-4: sprints van 5 sec  |  Week 5-6: sprints van 6 sec',
-      'Herhaal 3×:',
-      '   6 × sprint  ·  30 sec rust na elke sprint',
-      '   2 min @ 40% rustig joggen tussen sets',
-      'Cool down:  3 min @ 40%'
-    ]);
-  } else {
-    loopSection('MOBILITEIT — dinsdag',[
-      'Heup 90/90 stretch  ·  2×60s per kant',
-      'Thoracale rotatie  ·  2×10 per kant',
-      'Hip flexor stretch (half kneeling)  ·  2×45s per kant',
-      'Ankle circles + dorsiflexie  ·  2×10 per kant',
-      'Schouder capsule stretch  ·  2×30s per kant',
-      'Frog stretch  ·  2×30s',
-      'Active leg swings  ·  2×15 per kant'
-    ]);
-    loopSection('KEEPERSLOOPINTERVAL — zaterdag',[
-      'Warming-up:  3 min @ 50%  ·  3 min @ 60%  ·  3 min @ 65%  ·  2 min @ 40%',
-      'Week 1:  2 blokken — 6× sprint 10m + 6× shuffle 5m · 30s rust · RPE 6',
-      'Week 2:  2 blokken — 6× sprint 12m + 6× shuffle 5m · 30s rust · RPE 7',
-      'Week 3:  3 blokken — 6× sprint 12m + 6× shuffle 5m · 30s rust · RPE 7',
-      'Week 4:  3 blokken — 6× sprint 15m + 8× shuffle 5m · 30s rust · RPE 8',
-      'Week 5-6:  3 blokken — 8× sprint 15m + 8× shuffle 5m · 30s rust · RPE 9',
-      'Cool down:  3 min @ 40%'
-    ]);
-  }
-
-  // ═══════════════════════════════════════
-  // PAGINA 3 — 6 WEKEN PROGRESSIE
-  // ═══════════════════════════════════════
-  newPage();
-  doc.setFillColor(17,17,17);
-  doc.rect(0,0,W,22,'F');
-  doc.setTextColor(244,99,58);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(13);
-  doc.text('6-weken progressie',M,11);
-  doc.setTextColor(200,200,200);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(8);
-  doc.text(nm+'  ·  '+pos,M,18);
-  y=28;
-
-  var colW=(W-M*2)/7;
-  var wkCR=[120,55,55,244,244,244];
-  var wkCG=[120,138,138,99,99,99];
-  var wkCB=[120,221,221,58,58,58];
-
-  // Header
-  check(12);
-  doc.setFillColor(25,25,25);
-  doc.rect(M,y,W-M*2,10,'F');
-  doc.setTextColor(150,150,150);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(8);
-  doc.text('',M+2,y+7);
-  for(var i=0;i<6;i++){
-    doc.setTextColor(wkCR[i],wkCG[i],wkCB[i]);
-    doc.text('Week '+(i+1),M+colW+i*colW+colW/2,y+7,{align:'center'});
-  }
-  y+=11;
-
-  var tableRows=isK
-    ?[['Type'].concat(WT),
-      ['% kracht','55%','60%','65%','70%','72%','58%'],
-      ['Kracht A','Keeper A','Keeper A','Keeper A','Keeper A','Keeper A','Keeper A'],
-      ['Kracht B','Keeper B','Keeper B','Keeper B','Keeper B','Keeper B','Keeper B'],
-      ['Interval','2 blok 6x10m','2 blok 6x12m','3 blok 6x12m','3 blok 6x15m','3 blok 8x15m','3 blok 8x15m']]
-    :[['Type'].concat(WT),
-      ['% kracht','55%','60%','65%','70%','72%','58%'],
-      ['Duurloop','6x[70-80%]','6x[70-80%]','6x[70-80%]','6x[70-80-90%]','6x[70-80-90%]','6x[70-80-90%]'],
-      ['Interval','21x40s/20s','21x40s/20s','21x40s/20s','12x60s/30s','12x60s/30s','12x60s/30s'],
-      ['HIIT','4 sec','4 sec','5 sec','5 sec','6 sec','6 sec']];
-
-  for(var ri=0;ri<tableRows.length;ri++){
-    var r=tableRows[ri];
-    check(12);
-    if(ri%2===0){doc.setFillColor(248,248,248);}else{doc.setFillColor(255,255,255);}
-    doc.rect(M,y,W-M*2,10,'F');
-    doc.setDrawColor(230,230,230);
-    doc.rect(M,y,W-M*2,10,'S');
-    doc.setTextColor(60,60,60);
-    doc.setFont('helvetica','bold');
-    doc.setFontSize(8);
-    doc.text(r[0],M+2,y+7);
-    for(var ci=0;ci<6;ci++){
-      var val=r[ci+1]||'';
-      if(ri===0){doc.setTextColor(wkCR[ci],wkCG[ci],wkCB[ci]);doc.setFont('helvetica','bold');doc.setFontSize(7.5);}
-      else{doc.setTextColor(30,30,30);doc.setFont('helvetica','normal');doc.setFontSize(8);}
-      doc.text(val,M+colW+ci*colW+colW/2,y+7,{align:'center'});
-    }
-    y+=10;
-  }
-  y+=8;
-
-  // Legenda
-  check(20);
-  doc.setFillColor(245,245,245);
-  doc.rect(M,y,W-M*2,18,'F');
-  doc.setTextColor(80,80,80);
-  doc.setFont('helvetica','bold');
-  doc.setFontSize(8);
-  doc.text('Toelichting:',M+3,y+6);
-  doc.setFont('helvetica','normal');
-  doc.setFontSize(7.5);
-  doc.text('Week 1: volledig optioneel  |  Week 2-3: duurtraining mag ingeruild voor zomersport  |  Week 4-6: alles verplicht',M+3,y+12);
-  doc.text('% kracht = percentage van 1RM  |  Klachten? Neem contact op met Daan (fysiotherapeut)',M+3,y+17);
-
-  // Footer
+  var W=210,M=12;
   var appURL='https://daanvandervlies.github.io/Victoria-Heren-1-zomerschema-2026/';
-  var nPages=doc.getNumberOfPages();
-  for(var p=1;p<=nPages;p++){
-    doc.setPage(p);
+
+  function addFooter(wk){
     doc.setFillColor(17,17,17);
     doc.rect(0,286,W,11,'F');
     doc.setTextColor(100,100,100);
     doc.setFont('helvetica','normal');
-    doc.setFontSize(6.5);
-    doc.text('Victoria Heren 1  ·  Zomerschema 2026  ·  Eleven Rotterdam',M,291);
+    doc.setFontSize(6);
+    doc.text('Victoria Heren 1  ·  Zomerschema 2026  ·  Eleven Rotterdam  ·  '+nm,M,291);
     doc.setTextColor(244,99,58);
-    doc.textWithLink('Volledig schema: '+appURL,M,295,{url:appURL});
+    doc.textWithLink('Schema openen: '+appURL,M,295,{url:appURL});
     doc.setTextColor(100,100,100);
-    doc.text(p+' / '+nPages,W-M,291,{align:'right'});
+    doc.text((wk+1)+' / 6',W-M,291,{align:'right'});
+  }
+
+  var bl_set=new Set([].concat(D.kln||[]).concat(D.his||[]));
+  var squat=bl_set.has('Knie')?'Goblet squat':'Back squat + miniband';
+
+  var oefsA=isK
+    ?[['Hang high pull','3×6'],['Goblet squat','3×8'],['Nordic hamstring curl','3×5 exc.'],['Hamstring catch','3×6/been'],['Lateral bounds','3×8/kant'],['Single leg RDL','3×10/been'],['Copenhagen plank','3×20-30s']]
+    :[['Hang high pull','3×6 · 60-90s'],[squat,'3×8'],['Romanian deadlift','3×8'],['Lunge snapdown + sprong','3×8'],['Reverse lunge hiplock','3×12'],['Pogojumps','3×20']];
+
+  var oefsB=isK
+    ?[['Suspension strap pull','3×12'],['MB overhead throw','3×10'],['Pallof press staand','3×12/kant'],['Dead bug','3×10/kant'],['Prone Y-T-W','3×10'],['Shoulder taps push-up','3×10/kant'],['Wrist curls+extensions','3×15']]
+    :[['Suspension strap pull','3×12'],['Half kneeling MB lateral throw','3×10'],['Pallof lunges','3×12'],['Bird dog row','3×10/kant'],['Crabwalk zijwaarts','3×10m'],['Crabwalk achteruit','3×10m'],['Box jumps','3×6 · 60-90s']];
+
+  var extras=[];
+  if(bl_set.has('Lies')){extras.push('Copenhagen plank 3×20-30s','Dead bug 3×10/kant');}
+  if(bl_set.has('Knie')){extras.push('TKE band 3×15/been','Step downs 3×10/been');}
+  if(bl_set.has('Lage rug')){extras.push('Bekkenkantelingen ruglig 3×30s','Dead bug 3×30s');}
+  if(bl_set.has('Bovenrug')){extras.push('Bird dog 3×10/kant','Prone Y-T-W 3×10');}
+  if(bl_set.has('Schouder')){extras.push('Ext. rotatie band 3×15/arm','Shoulder taps 3×10/kant');}
+  if(bl_set.has('Hamstring')){extras.push('Nordic hamstring curl 3×5','Single leg RDL 3×10/been');}
+  if(bl_set.has('Enkel')){extras.push('Calf raises SL 3×15/been','Band eversie/inversie 3×15/kant');}
+
+  for(var wk=0;wk<6;wk++){
+    if(wk>0)doc.addPage();
+    var y=0;
+    var p=WP[wk];
+    var hard=(wk>=4)||(pos==='Aanvaller'&&wk>=3);
+    var vF=wk>=3;
+    var vReps=vF?4:7;
+    if(!vF&&pos==='Aanvaller')vReps=8;
+    if(!vF&&pos==='Verdediger')vReps=6;
+    var vRust=(pos==='Verdediger'&&vF)?'2,5min':'2min';
+    var vOn=vF?'60s':'40s';
+    var vOff=vF?'30s':'20s';
+    var hiitSec=wk<=1?4:wk<=3?5:6;
+    var hiitRpe=wk<=1?7:wk<=3?8:9;
+
+    // ── HEADER ──
+    doc.setFillColor(17,17,17);
+    doc.rect(0,0,W,18,'F');
+    doc.setTextColor(244,99,58);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(13);
+    doc.text('Week '+(wk+1)+'  —  '+WT[wk],M,10);
+    doc.setTextColor(180,180,180);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(7.5);
+    doc.text(nm+'  ·  '+pos+'  ·  Kracht: '+p+'% van 1RM',M,16);
+    y=21;
+
+    // ── WEEKINDELING (alleen wk 0, of altijd compact) ──
+    if(wk===0){
+      // Toon weekindeling als kleine tabel
+      var dagL=isK?['Ma','Di','Wo','Do','Vr','Za','Zo']:['Ma','Di','Wo','Do','Vr','Za','Zo'];
+      var sessL=isK?['Kracht A','Mobiliteit','Rust','Kracht B','Rust','Loopinterval','Rust']:['Kracht A','Duurtraining','Rust','Kracht B','Loopinterval','Rust','HIIT'];
+      var cW=(W-M*2-4)/2;
+      for(var i=0;i<7;i++){
+        var ci=i<4?0:1;
+        var ri=i<4?i:i-4;
+        var gx=M+ci*(cW+4);
+        var gy=y+ri*6.5;
+        var isRust=sessL[i]==='Rust';
+        var r2=isRust?200:sessL[i].indexOf('Kracht')>-1?244:55;
+        var g2=isRust?200:sessL[i].indexOf('Kracht')>-1?99:138;
+        var b2=isRust?200:sessL[i].indexOf('Kracht')>-1?58:221;
+        doc.setFillColor(isRust?245:252,isRust?245:252,isRust?245:255);
+        doc.rect(gx,gy,cW,6,'F');
+        doc.setFillColor(r2,g2,b2);
+        doc.rect(gx,gy,2,6,'F');
+        doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(80,80,80);
+        doc.text(dagL[i],gx+3,gy+4.5);
+        doc.setFont('helvetica','normal');doc.setTextColor(isRust?160:20,isRust?160:20,isRust?160:20);
+        doc.text(sessL[i],gx+13,gy+4.5);
+      }
+      y+=30;
+      // Note week 1
+      doc.setFillColor(255,245,240);doc.rect(M,y,W-M*2,5,'F');
+      doc.setTextColor(200,80,30);doc.setFont('helvetica','italic');doc.setFontSize(6.5);
+      doc.text('Week 1 volledig optioneel. Bovenstaande weekindeling geldt voor alle 6 weken.',M+2,y+3.5);
+      y+=6;
+    } else if(wk===1||wk===2){
+      var sn=isK?'mobiliteit (di)':'duurtraining (di)';
+      doc.setFillColor(240,247,255);doc.rect(M,y,W-M*2,5,'F');
+      doc.setTextColor(30,100,180);doc.setFont('helvetica','italic');doc.setFontSize(6.5);
+      doc.text('De '+sn+' mag je ruilen voor een actieve zomersport. Overige sessies verplicht.',M+2,y+3.5);
+      y+=6;
+    }
+    y+=2;
+
+    // ── KRACHT A + B naast elkaar ──
+    var kW=(W-M*2-4)/2;
+
+    // Kracht A header
+    doc.setFillColor(244,99,58);doc.rect(M,y,kW,6,'F');
+    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(7.5);
+    doc.text(isK?'KRACHT A — KEEPER':'KRACHT A — ONDERLICHAAM',M+2,y+4.5);
+    // Kracht B header
+    doc.setFillColor(244,99,58);doc.rect(M+kW+4,y,kW,6,'F');
+    doc.text(isK?'KRACHT B — KEEPER':'KRACHT B — BOVENLICHAAM',M+kW+6,y+4.5);
+    y+=6;
+
+    // WU rij
+    doc.setFillColor(242,242,242);doc.rect(M,y,kW,5,'F');
+    doc.setTextColor(100,100,100);doc.setFont('helvetica','italic');doc.setFontSize(6);
+    doc.text('WU: touwtjespringen · heupopeners · glute bridge',M+2,y+3.5);
+    doc.setFillColor(242,242,242);doc.rect(M+kW+4,y,kW,5,'F');
+    doc.text('WU: touwtjespringen · schouderrotaties · dead bug',M+kW+6,y+3.5);
+    y+=5;
+
+    // Oefeningen naast elkaar
+    var maxOefs=Math.max(oefsA.length,oefsB.length);
+    for(var i=0;i<maxOefs;i++){
+      var bg=i%2===0?248:255;
+      doc.setFillColor(bg,bg,bg);doc.rect(M,y,kW,6.5,'F');
+      doc.setFillColor(bg,bg,bg);doc.rect(M+kW+4,y,kW,6.5,'F');
+      // Kracht A
+      if(i<oefsA.length){
+        var kg='';
+        var keyMap={'Hang high pull':'Hang high pull','Goblet squat':'Goblet squat','Back squat':'Squat','Romanian deadlift':'RDL','Reverse lunge hiplock':'Reverse lunge','Suspension strap pull':'Suspension strap pull','Box jumps':'Box jumps'};
+        var ek=Object.keys(keyMap).find(function(k){return oefsA[i][0].indexOf(k)===0;});
+        if(ek){var w2=parseFloat(D.rm[keyMap[ek]+'_kg']),r2=parseFloat(D.rm[keyMap[ek]+'_reps']);if(w2&&r2){var orm=Math.round(w2/(1.0278-0.0278*r2));var t=Math.round(orm*p/100/2.5)*2.5;if(t)kg=' ~'+t+'kg';}}
+        doc.setTextColor(60,60,60);doc.setFont('helvetica','bold');doc.setFontSize(6.5);
+        doc.text((i+1)+'.',M+1,y+4.5);
+        doc.setFont('helvetica','normal');doc.setTextColor(20,20,20);
+        doc.text(oefsA[i][0],M+6,y+4.5);
+        doc.setTextColor(244,99,58);doc.setFont('helvetica','bold');
+        doc.text(oefsA[i][1]+kg,M+kW-1,y+4.5,{align:'right'});
+      }
+      // Kracht B
+      if(i<oefsB.length){
+        var kg2='';
+        var ek2=Object.keys(keyMap).find(function(k){return oefsB[i][0].indexOf(k)===0;});
+        if(ek2){var w3=parseFloat(D.rm[keyMap[ek2]+'_kg']),r3=parseFloat(D.rm[keyMap[ek2]+'_reps']);if(w3&&r3){var orm2=Math.round(w3/(1.0278-0.0278*r3));var t2=Math.round(orm2*p/100/2.5)*2.5;if(t2)kg2=' ~'+t2+'kg';}}
+        doc.setTextColor(60,60,60);doc.setFont('helvetica','bold');doc.setFontSize(6.5);
+        doc.text((i+1)+'.',M+kW+5,y+4.5);
+        doc.setFont('helvetica','normal');doc.setTextColor(20,20,20);
+        doc.text(oefsB[i][0],M+kW+10,y+4.5);
+        doc.setTextColor(244,99,58);doc.setFont('helvetica','bold');
+        doc.text(oefsB[i][1]+kg2,M+2*kW+3,y+4.5,{align:'right'});
+      }
+      y+=6.5;
+    }
+
+    // Blessure extras (compact, 1 regel per 2 oefeningen)
+    if(extras.length>0){
+      doc.setFillColor(235,225,255);doc.rect(M,y,W-M*2,5.5,'F');
+      doc.setTextColor(120,80,180);doc.setFont('helvetica','bold');doc.setFontSize(6.5);
+      doc.text('EXTRA (blessurehistorie):',M+2,y+4);
+      doc.setFont('helvetica','normal');
+      var extStr=extras.join('  ·  ');
+      doc.text(extStr,M+38,y+4);
+      y+=6;
+    }
+    y+=3;
+
+    // ── LOOPTRAININGEN ──
+    if(!isK){
+      // Headers naast elkaar
+      var lW=(W-M*2-8)/3;
+      var lTitles=['DUURTRAINING — di','LOOPINTERVAL — vr','HIIT — zo'];
+      var lX=[M, M+lW+4, M+2*(lW+4)];
+      for(var j=0;j<3;j++){
+        doc.setFillColor(55,138,221);doc.rect(lX[j],y,lW,6,'F');
+        doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(7);
+        doc.text(lTitles[j],lX[j]+2,y+4.5);
+      }
+      y+=6;
+
+      // WU rij (alle 3 gelijk voor interval en HIIT, duur iets anders)
+      var wuDuur='3min@50% · 3min@60%';
+      var wuInterval='3min@50%·3min@60%·3min@65%·2min@40%';
+      var wuLines=[wuDuur,wuInterval,wuInterval];
+      for(var j=0;j<3;j++){
+        doc.setFillColor(242,242,242);doc.rect(lX[j],y,lW,5,'F');
+        doc.setTextColor(100,100,100);doc.setFont('helvetica','italic');doc.setFontSize(5.5);
+        doc.text('WU: '+wuLines[j],lX[j]+2,y+3.5);
+      }
+      y+=5;
+
+      // Hoofdblok
+      var duurBlok=hard?'6×: 2,5min@70%\n      1min@80%\n      30s@90%\n      2,5min@40%':'6×: 2,5min@70%\n      1,5min@80%\n      2,5min@40%';
+      var intBlok='3×'+vReps+'× '+vOn+'@90%\n'+vOff+'@10%\n'+vRust+' rust tussen';
+      var hiitBlok='3× 6 sprints '+hiitSec+'s\n30s rust/sprint\n2min@40% tussen\nRPE '+hiitRpe;
+      var blokken=[duurBlok,intBlok,hiitBlok];
+
+      for(var j=0;j<3;j++){
+        var lines=blokken[j].split('\n');
+        var bH=lines.length*5.5+2;
+        doc.setFillColor(245,250,255);doc.rect(lX[j],y,lW,bH,'F');
+        doc.setTextColor(55,138,221);doc.setFont('helvetica','bold');doc.setFontSize(7);
+        for(var li=0;li<lines.length;li++){
+          if(li===0)doc.setFont('helvetica','bold');else doc.setFont('helvetica','normal');
+          doc.setTextColor(li===0?55:60,li===0?138:60,li===0?221:60);
+          doc.text(lines[li],lX[j]+2,y+5+li*5.5);
+        }
+        y_loop_end=y+bH;
+      }
+      y=y_loop_end;
+
+      // CD rij
+      y+=1;
+      for(var j=0;j<3;j++){
+        doc.setFillColor(242,242,242);doc.rect(lX[j],y,lW,5,'F');
+        doc.setTextColor(100,100,100);doc.setFont('helvetica','italic');doc.setFontSize(5.5);
+        doc.text('CD: 3min@40%',lX[j]+2,y+3.5);
+      }
+      y+=5;
+
+    } else {
+      // Keeper loop
+      var blokken2=wk<=1?2:3;
+      var sprintM=wk<=1?10:wk<=2?12:15;
+      var sprintN=wk>=4?8:6;
+      var shuffleN=wk>=3?8:6;
+      var kRpe=wk===0?6:wk<=1?7:wk<=2?7:wk===3?8:9;
+      var lW2=(W-M*2-4)/2;
+
+      doc.setFillColor(55,138,221);doc.rect(M,y,lW2,6,'F');
+      doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(7);
+      doc.text('MOBILITEIT — di',M+2,y+4.5);
+      doc.setFillColor(55,138,221);doc.rect(M+lW2+4,y,lW2,6,'F');
+      doc.text('LOOPINTERVAL — za',M+lW2+6,y+4.5);
+      y+=6;
+
+      var mobItems=['Heup 90/90  2×60s/kant','Thoracale rotatie  2×10/kant','Hip flexor  2×45s/kant','Ankle circles  2×10/kant','Schouder capsule  2×30s/kant','Frog stretch  2×30s','Active leg swings  2×15/kant'];
+      var loopItems=['WU: 3min@50%·3min@60%·3min@65%·2min@40%',blokken2+'× blok:',sprintN+'× sprint '+sprintM+'m · 30s rust',shuffleN+'× shuffle 5m · 20s rust','2min@40% tussen blokken','RPE '+kRpe,'CD: 3min@40%'];
+      var maxK=Math.max(mobItems.length,loopItems.length);
+      for(var i=0;i<maxK;i++){
+        doc.setFillColor(i%2===0?248:255,i%2===0?248:255,i%2===0?248:255);
+        doc.rect(M,y,lW2,5.5,'F');doc.rect(M+lW2+4,y,lW2,5.5,'F');
+        doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(40,40,40);
+        if(i<mobItems.length)doc.text(mobItems[i],M+2,y+4);
+        if(i<loopItems.length)doc.text(loopItems[i],M+lW2+6,y+4);
+        y+=5.5;
+      }
+    }
+
+    addFooter(wk);
   }
 
   doc.save('VIC_H1_Schema_'+nm.replace(/ /g,'_')+'.pdf');
 }
+
 
 function chkPW(){
   var v=document.getElementById('pwi').value;
@@ -993,7 +919,6 @@ function chkPW(){
     }
   }catch(e){}
 })();
-
 
 rsb(0);
 </script>

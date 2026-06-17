@@ -435,7 +435,7 @@ function wkNote(wk,keeper=false){
     const sport=keeper?'actieve zomersport (padel, tennis e.d.)':'actieve zomersport (padel, tennis, zwemmen e.d.)';
     return`<div class="wknote vrij"><strong>Week ${wk+1}:</strong> Je mag ${sessie} vervangen door een ${sport}. De overige sessies zijn verplicht.</div>`;
   }
-  return'';
+  return`<div class="wknote verp"><strong>Week ${wk+1}:</strong> Alle sessies zijn verplicht.</div>`;
 }
 
 function bSch(){
@@ -1200,7 +1200,7 @@ function renderDash(){
       var pos=(s.positie||'').substring(0,2).toUpperCase();
       rows+='<tr><td><a class="plink" data-nm="'+encodeURIComponent(nm)+'" href="#">'+nm+(hk?' <span class="dflag">\u2691</span>':'')+'</a></td><td style="color:rgba(255,255,255,.4)">'+pos+'</td><td style="text-align:center">'+comp+'</td><td style="text-align:center">'+gkr+'</td><td style="text-align:center">'+glp+'</td><td style="text-align:center">'+sb+'</td></tr>';
     });
-    document.getElementById('teamtable').innerHTML='<table><thead><tr><th>Speler</th><th>Pos.</th><th style="text-align:center">Compl.</th><th style="text-align:center">Load K</th><th style="text-align:center">Load L</th><th style="text-align:center">Signaal</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    document.getElementById('teamtable').innerHTML='<table style="border:1px solid #2a2a2a;border-radius:8px;overflow:hidden"><thead><tr style="background:#1a1a1a"><th>Speler</th><th>Pos.</th><th style="text-align:center">Aanwezigheid</th><th style="text-align:center">Load K</th><th style="text-align:center">Load L</th><th style="text-align:center">Signaal</th></tr></thead><tbody>'+rows+'</tbody></table>';
   }
 
   // Klachten
@@ -1260,6 +1260,7 @@ function dSig(s,verp){
 }
 
 function dSetWk(wk){dWk=wk;document.getElementById('profiel-card').style.display='none';renderDash();}
+function sluitProfiel(){document.getElementById('profiel-card').style.display='none';}
 function dSetAll(){dWk='all';document.getElementById('profiel-card').style.display='none';renderDash();}
 
 function showProfiel(naam){
@@ -1301,7 +1302,7 @@ function showProfiel(naam){
     var totW=([d.ka,d.kb,d.en,d.vo,d.hi].filter(function(x){return x!==null;}).length);var cb=totW===0?'—':'<span class="dbadge '+(d.gedaan>=totW?'dbg':d.gedaan>=totW-1?'dbo':'dbr')+'">'+(d.gedaan+'/'+totW)+'</span>';
     br+='<tr><td>W'+w+(w===1?' <span style="color:rgba(255,255,255,.25);font-size:10px">(opt.)</span>':'')+'</td>'+bc(d.ka)+bc(d.kb)+bc(d.en)+bc(d.vo)+bc(d.hi)+'<td style="text-align:center">'+cb+'</td></tr>';
   }
-  var th='<div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px">Load per training \xb7 alle weken</div><table style="font-size:11px"><thead><tr><th>Week</th><th style="text-align:center">Kr. A</th><th style="text-align:center">Kr. B</th><th style="text-align:center">Duur</th><th style="text-align:center">Interval</th><th style="text-align:center">HIIT</th><th style="text-align:center">Compl.</th></tr></thead><tbody>'+br+'</tbody></table>';
+  var th='<div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px">Load per training \xb7 alle weken</div><table style="font-size:11px"><thead><tr><th>Week</th><th style="text-align:center">Kr. A</th><th style="text-align:center">Kr. B</th><th style="text-align:center">Duur</th><th style="text-align:center">Interval</th><th style="text-align:center">HIIT</th><th style="text-align:center">Aanwezigheid</th></tr></thead><tbody>'+br+'</tbody></table>';
   document.getElementById('profiel-content').innerHTML='<div style="display:grid;grid-template-columns:1fr 2fr;gap:16px"><div>'+ih+'</div><div>'+th+'</div></div>';
   document.getElementById('profiel-card').style.display='block';
   document.getElementById('profiel-card').scrollIntoView({behavior:'smooth'});

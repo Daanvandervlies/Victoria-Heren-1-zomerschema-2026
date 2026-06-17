@@ -113,6 +113,7 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
 #mainwrap{display:none}
 
 #dashwrap{display:none}
+.dash-active #physiobar{display:none}
 .db-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid #1f1f1f}
 .db-title{font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
 .db-subtitle{font-size:11px;color:rgba(255,255,255,.35);margin-top:3px}
@@ -145,6 +146,10 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
 .dir{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06)}
 .dil{color:rgba(255,255,255,.4)}
 .div2{color:#fff;font-weight:500}
+#teamtable table{width:100%;border-collapse:collapse;font-size:12px}
+#teamtable th{text-align:left;padding:8px 10px;color:rgba(255,255,255,.4);font-weight:500;border-bottom:1px solid #2a2a2a;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+#teamtable td{padding:9px 10px;border-bottom:1px solid #1a1a1a;color:#fff;vertical-align:middle}
+#teamtable tbody tr:hover{background:#151515}
 .plink{cursor:pointer;color:#fff;text-decoration:none}
 .plink:hover{color:#F4633A}
 .refresh-btn{font-size:11px;color:#B1A2CA;background:transparent;border:1px solid #B1A2CA33;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'DM Sans',sans-serif}
@@ -172,11 +177,11 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
   <div class="hic"><img src="data:image/png;base64,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" alt="Victoria logo"></div>
   <div>
     <div class="ht">Victoria Heren 1 — Zomerschema 2026</div>
-    <div class="hs">23 juni – 3 augustus · 6 weken · gepersonaliseerd</div>
+    <div class="hs">23 juni – 3 augustus 2026 · 6 weken · gepersonaliseerd</div>
   </div>
 </div>
 
-<div class="physio" id="physiobar">Klachten tijdens de training? Neem contact op met Daan (fysiotherapeut).</div>
+<div class="physio" id="physiobar" class="physio-speler">Klachten tijdens de training? Neem contact op met Daan (fysiotherapeut).</div>
 <div id="schema-sections"><div class="stepbar" id="SB"></div>
 
 <!-- STAP 0: PROFIEL -->
@@ -317,7 +322,7 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
     </div>
   </div>
   <div class="dcard" id="profiel-card" style="margin-bottom:10px;display:none">
-    <div class="dsh" id="profiel-title">Individueel profiel</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div class="dsh" style="margin-bottom:0" id="profiel-title">Individueel profiel</div><button type="button" onclick="document.getElementById('profiel-card').style.display='none'" style="background:transparent;border:1px solid #2a2a2a;border-radius:6px;color:#555;font-size:12px;padding:4px 10px;cursor:pointer;font-family:'DM Sans',sans-serif">✕ Sluiten</button></div>
     <div id="profiel-content"></div>
   </div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
@@ -325,7 +330,7 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
     <div class="dcard">
       <div class="dsh">Legenda load-signaal</div>
       <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
-        <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbg">goed</span><span style="color:rgba(255,255,255,.4)">Borg 5–7, compliance ok</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbg">goed</span><span style="color:rgba(255,255,255,.4)">Borg 5–7, aanwezigheid ok</span></div>
         <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbo">oranje</span><span style="color:rgba(255,255,255,.4)">Borg ≥8 (2×) of 1–2 trainingen gemist</span></div>
         <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbr">hoog</span><span style="color:rgba(255,255,255,.4)">Borg ≥9 of 3+ gemist (verplicht)</span></div>
         <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbgr">onder</span><span style="color:rgba(255,255,255,.4)">Borg ≤4 herhaaldelijk</span></div>
@@ -421,11 +426,11 @@ function brz(w,r){return(!w||!r||r<1)?null:Math.round(w/(1.0278-0.0278*r));}
 function tkg(o,p){return o?Math.round(o*p/100/2.5)*2.5:null;}
 
 function wkNote(wk,keeper=false){
-  if(wk===0){
-    const msg=keeper?'Week 1 is volledig optioneel.':'Week 1 is volledig optioneel — train als je wil, sla over als je rust nodig hebt of op vakantie bent.';
+  if(wk===0||wk===1){
+    const msg=keeper?'Week '+(wk+1)+' is volledig optioneel.':'Week '+(wk+1)+' is volledig optioneel — train als je wil, sla over als je rust nodig hebt of op vakantie bent.';
     return`<div class="wknote opt">${msg}</div>`;
   }
-  if(wk===1||wk===2){
+  if(wk===2||wk===3){
     const sessie=keeper?'de mobiliteitssessie (dinsdag)':'de duurtraining (dinsdag)';
     const sport=keeper?'actieve zomersport (padel, tennis e.d.)':'actieve zomersport (padel, tennis, zwemmen e.d.)';
     return`<div class="wknote vrij"><strong>Week ${wk+1}:</strong> Je mag ${sessie} vervangen door een ${sport}. De overige sessies zijn verplicht.</div>`;
@@ -725,7 +730,7 @@ function downloadPDF(){
   var pos=D.pos||'Middenvelder';
   var leef=D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):25;
   var isK=pos==='Keeper';
-  var WT=['Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht','Verplicht'];
+  var WT=['Optioneel','Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht'];
   var bl_set=new Set([].concat(D.kln||[]).concat(D.his||[]));
   var W=210,M=14;
   var y=0;
@@ -1071,6 +1076,7 @@ function chkPW(){
     document.getElementById('mainwrap').style.display='block';
     document.getElementById('dashwrap').style.display='block';
     document.getElementById('schema-sections').style.display='none';
+    document.body.classList.add('dash-active');
     try{localStorage.setItem('vich1_ok','dashboard');}catch(e){}
     loadDashboard();
   } else {
@@ -1089,6 +1095,7 @@ function chkPW(){
       document.getElementById('mainwrap').style.display='block';
       document.getElementById('dashwrap').style.display='block';
       document.getElementById('schema-sections').style.display='none';
+      document.body.classList.add('dash-active');
       loadDashboard();
     }
   }catch(e){}
@@ -1133,7 +1140,7 @@ function renderDash(){
   document.getElementById('dtabs').innerHTML=tabs;
 
   var checkins=dWk==='all'?dCheckins:dCheckins.filter(function(c){return parseInt(c.week)===(dWk+1);});
-  var vp=[0,4,4,5,5,5];
+  var vp=[0,0,4,4,5,5];
   var verp=dWk==='all'?24:(vp[dWk]||0);
 
   // Stats per speler
@@ -1161,7 +1168,7 @@ function renderDash(){
   var totC=0,totK=[],totL=[],nR=0,nO=0;
   namen.forEach(function(nm){
     var s=stats[nm];
-    totC+=verp>0?s.gedaan/verp*100:100;
+    var totSess=s.bk.length+s.bl.length;totC+=totSess>0?s.gedaan/totSess*100:100;
     totK=totK.concat(s.bk);totL=totL.concat(s.bl);
     var sg=dSig(s,verp);
     if(sg.l==='rood')nR++;else if(sg.l==='oranje')nO++;
@@ -1171,7 +1178,7 @@ function renderDash(){
   var gl=totL.length>0?(totL.reduce(function(a,b){return a+b;},0)/totL.length).toFixed(1):'—';
 
   document.getElementById('dmetrics').innerHTML=
-    '<div class="metric"><div class="label">Compliance</div><div class="val">'+gc+'%</div><div class="sub">'+namen.length+' ingeschreven</div></div>'+
+    '<div class="metric"><div class="label">Aanwezigheid</div><div class="val">'+gc+'%</div><div class="sub">'+namen.length+' ingeschreven</div></div>'+
     '<div class="metric"><div class="label">Load kracht</div><div class="val">'+gk+'</div><div class="sub">Borg gem.</div></div>'+
     '<div class="metric"><div class="label">Load loop</div><div class="val">'+gl+'</div><div class="sub">Borg gem.</div></div>'+
     '<div class="metric"><div class="label">Signalen</div><div class="val" style="color:#F4633A">'+(nR+nO)+'</div><div class="sub">'+nR+' rood \xb7 '+nO+' oranje</div></div>'+
@@ -1184,7 +1191,7 @@ function renderDash(){
     var rows='';
     namen.sort().forEach(function(nm){
       var s=stats[nm];
-      var comp=verp>0?s.gedaan+'/'+verp:'opt.';
+      var totSess2=s.bk.length+s.bl.length;var comp=totSess2>0?s.gedaan+'/'+totSess2:'—';
       var gkr=s.bk.length>0?(s.bk.reduce(function(a,b){return a+b;},0)/s.bk.length).toFixed(1):'—';
       var glp=s.bl.length>0?(s.bl.reduce(function(a,b){return a+b;},0)/s.bl.length).toFixed(1):'—';
       var sg=dSig(s,verp);
@@ -1249,7 +1256,7 @@ function dSig(s,verp){
   if(gem>=1&&verp>0)return{l:'oranje',r:gem+'x training gemist'};
   if(l4>=2)return{l:'onder',r:'Borg \u22644 meerdere keren'};
   if(all.length===0)return{l:'geen',r:'Nog geen data'};
-  return{l:'goed',r:'Compliance en load ok'};
+  return{l:'goed',r:'Aanwezigheid en load ok'};
 }
 
 function dSetWk(wk){dWk=wk;document.getElementById('profiel-card').style.display='none';renderDash();}
@@ -1288,10 +1295,10 @@ function showProfiel(naam){
     if(!isNaN(b)){if(t==='Kracht A')wkd[w].ka=b;else if(t==='Kracht B')wkd[w].kb=b;else if(t==='Duurtraining')wkd[w].en=b;else if(t==='Loopintervaltraining')wkd[w].vo=b;else if(t==='HIIT')wkd[w].hi=b;}
   });
   function bc(v){if(v===null)return '<td style="text-align:center;color:rgba(255,255,255,.15)">—</td>';var cl=v>=9?'color:#f87171;font-weight:700':v>=8?'color:#fb923c;font-weight:600':'';return '<td style="text-align:center;'+cl+'">'+v+'</td>';}
-  var vp=[0,4,4,5,5,5];var br='';
+  var vp=[0,0,4,4,5,5];var br='';
   for(var w=1;w<=6;w++){
     var d=wkd[w];var vr=vp[w-1];
-    var cb=w===1?'<span class="dbadge dbbl">opt.</span>':vr>0?'<span class="dbadge '+(d.gedaan>=vr?'dbg':d.gedaan>=vr-1?'dbo':'dbr')+'">'+d.gedaan+'/'+vr+'</span>':'—';
+    var totW=([d.ka,d.kb,d.en,d.vo,d.hi].filter(function(x){return x!==null;}).length);var cb=totW===0?'—':'<span class="dbadge '+(d.gedaan>=totW?'dbg':d.gedaan>=totW-1?'dbo':'dbr')+'">'+(d.gedaan+'/'+totW)+'</span>';
     br+='<tr><td>W'+w+(w===1?' <span style="color:rgba(255,255,255,.25);font-size:10px">(opt.)</span>':'')+'</td>'+bc(d.ka)+bc(d.kb)+bc(d.en)+bc(d.vo)+bc(d.hi)+'<td style="text-align:center">'+cb+'</td></tr>';
   }
   var th='<div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px">Load per training \xb7 alle weken</div><table style="font-size:11px"><thead><tr><th>Week</th><th style="text-align:center">Kr. A</th><th style="text-align:center">Kr. B</th><th style="text-align:center">Duur</th><th style="text-align:center">Interval</th><th style="text-align:center">HIIT</th><th style="text-align:center">Compl.</th></tr></thead><tbody>'+br+'</tbody></table>';
@@ -1309,7 +1316,7 @@ function downloadPDF(){
   var leef=D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):25;
   var isK=pos==='Keeper';
   var WP=[55,60,65,70,72,58];
-  var WT=['Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht','Verplicht'];
+  var WT=['Optioneel','Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht'];
   var bl_set=new Set([].concat(D.kln||[]).concat(D.his||[]));
   var W=210,M=12;
   var appURL='https://daanvandervlies.github.io/Victoria-Heren-1-zomerschema-2026/';
@@ -1568,6 +1575,16 @@ function downloadPDF(){
   doc.save('VIC_H1_Schema_'+nm.replace(/ /g,'_')+'.pdf');
 }
 
+
+// Auto-bepaal huidige week op basis van startdatum 23 juni 2026
+(function(){
+  var start=new Date('2026-06-23');
+  var nu=new Date();
+  var diff=Math.floor((nu-start)/(1000*60*60*24*7));
+  var huidig=Math.max(0,Math.min(5,diff));
+  // Stel dWk in op verlopen weken (voor aanwezigheidsberekening)
+  window.dHuidigeWeek=huidig;
+})();
 
 rsb(0);
 </script>

@@ -462,7 +462,7 @@ function bSch(){
         <div class="sc"><div class="sv">${z2l}–${z2h}</div><div class="sl">Zone 2 · duurloop (spm)</div></div>
         <div class="sc"><div class="sv">${z4l}–${z4h}</div><div class="sl">Zone 4 · interval (spm)</div></div>
       </div>
-      <div class="wtabs">${[0,1,2,3,4,5].map(i=>`<div class="wt${i===wk?' active':''}" onclick="D._w=${i};bSch()"><div style="font-size:11px;font-weight:600">Wk ${i+1}</div><div style="font-size:9px;margin-top:2px;color:${i===0?'#888':i<=2?'#378ADD':'#F4633A'}">${WT[i]}</div></div>`).join('')}</div>
+      <div class="wtabs">${[0,1,2,3,4,5].map(i=>`<div class="wt${i===wk?' active':''}" onclick="D._w=${i};bSch()"><div style="font-size:11px;font-weight:600">Wk ${i+1}</div><div style="font-size:9px;margin-top:2px;color:${i<=1?'#888':i<=3?'#378ADD':'#F4633A'}">${WT[i]}</div></div>`).join('')}</div>
       ${wkNote(wk,false)}
       <div class="open-hint">${'↓ Klik op een training om het volledige schema te openen'}</div>
       <div class="daygrid">
@@ -520,7 +520,7 @@ function bSchKeeper(nm,leef,wk,WT,WC){
   document.getElementById('SO').innerHTML=`
     <div class="card">
       <div class="card-title">${nm} · Keeper · ${leef} jaar</div>
-      <div class="wtabs">${[0,1,2,3,4,5].map(i=>`<div class="wt${i===wk?' active':''}" onclick="D._w=${i};bSch()"><div style="font-size:11px;font-weight:600">Wk ${i+1}</div><div style="font-size:9px;margin-top:2px;color:${i===0?'#888':i<=2?'#378ADD':'#F4633A'}">${WT[i]}</div></div>`).join('')}</div>
+      <div class="wtabs">${[0,1,2,3,4,5].map(i=>`<div class="wt${i===wk?' active':''}" onclick="D._w=${i};bSch()"><div style="font-size:11px;font-weight:600">Wk ${i+1}</div><div style="font-size:9px;margin-top:2px;color:${i<=1?'#888':i<=3?'#378ADD':'#F4633A'}">${WT[i]}</div></div>`).join('')}</div>
       ${wkNote(wk,true)}
       <div class="open-hint">${'↓ Klik op een training om het volledige schema te openen'}</div>
       <div class="daygrid">

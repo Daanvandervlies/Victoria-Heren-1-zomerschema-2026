@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Victoria H1 — Zomerschema 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-height:100vh;padding:1rem;-webkit-text-size-adjust:100%}
+* {-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+.wrap{max-width:640px;margin:0 auto}
+.hdr{background:#111;border-radius:12px;padding:.875rem 1.125rem;margin-bottom:.75rem;display:flex;align-items:center;gap:12px;border:1px solid #1f1f1f}
+.hic{width:38px;height:38px;background:#111;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid #2a2a2a;overflow:hidden}
+.hic img{width:100%;height:100%;object-fit:contain}
+.ht{font-size:15px;font-weight:600;color:#F4633A;letter-spacing:-.2px}
+.hs{font-size:11px;color:#aaa;margin-top:2px}
+.physio{background:#F4633A12;border-left:3px solid #F4633A;padding:6px 12px;margin-bottom:.75rem;font-size:11px;color:#F4633A;border-radius:0 8px 8px 0}
+.stepbar{display:flex;gap:4px;margin-bottom:.75rem}
+.step{flex:1;padding:5px 3px;border-radius:8px;font-size:10px;text-align:center;color:#888;background:#111;cursor:default;border:1px solid #1f1f1f;text-transform:uppercase;letter-spacing:.4px;transition:all .15s}
+.step.active{background:#F4633A;color:#fff;border-color:#F4633A}
+.step.done{color:#F4633A;border-color:#F4633A44;cursor:pointer}
+.step.done:hover{background:#F4633A15}
+.pane{display:none!important}.pane.show{display:block!important}
+.card{background:#111;border:1px solid #1f1f1f;border-radius:12px;padding:.875rem 1.125rem;margin-bottom:.75rem}
+.card-title{font-size:11px;font-weight:600;color:#F4633A;text-transform:uppercase;letter-spacing:.6px;margin-bottom:.625rem}
+.fl{margin-bottom:.625rem}
+.fl label{display:block;font-size:10px;color:#aaa;margin-bottom:4px;text-transform:uppercase;letter-spacing:.4px}
+.fi{width:100%;padding:10px 10px;border:1px solid #2a2a2a;border-radius:8px;background:#1a1a1a;color:#e8e8e8;font-size:16px;outline:none;font-family:'DM Sans',sans-serif;transition:border-color .15s;-webkit-appearance:none;appearance:none}
+.fi:focus{border-color:#F4633A}
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.chips{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.chip{padding:5px 13px;border-radius:16px;font-size:11px;cursor:pointer;color:#999;background:#1a1a1a;border:1px solid #2a2a2a;user-select:none;transition:all .12s}
+.chip:hover{border-color:#F4633A;color:#F4633A}
+.chip.on{background:#F4633A;color:#fff;border-color:#F4633A}
+.btn{background:#F4633A;color:#fff;border:none;border-radius:8px;padding:12px 20px;font-size:14px;font-weight:500;cursor:pointer;font-family:'DM Sans',sans-serif;transition:background .15s;min-height:44px;-webkit-appearance:none}
+.btn:hover{background:#d94f28}
+.btn2{background:transparent;color:#666;border:1px solid #2a2a2a;border-radius:8px;padding:11px 16px;font-size:13px;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .12s;min-height:44px;-webkit-appearance:none}
+.btn2:hover{color:#e8e8e8;border-color:#444}
+.brow{display:flex;gap:8px;margin-top:.625rem;position:relative;z-index:1}
+.tip{font-size:11px;color:#bbb;background:#1a1a1a;border-radius:8px;padding:9px 11px;border-left:3px solid #F4633A;margin-bottom:.75rem;line-height:1.6}
+/* Week tabs */
+.wtabs{display:flex;flex-direction:row;gap:4px;margin-bottom:.875rem;width:100%}
+.wt{flex:1;padding:6px 2px;border-radius:7px;font-size:10px;cursor:pointer;color:#666;background:#1a1a1a;border:1px solid #252525;transition:all .12s;user-select:none;text-align:center;white-space:nowrap}
+.wt:hover{border-color:#F4633A44;color:#aaa}
+.wt.active{background:#F4633A;color:#fff;border-color:#F4633A;box-shadow:0 0 0 3px #F4633A22}
+/* Week notes */
+.wknote{font-size:11px;padding:8px 12px;border-radius:8px;margin-bottom:.625rem;line-height:1.6;font-weight:500}
+.wknote.opt{background:#F4633A12;border-left:3px solid #F4633A;color:#e8e8e8}
+.wknote.vrij{background:#378ADD12;border-left:3px solid #378ADD;color:#e8e8e8}
+/* Day grid */
+.daygrid{border:1px solid #1f1f1f;border-radius:10px;overflow:hidden;margin-bottom:.75rem}
+.dayrow{display:grid;grid-template-columns:32px 1fr;border-top:1px solid #1f1f1f}
+.dayrow:first-child{border-top:none}
+.daylbl{padding:7px 4px;font-size:9px;color:#aaa;text-transform:uppercase;font-weight:600;background:#151515;border-right:1px solid #1f1f1f;display:flex;align-items:center;justify-content:center;letter-spacing:.3px}
+.daycont{padding:12px 12px;cursor:pointer;transition:background .1s;position:relative;padding-right:32px;border-left:2px solid transparent;min-height:44px}
+.daycont:hover{background:#161616}
+.daycont::after{content:'›';position:absolute;right:10px;top:50%;transform:translateY(-50%);font-size:18px;color:#333;font-weight:300}
+.daycont.rest{cursor:default;padding-right:12px}
+.daycont.rest:hover{background:transparent}
+.daycont.rest::after{display:none}
+.dtag{display:inline-block;padding:2px 9px;border-radius:7px;font-size:10px;font-weight:600;text-transform:uppercase;letter-spacing:.3px}
+/* Kleur systeem: oranje=kracht, blauw=alles hardlopen incl HIIT, grijs=rust */
+.ta{background:#F4633A15;color:#F4633A;border:1px solid #F4633A25}
+.tl{background:#378ADD15;color:#378ADD;border:1px solid #378ADD25}
+.th{background:#378ADD15;color:#378ADD;border:1px solid #378ADD25}
+.tr{background:#1f1f1f;color:#777;border:1px solid #2a2a2a}
+.dsub{font-size:10px;color:#aaa;margin-top:3px}
+.open-hint{font-size:10px;color:#F4633A;margin-bottom:.5rem;display:flex;align-items:center;gap:4px}
+/* Stats */
+.st2{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:.75rem}
+.sc{background:#1a1a1a;border-radius:8px;padding:9px;text-align:center;border:1px solid #1f1f1f}
+.sv{font-size:18px;font-weight:600;color:#F4633A}
+.sl{font-size:9px;color:#aaa;margin-top:2px;text-transform:uppercase;letter-spacing:.4px}
+/* Modal */
+.modal{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.8);z-index:100;overflow-y:auto;padding:1rem}
+.modal.show{display:block}
+.mbox{background:#111;border-radius:12px;border:1px solid #2a2a2a;max-width:560px;margin:0 auto;padding:1.125rem}
+.mhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:.75rem;padding-bottom:.625rem;border-bottom:1px solid #1f1f1f}
+.mtitle{font-size:14px;font-weight:600;color:#F4633A}
+.mclose{background:transparent;border:none;font-size:22px;cursor:pointer;color:#555;line-height:1;font-family:'DM Sans',sans-serif;padding:0 4px;transition:color .12s}
+.mclose:hover{color:#e8e8e8}
+.mbl{font-size:10px;font-weight:600;color:#aaa;text-transform:uppercase;letter-spacing:.5px;padding:5px 0;border-bottom:1px solid #1f1f1f;margin-bottom:.5rem}
+.exrow{display:flex;gap:8px;padding:5px 0;border-bottom:1px solid #141414;align-items:flex-start}
+.exrow:last-child{border-bottom:none}
+.exdot{color:#333;font-size:12px;flex-shrink:0;padding-top:2px}
+.exname{font-size:12px;color:#ddd;font-weight:500}
+.exsets{font-size:10px;color:#aaa;margin-left:5px;font-weight:400}
+.exkg{font-size:11px;color:#F4633A;font-weight:600;margin-top:2px}
+.exinfo{font-size:10px;color:#aaa;margin-top:2px;line-height:1.5}
+.extra-blok{margin-top:8px;padding:8px 10px;background:#B1A2CA15;border:1px solid #B1A2CA30;border-radius:8px}
+.extra-lbl{font-size:9px;color:#B1A2CA;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;font-weight:600}
+/* Run table */
+.rtbl{width:100%;border-collapse:collapse;font-size:11px}
+.rtbl td{padding:5px 6px;border-bottom:1px solid #141414}
+.rtbl tr:last-child td{border-bottom:none}
+.rtbl .lbl{font-size:10px;color:#aaa;width:100px}
+.rtbl .dur{width:55px}
+/* RPE / done */
+.borg-wrap{margin-top:12px;padding-top:10px;border-top:1px solid #1f1f1f}
+.borg-lbl{font-size:11px;color:#aaa;margin-bottom:6px}
+.borg-nums{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:4px}
+.borg-num{width:28px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600;cursor:pointer;border:1px solid #2a2a2a;background:#1a1a1a;color:#999;user-select:none;transition:all .1s}
+.borg-num:hover{border-color:#F4633A;color:#F4633A}
+.borg-num.on{background:#F4633A;border-color:#F4633A;color:#fff}
+.borg-hint{font-size:10px;color:#888;margin-bottom:8px}
+.done-btn{display:inline-block;padding:5px 14px;border-radius:8px;font-size:11px;cursor:pointer;border:1px solid #2a2a2a;background:#1a1a1a;color:#999;user-select:none;transition:all .1s;font-family:'DM Sans',sans-serif}
+.done-btn:hover{border-color:#27AE60;color:#27AE60}
+.done-btn.done{background:#27AE6020;border-color:#27AE6060;color:#27AE60}
+#pwpage{min-height:100vh;background:#0a0a0a;display:flex;align-items:center;justify-content:center;padding:1rem}
+#mainwrap{display:none}
+
+#dashwrap{display:none}
+.dash-active #physiobar{display:none}
+.db-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;padding-bottom:1rem;border-bottom:1px solid #1f1f1f}
+.db-title{font-size:18px;font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+.db-subtitle{font-size:11px;color:rgba(255,255,255,.35);margin-top:3px}
+.label{font-size:10px;color:rgba(255,255,255,.45);text-transform:uppercase;letter-spacing:.08em;margin-bottom:6px}
+.metric{background:#111;border-radius:10px;padding:12px 14px;border:1px solid #1a1a1a}
+.metric .val{font-size:24px;font-weight:700;color:#fff}
+.metric .sub{font-size:11px;color:rgba(255,255,255,.4);margin-top:3px}
+.dcard{background:#111;border-radius:10px;padding:1rem 1.25rem;border:1px solid #1a1a1a}
+.alertbar{background:#1a0000;border:1px solid #C63527;border-radius:10px;padding:10px 14px;margin-bottom:1rem;display:none}
+.alertbar.show{display:flex;align-items:flex-start;gap:10px}
+.alert-text{font-size:13px;color:#ff6b6b;font-weight:600}
+.alert-sub{font-size:11px;color:rgba(255,107,107,.7);margin-top:2px}
+.dtab-bar{display:flex;gap:6px;margin-bottom:1rem;flex-wrap:wrap}
+.dtab{font-size:12px;padding:5px 14px;border-radius:8px;border:1px solid rgba(255,255,255,.12);background:transparent;color:rgba(255,255,255,.4);cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .15s}
+.dtab.on{background:#F4633A;color:#fff;border-color:#F4633A;font-weight:600}
+.dtab.totaal{border-color:#B1A2CA;color:#B1A2CA}
+.dtab.totaal.on{background:#B1A2CA;color:#000;border-color:#B1A2CA}
+.dbadge{display:inline-block;font-size:10px;padding:2px 8px;border-radius:6px;font-weight:600}
+.dbg{background:#1a3a1a;color:#4ade80}
+.dbo{background:#2a1a00;color:#fb923c}
+.dbr{background:#1a0000;color:#f87171}
+.dbgr{background:#1a1a1a;color:rgba(255,255,255,.4)}
+.dbbl{background:#0a1a2a;color:#7cb9f4}
+.dflag{color:#C63527;font-size:11px}
+.dsig{border-radius:8px;padding:9px 12px;margin-bottom:7px}
+.dsig-red{background:#1a0000}
+.dsig-ora{background:#1a0e00}
+.dsig-gray{background:#151515}
+.dsh{font-size:13px;font-weight:700;color:#F4633A;text-transform:uppercase;letter-spacing:.05em;margin-bottom:10px}
+.dir{display:flex;justify-content:space-between;font-size:12px;padding:4px 0;border-bottom:1px solid rgba(255,255,255,.06)}
+.dil{color:rgba(255,255,255,.4)}
+.div2{color:#fff;font-weight:500}
+#teamtable table{width:100%;border-collapse:collapse;font-size:12px}
+#teamtable th{text-align:left;padding:8px 10px;color:rgba(255,255,255,.4);font-weight:500;border-bottom:1px solid #2a2a2a;font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+#teamtable td{padding:9px 10px;border-bottom:1px solid #1a1a1a;color:#fff;vertical-align:middle}
+#teamtable tbody tr:hover{background:#151515}
+.plink{cursor:pointer;color:#fff;text-decoration:none}
+.plink:hover{color:#F4633A}
+.refresh-btn{font-size:11px;color:#B1A2CA;background:transparent;border:1px solid #B1A2CA33;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'DM Sans',sans-serif}
+.uitlogbtn{font-size:11px;color:#555;background:transparent;border:1px solid #222;border-radius:6px;padding:4px 10px;cursor:pointer;font-family:'DM Sans',sans-serif}
+</style>
+</head>
+<body>
+<div id="pwpage">
+  <div style="background:#111;border:1px solid #222;border-radius:14px;padding:2rem 1.5rem;max-width:300px;width:100%;text-align:center;box-sizing:border-box">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAABvCAYAAAAaJWWXAAA8wklEQVR42u29d7glV3nm+1uhaoeTc+eo0FJLrZxQQhIgRJCAAQQmGydkE67B18zgMGAb4zBjY4MBY3KQCSLYxBEIIUCggLJarRw7nNR98t67qtZ654/a3Wohqfu0JAzcSz1Pdekcnb2ran3rS++XDCB+ffwijghY4OnA9wEHBPvrdfnlOn5lCWLaZ/nPI/7jV/rwv5LEMCkeA84BBsUFFB2R4lde/j5pDrG23JnOgbX/FcQwOAu5cvKiRV4UFNHjPGDcU8+Gj7o/OGcw5uF3/6XhEGMhRlFLu2hks+UXOgOCEA0yEbT7oXXACy9pz6I44zA2UhSiCBldnf288aKD6Ogo+Kd/3MHorm2AwTkDEjEa9KT4xWBpf4cRxhiMMYQQCUF01vqYb8xhbI7iU0sUPZHTOSswOu6og7X5mnP0N396sNauHhI4gRXGKvVW3jtZZ2Vs+ff7/24rsLLWyftEPumSsUn7/yXq6xnQ773uaG2+5hQpH5aKTj14y6F6+5s3aGSkX5AKkMcp9XX5JJW1VsYYGWMW9W7GWDmTKHFelcTJmN33N1o+PKI/fsvxuu3Gp+v5z1ojSOV88kTWMLSvZ7bp4J4wQZy1wqAlQ8t0y7VnS3lVyro0ef/B+sj7NukZZ65UNe1oL275sN5YOWfkfft0P3N6I+9LQj+8cG3i0qVjNq3SX//pKbr3xmOk1hJp2isfNcrGrDTrpdinrbcfqn989yE66fhlsraz/VkvMLIWOb+/+xs5h6zxe93fy7kunXzSQfrnvzlT2+46UmqslFoVbX9glQ4/ZHCvDfrkCWIOVJYYY7BWONfJV75wKuc960ryqQUKb6m5CF0dMN/L5s29fPcH4vIrWtxw8ywPbJuhKBYWcTsHVBgZ7uaww7p4+tO6ecbTDSccvUDaPwrz0xQtQUyILiBX4EOFYFqk3kK9StEc4IYburjsMsMVP2pw4+ZZtm6fRWou6nWNqbNySQ+bjuzl9FO7OfusjKM3zeI7d0FjJ6HhCDKkHY7rb13OOc/ewdT0PAZDjItezsf0Qw6IIAaL94a88HzwvSfxu2+8g2JiFOdSipiXFg8JjiauDqSdEHqZGq/y4L01ttyTct9DTXaMtRgbSwiFRQLrEvr7F1i6tMWKJUMcvM6xbs08I0saUJuGbALmIYuArSAjKtUcKl0gB/kC+UJBxGAV8T5iqkDSDVkfk2MV7rmvwp13Jzy0bZbtO2BsvAPFAmMjGMdIX4MlSyosW9XNoasz1q9p0b9sFtJd0JqFpsgjCIfF4JyIuXD9db5yyTJe+rIHkW8Rg4jSfw1BvLcUheVtv3sif/fPoxQzd+NsjUgT11UtTa3ZeYqGIcoAEeeESwCfQGoozaEKKAHZUukbD6YFaoBpQp5DUV5iABMN1ghvHXR7SFLu2lLhg++LNGY9v/sWz6Yjc2Aa5i15UaBQSgTn27dMLHgHrgKkEOuU2lil6WTnwRQQIxQ5tApiy1G0d7w1Fl8BOj2oCnNTABSZxQ/18N73dPOWd+zAJ4EiL37+BPHeUBTiRc/eyBc+J2J+G4YKuCYu7ecv/ypleLnnJedB3/Lp8gUbEWWeoohIFhlQuY+xtnxotddDlJbZbrPKGIP1kKYBqg5MQjaRcvlPalz87zlf+UaDqZkWANVqjQue0cErXlHjjKdn9IzsgpBBM6Im5NERVPK4kbBEDAbZ+LASlUHt+xo81uZ4CyYxUBXYhNnRTr71Lc91t1R41zsc3j5EDLEUX/19/P7re/iXT9zdXqv9WpaPSZBFKHUj50rlevSmgzT54EkKs0ZhrKpsLJHUqb9/18geK2jFiqpe8/JB/ftHlure6wcVd/ZLeZcU61KRSk0nzVlpzkizbYU848qfW0bKrRQqUtYtzfZq2539+voXh/TWP+jTxoP79hgJUCrjxLm9ntXpkNWDuui3hvQfn12ihzYvkab7pawuFRUpc1LTSnNIs0jTpn1aadZIDSvlqaRa+bwz/Xrotl599VO9uug3u7V2baVtKKA3XrReKpaq2OEUxxIVk0b5roN03hmrymfzfs/fPqVK3VlHlBgZGeZ7XzucDRu/TzFvMcHghi1furibC39jCuMDAorCATmQ0tlhOPQgxxGHd3D4BsMhB8GSQcdQX0Gts8C4gDGBGCpkDceunZaxqYx77nNsvk1s3pJz2+2B7ROtPX5smgLKyYuIVDppMap02Lwjzx72eQc6Khx6uGPT4TU2HOw46OAmS/odvb2GaofwLsMQiUHMtRImd6WMj1nuunuB27YYbr1FbLmrxeQsQAYYvAPjAnmW8P7/tYaL3jJKMdrEJBZbz5kYO4zTn72d22+fxbmMEPTUcYg1VtYZWVvLv/mVUzMVncq2JyrGjJR5XfuDperpSmSslbNOxiBrKkp8TUnysE9Rfl+lfSbqqlfV311Tf09N/d119fbU1dNVU9VVBbU2FyR7mb2m/fNeO84Ymb04Y29TNUk75F3SNnn3Np9TeVtRR72qnt5ODXTXNdRd02B3Xd21ihx+j5n88DpUZL1VmqRyptL2U5wSn6riq/rWl46Q8g7l44nCeCq1vK678jANdncJY2SNfWo4xOBIKp6sFfiX/3V2fMObbqKYGrWGCraSs2N8CaefM8Pd983jnCWE4pGQg9rwQvvEGqIiMYLiz97WtjdMpb0TLUli6eno5pxnrWJkKFKv5QwOiIPXjvCjqzP+7h+vwlHlzW8+ggvOS3ExcPd9Be/8i7u4e/sCiY0EAqtXDWCLyINbG2Rhvq2fKpSGUN5WYLG0IU0EC9aUekxRSBBl2pptt+9vcM4RQmR4sIfvXbqKwzfcRpiLSA7fm/CVL67nwlfdhWxBUbR4DMPrQDjEKEnLHfnHFx0nFWtUjKNioqJiyirbOaKzzuws/85XZYxdhPdL21tG1u7+GTlnBFbnnHaI3vf+0/TJj5+t175krcBp2fCwPvChU/W/33OkHrjtNP3HxWv00ucP6eRjBwWp/v7dZ+v6a4/R2Sd16LCD6/rHf1itO645XgN9XTIukaVT3/3P83Tn9WfoO187WZ/76Kl60QvK7/a2LmPqbaeuKmOtTLmN9uK8fXv2iasJjI46bKl23btBmkbFZKp8B1IY1N+++/CSY72XfbQ+Wbyn7tte53nnHaN85piSGOOp8nGkVo/e8JrB8qUSJwyLIsjDhDFtEbKbGOhNv3+sbr/ldP3RHyzR779uuR6643T9zz858hGfe/8/Haf/8Zble0TQ2pUj2nbnaVq/yrThEitwuuwbx+t/vHWlwGlwsFd33Hiizjwp1bGbuvSm1y/V/XeeqFe+bInAaOXKIb325cer6qsyzshgZJ2R86YkkNk3xGONaytvdMGzVqg5u075pFExkSgfN1JrQL/76mWlqEwOmCBGxjjZNm606fD1Gn/wVMUppzDulY0mUuzSP71zicDLJ05mD9XtY3IEGFm8rE1UT3s02NcvQ1Ufff95etYzhoVBq1eM6J5bnqtDD9mtK6zWrxzQueeulPVWlVqXvLf6u/ccrI//y3I5l8gaqxdfsFY/vOyoPVxaSa2c8/qz/3ejLv7QoQJ08kkrdcvVJz7iuT78D8foEx9cI0C//5sn6/qrTpc1yLqKEl9tb5aacKkMNZlF4G9Jkgqc3nbRBilfrtakUdhZUZz0as2s1NlnLt8Drxjcbs57TILYvTFGa0qZuWbFcv7948sYHLia2PRIkaSvypc+X+Nt79yFT1JiEdtikL2uD8MfUilnrXfEGHnphWv5X+85CtGiVh3ndS8dABmOPbaTHTvu5fY7DElqSL3j7gen+fa3HyQWDoUWRRHZOVqht6uLEAqiIjI5CbF8D5NhTHmfrkqVoi3xD1mTsm59g4s/cgrv+pPj+MOLDuXEU1I+ffFOwHHWsxxf+9odRBmqlYS8aPKSC9bwjUtOYrjblfpiESGFosjxqefv/+VePvDPNdL+PggBmUBqxvjUxxzHHD5MjB5rPWYfhq3dWw9b65FyznvmUg474X6y2Yh8ga1bbr8+4fW/1SRThsICkkePE6Xz3jAyMkCMDlwoN4PmWLp8EhAf/vR2TjypG+vErpkWnfUqiTXEYImkJKnjta86muedt57SVjDs2BYZ6K6VG8c6rrlmlpUrlnLooRXyPNJs5Ugpz35uF9dcOQnAcSf28/VvzvDFS+7FuSne+rYeLr10lEu/P0N3Z40jNuZ89ztTWONZWJjjOWcfzrveuZbjjhxn+fLSwDCLCXnIoiLgXIs3v20bP/j6MLbLQHAUc2LZ2jle9uK+0gl2CWYf0U27t9wqQo61hs9+8UY2X92N76kQsJho6EyqVFNbWkyyJczwM5Q27QBOWkm55DOn8RfvWEvRAmstOyebVG0ZfvnRlbvIZDjz1G6uuXonQ0vqHH90NyGIQIs8K/jNV49w0MEzhCjAs3O6wdBShzUG6+CBrXN8+GOjfPWLJ/OyF27kGWeu4stfOppdu3by0c/OAClHbSr49ncXuOQbO3jHO+/mD9+yleOP7cMYywnHDpHEjBtvCkQVbDpiLe97/6G86c1Xc/VVgyTV0hI0WgSLmIgkJENS8XQmgxASIh7bFdh2t+f9H7oHyFBoEhfDISWMIayF6dmcd/59Cxv7cCZSNAPLj9nFq19dJ0aw/vEDK8YYFhYavPGtl/OmNwzz+tcPECNMzhisreINtFoL/PiHOa982QjzCw0++pntfPqTh3Lsxh56u2pc9DvHMDI4zyX/Po6x5Tffdc8sV1zdIEkSYm6xPuHP//p2/vqvbuXlL6vyx2/q4e6fPsQFL76D+ZiRJCnGDXLP5nmc83hfY3CggyTLkCLnPKOPm2+eY9d8YM3qIS6/9BD+9UNXcOn3ZxhaEohBbVG8uOiT8yJG8YLnruOYZzxAmG8STIGtVHnfv7R4YDTgnUFx/zjXY8Q7UJJ06NrLD1dccGqN1hXnUt3y0xWq16uy1sg+XrDH0LY8Ep1x8oBmdpyls04f1rLhIV33vbPUXS0trPOetVJ3XX+UOqteqa3p7961QZuvOkE/ufQ0fetrT9NJx1ZL48H6tjXjBIms9bKkMsa0YxDJIwJbUJG3TtWkqiVDI+qqV9sGiNMrX3G8PvovR8u6RJtvOFuvvbBDg/1DuvX6Z+tbX1mt73/9ZH38Yyfrzp8eoaM39uyJoyzGcnTOyJiKLv36KVJWVTZaUZxO9eBtgxrorchaI/cIZ/YAzN6kHQ387VcdJLWWKB+zKkaN1OjS+c8aFFgl3u395Y98QFCSlAv/wvNGtPW+U/XM01fo0q8cryXDiSBVd71DW356rs44dVi0idtV8xrqcw+bldbIYEvfwBhZa0vvFytrrLxxSn0in1p55+W9k2ub1XuCXMbImt0WoVMlrahS6dKfvv0orVjap//z1Qv0wfeuF6AVw1364zet1+T9R+mIQ/tKBMDu38rytnzmY49eq9audYoTKNthJVX17rf3ti1Bu5fZf4AEscYK4zTS06OtWzZKsyjbbqXC61MfWiGoyie+bcLt40F9efPX/cZqPXjnibrlxiO0dFlHudNdRRvWDam7pyZjS6Bw7x23r53pDKoYK+ucvEvkbVWJKaOYjza9eVTo1lhf+lG+rmM29Mu7RM6lbdikppt+dJqO3dTb5hCzX/A19WVk8S/+/Hip6FK23SjuRDOj/dq4uqvtTvg9zvG+CPKYGisqkjrL6PQ8X/2WoFYvTef5wFln5vT3GopcYOKjMlC8s3hnymQHHJ3VGh/77Fbe975xZu/PKBZE4oX3kS33TDEzXYBEEUqA0JhSl8W470BZS4Zj+/s4v7eLYDKCdY96mb3hCtM2l4y12GjwvkoIcP2WGYwtcNaQJpa+3k5S30GaCO8ciUvwrkye8M7gfja1xogiBBJf59nnBmjOIQymw/H9yx233p/hLUQVGGyZuPFEkhy89zIkevbT1yjOrVIxZpWPWWluQM85s09g5dzebOsfJ2Hh8XcWIGvdIpMfHtZRxjh1pzW9bflKfXLJUh2eVOSMlzWL+7xtwyNlWMHtpYfKc7iv3gYaH9tDdybZI65LTrY6+ojVak0coTCBWuNOKrr02lcPCWp7EI3FeOr+8fZgjEKm4Kprd3L/fSOsWRVpLjh8dZ6zzxzkG9+fae+60jKTDE8/a2Pz2CNtdWJ8CqmjzNOyOQbbjjsJRUMMhu5ux023NvjBlVuxNu6TI3gUDCme0d3NCxueGJq8otLJO4qd5TLvL96m8vPGGkKE449dzYnH1Zifnsc4B4gsNySJwxoIJkDwODXoHajy4LbIl77yIMZYpIi15Vqd9rRO0v4HyMcdSSXQ2Oa44rIGkBOkMtRcYodPMC9LwnrPrrkGP7kmYc0hCbEhKDJOObnA4Akh20NAGUdi8+T88zo585xeSHZAC3DFXjmfBqIBB8XCIC/4bxFMOLAsUEF3rcLZJuGWMMMyeV4IfCLx3JHle3DjxeTAyRgSZ/jL/9lB37JtkJvdHnIZyjUGigAVC/Ry9eWR939oAaxKp1i04+eep51cgZChaDF1uObHFe57aA5rYukgm2LRwfJ9KOVSaV/024dIWa+a21Np2mj8jmEt6+98JGa1l+I89fgB/eg7q6VmRc0dKJ9E+TgqxlBzKwq51V++o0Raq5VUiXVyWBnjH1N8mbZoS60RBr22f1hjnUv1/a4RfaNrRFPJEv1VfaAUJ3ssLPO4qLPFyBqvSloVoN9+1UEKrS41t6F8DBWj5bW1DWku1a1XDem8s7sfafS0nwtQJa3p5p+cIC2kau5wkir623f3tNfQPp7oXrxS30Opthy56eY51Owi8TmxEP3DhjWrK+3gf0nT2HYqnbP86NpdnPfcnXzxkoOoDHVhg8e6BOvKOLm1hp7uGpgO8qgylm6FMwH7GICMdkfao6WzknJkknKdaXGzM+RGKGY8z3mOTKsE40vb73G4wmOwFowpygQG4+jpqWNtmY7qnIUkAaWkgynfu2qQZz67xTcvm8f68h1iO1Vxt6GwfFk3q1bNQJ5hnCB4bvjpbkGzeOdyvwTZnc5y930F49Od2IohhBTb0WD9QcWj8l9jhBCETyyz+QKv+s07+c6312F7Uija2RvOwHzkued6BvrExo5O1tcrBGMooqWdB4Jtn7vTHiTIXORlXQO8bBY2ZClHBkhtZN4blueG30kdhgJnzB4Ar7T1zJ5IXC5RWNGXJhzZWWco6eSFLxDk03t0IgF8l7jhphEuvHCabdNN0tSgomh78A+n0gKsWtZDV1ck5pA4S5g23L6lncRxgGmm+8zt3W2hTU42GN+aM9zniApgC5av6tiTfPyz+7nII94Zmq2MN1y0g6t/MEJv132oKNN5Qkus3TDPBWf30vpm4Ly+LsxCxtdD4Op8nvvyFkUo38YYSI2hkKWn4tiQJFxvm6TAfVYsj6XCbMacc5M6R6cZN2Q5iXNERYoIwQrnPCPeMVKt8mrfQ1fIubdosvW4ZRx/QiQulAq6DM4XZFkfb/ydWcYnFkgSR56FR2N37XdfvSZg0iZFs2SuXdurbN8+v+ePTBuWekqy342FLG+xfZsFa9ssGFixLH2Urb93dLIIAecNd903zr9+wGNqA8RYhkolA7bJc15sySlY0phldWF5f3B8tt7FRzqHeF13N0dUa6Te0hIEAi/vGOQ5jYzl0bAcx1BSxVPG4jJTMNSK/I7rQYgsQMSwrt7JBR0DvKl7gM93LeHvbQfLmrOsNDm9s44TX9JF2vEgeelSEINw3RW+8JmEH143g0tEnhdoH6nbQ8MJ+FZpKbrI+E7DzpknloG93+x3awyBwI7RXrBbMcqBguGe/ZtGigZjxEc/PcVFb+iis2MCCby1FPOBp5+5wGXrE6buiNxfb5DnFQ6bcaxWwXkepn0XN1YH+C4Z14R5jouRuWaDHENAtDJHLZaJdt44GjFylvGcUe9gZbWXQ51YRs5zm3VuyhvMtmZZnnnurFU4aj7hxyOeFz1PaH4Gj0WlzUBoVPjQx1olC8T9m6vDS7rAbm3LWsuOiQWaRcBagw4wAd8uxjyEyNS8AdfeJRG6uuf3wSEPGwXOeu54YBff/nYF05lSxEhhIeYwMFCw/vl1booZr4gdbLYLXJ+2yJxoFJ5qJs6aa/GeFrzLdNARRJpWqLkanaZOt60g40AFpp38FosmL6rWeJUi/8+MYc185Mfs4ujMs9N6ftzR4hxXo9Gco+u5HaxbtZ3YAoclRLBdlquu9Pz4ujmcsW2u3vfRmVRAgYAFDzMz1TIpr11SoQOgil2sZTw7P/fwX0dR7/SA3e8OsASg4EOfzgnFELatpj0G8lnOfaFY1ptwezZNv+1mNrHcljaokZCbyJwrmA4ZBxU5PkSahSUPBWO2YCEW5e4wEclgjOXGagdnFJa81eT7foFNRYUqdS7zC3TGgpOzOgPz89yVJpz2gk7QdoyxRAMmeKDOxz9qKGLAObtP12H3Qnd1ZBAjRh6MJW/aA4LuD4wgZi8TeDfYZBZf0xeiw7qUy3+0i+t/0oOrp8RoMdYRFhwbNu5i8tQadxUdnF0EBvKM60yN2+oZdfJSZxnozg3EwOZqAOdJqCJXIZp2Di+eaQNjajEacp5WpGTGcqNrsSyHiTSyxjiGsgazWZP8qD6OOHkHagQwjiCLq4t77qzzpW+0MCYhhMU5rT6ZhmDKzRcdeda21p5AgZVdBHO0rwZU1hQRSzt+MR8NClgTKPJdfPyzDUzSiw27dzU4N8exzwssNRXuzSPbTZXfCJbNRcGNaYWa8zjKCqYNRUp3JmqxRXfRoLdotm1iSxIN9/rAUSZFCvyw0uSsVpUdVlxZaXB+VmEgz7CJY1KOFef0UO8dIxaU6H8w0Fnh8180TM7OY10oLcrFgIHGgfFEW/p7pd/4xOr7Fv2pJPWP4JiiiI9bh/ezFle508QlX55lx739uGpBjAZrC9SIHP20OX46ssBdFXhm7tmWOXrSClPessU1cFRZMIaeZJ5d1nBdR42H6gl31VKiLIUz5MbwoINGLk7Iu6mFlK+ns/TIcEae4vJANAnVzDNV72btuTnkjdL3UMS7jPmdFT7z2YW2RAiLqMQrX76x0AEWjCuhoLSy1yb+eRGkq6sDrEqp6MX8QikjF5UDoDKuvmNyii9/VZjOLqSiXIwMBleIvhMcp8zCFl+wpavgmZllXaPFj3yNB3yOtwZbVNlY5CxpFhzRyDi4ZUiASoR7KwVrrKXpWlxXiQwXMOnhEOsZauUQE4wxzBcZrcNSBjbtRI0y9T7EiOlJ+fb/SbjljgWsK8HS/Rf2lNfWvAcTUExgd8UFT6wjwyIJYqjV2o6aBMYyO/94juG+vMzAv31qjubUIFYJBQl57vGdLU4+v84VLmWm4nlOw7FFC2ypeF5RJFxvCm63llqs0E9ki21xixU7NE/LiITArbZgHPH0LOFB0+KHtRYXZB105y0y5zEOOg3swjDy3A5q/dPkLVuCqEqhqPHRjzd2BxkPyDpqxFCWVQoIllpXVkJT0lNPkBI+cQz2NSGGEkrHMTd3YDeKUTjrue7mHVzxwwqm05NESAccW2/v5carC27rWKAemtxCk+1pyjPylIdy0e0dk0nBzUmLkaLOOirUfZWDSKhEz3ZnWOKr9BaGr3noD3BOVqWSR6Q6KZ4mlruwXFEJXHHnHA9e30E6lGCSFKqBW280XHZ5o/S7igOT/2Pjs6Ck1KtRjAyleGufUHWu3z9BwJAyMtiEop3AYhLGt8cD45C2XW7I+fjHWzzr/GG2PzTDlR8wTH4CDr9/hnN8nfuN56ZKg1UYbg45Y3XL2a2UBwh8Nw3UjGFDEfmOLyhcnYPCAnfbSCM61hdiSz3npKxGbxYJwLhtsssatjjLcGJZn3vsFyf5wXcTGq9Ywjmvy1lz5Dwf/xQ0MkgTyAodkLzZNdGC6EtQN0BfR0pHHabnHMaEA2IUv5ha8a7OOv0DFrKAtQ5kGB1r7VdOmjYRoo04GQwR4fjKd3bw0f+xluQ/51h5q+HENFAzCY24wEHWsS5LGDeBa2qB7ui5ynhmKwW/Eav8wMyzxFY5KEQKlyFTYH2dhTxyZWWelzc7UB6528+y09a4LU04Pjr6vFiXCbUyTK3KwFzglvfNctUXEr75imV84av3laEvCWcgGouJFhEeFzTZvdDbxywUVRwGctHft0Bfr2N6Lh5wVa1dhAvC0GDC4EBARYlFEXLuf2D/VkgZxhEVWYIseYiM1FP+IOlj5d9knLnFsrFWisB5hEiJAVRkDBeR5zUtR+WOYAvAcG1REHyV8cSwYCw3ush93rI9Zgw5cWLo5g7BD6sFV6We7rSDNdGwqpXT3WoR8kALaMZIC8eaes5xOyLFP07zpqk+VlVT8iACDi9TKmqj/YKv27bnhEYn1lkUoKMnsGyJb+ujp1BkGVvCOKtXJnR3zZFnlEWNsz088FC2X+gEwMnQMrC86rkw7eaVVFnZzEmSKTIiefRUdn+PYsniiBLOcyzLDEudY6qwbHWRiVDQkuPHtUgDz70WlnhPncBdZIzVPGcWjp7CcFCrxbzLsCZiTZnGaTEkAhNE09UgiRxUKTi2WaG3c4DtHRkfakzzUKvARItR3AeHlL/fvmMnU9MjDAxF8nlL0i3WrRdXXrtX6ctTQpD29bBDhqG2HbXAOhgfi2zbHvZLEGMgs+KInj5+q9bLUbNz3BN2sd048tRR2Aq12KKIBpLyuT2QGUMdywLCJ4JQUDOOBVfgjGXOlYWZ35qeYpLAhX3D1POCQ2KNosi5NxRsMwXNSsoDBhaUsN1GJqKIzhOdJTHQsoGJRGz1opE2mCrEScbT0TXElytNfrRrFyrTYPbJIeOTgQcf6mVgsEqhgsQVHHFI51OP9qodKjriyABuilg46PTcfX+Fianmw/1I9uGqWzl2NlpcqilWVrsJeQJJpJlHlCZUM0fLtOjBsI3AQXmNm2riqFBjLMyyVh1sdk2OM4btxiNTx2QL2A5LV93h5aiEnKSSkEZxYkwwLmcwVAg4RqLHyrA6QjAimGqJEBjRIlINhqW5oUOGdSZnOlYYb+Vsa84RbdyvCLAW8iLn9nvmOfqkCPMGAhx1RGVP0O4pI0iMYKzniI0VaBalPK0GbtocCLRwToRi39CJiZFtjSbbGvOM+XmO6qjxBwt1jClYKAqSIjLvHSOZJ3jHuqxg0uasb0CWZBwWIpMp5MFS2IK6NyxxlrFGznnVLjJELRrWzhU0DdykFie0PEMxUguQ76UDggGjiJUhGIEsPkLiDPOp4fJmi49nM1yhFnm7QYAWQZAYC2662XDhK1OcKaBVsOHQnHotZaGRsQ8mWyxBLMYZFCIrlvRw+CHTkLdKKyJWufGGxZM9mtgOoBquiTnXzLS42TU5pbOD820H1ucUMWPOGwIZLZuUyssbtnuYTxy7gsiqhhOLGlkrcLvP2egqjGeOzMyyjE5syLitEjnZ9LAtNvhuNeeYPGV5Dp2mhcNTYDCFI/qCJHgq1tGqBL6tgo8157giFAQ8ljIrqzDab53y7oW++foFaPXi7VZC7lmxCjasrXPd5jIJr4haVDzXPz7lDSGIIw7to38gJzQh8SLMe266aXfkbxFk18OlkhaBDFcVTa6abXGtW+CMWi9n56Kj1cLXOyismIgNrnaROVNlWI7TQk7/XMpO5dyWZrRsZB6xNsCoqzAWM442NWbzBebUoJEaTledOQW+Xgusz2uMRMvy2KBiDcoqNJnnJ3X4WCvjO3lOk1DW4JpAoViWDCzm9doFrLdsbrFrok5fZyQrImn/PMcc1cF1m8scMOKTMnvjnoc55ugq1CcIEUwFtm9Nuf3Odi5WPDCbLgLRCGsgkeWHIfDume38+9pBbl3bxYPFAne5jNQaBqlyfsuyqVHQERyjJuOrlQYrkg4OUpX+KLpVUBhHxXomyDm7VeUu16KCYWRBjNkmzw4dDFm4vNbkJxXPdT5w31CFzx42wivnF/haKIhGeFOKtHCAcEeJJFnu3zHNnfdUy0LiIoBtcfzx7SWWWXS2w+P6IaXo9Wza5CDOomAgtdx2W8HkbIvEmQPHarQ7cxByBRIiRnDzcEHvnx1Oy2essoZnzQcOas1RxAJjYMw2+VG1xdNNJzvyJlsQm3KhKJZkhqNaCVtdZCoJvLDViV+IfKWecaQ6SbMmd1PwglaVjS7l0qzF3NsP5aaNohELqgSCRKEy3Ko9aVOLfSVhrSfGjBtvApK0JEAe2bTR4UgJ0e2zamr/IstACIHEd3LoBgvNUFZNuYQbbwRoYaxDgSd2tN83D2U14HVXPsglEX6fXgYbMzTbvRRT49iB2OyhHqskMbIqOKYo6Ispo1bcmWRkzjJjHdPB0xdy1iWOVmbYRsFERRwZDZWiyQ/xvML38oOLN/Mfd+zEYWg+qtPCgQOChgBEbropA9OLcePQiqxblzPYC6NTAbvI/WsfFzJBDA/VWbGiBTlYK4iWm28J7SQ78VR0AjUG8qyguHqCgaKg4UQUOAPNGLjUt1hqapyUJ2yxOXf7yHpfxYYMg2UdcFQj56QmbKVF5qFDTU4sLHe60pzuyQOX+8BGJawwTbb8dBcLu5pPWSPT3Tpy8+YMGinOCWUwNFiwfFkKFIv22O2+frlsWSd9nS1UgHWOsFDljnvCE9Ifjw9eGpKkytN76lRyA3IkTkxGuLweeLrrY6LIaZnApuAY84GRHDJKaONek3OPmszEFtt8YNYYXLDI5Dw3T2iGyNcr4ijTQ0fIuczmnNU9wJrEE56iFqaK5Yrd8+A801NVrIVQWFxnwZrVSWm1LpIidl+Bl1XLKvhKRhHBpZGZmci2HXk7dbTgyTbF3t2uYkXFcXiWkJGTytEqDDdVI4Xvol6Io43n5qTF/SayIVSp5wXBWGQNa0KVtbHGEXmVQ4PhbtvCUiHHUiuaHFMYekmZUsYNiVjtOjm5ERl2HoyeksbFkjAYJsZhYrIGiSkdQh9Ys8ouMrK6L6XepsjqFYLqbLmTDEyOV5nYWSq9aLVoqu8Pmjnd11jeahG8YcZ7vlLJWE+FZ84V/MjnBBlOyxJurMBw8CTKcIALnrtM4Ia04HqXsdWn3O4TFixYBXIcHUXO6ZnlDtOibgxLmnB12uKsNMXqieSFPNZbWKw1LDQajG3PIS1zvDCWFUt325dPKnOxpEBfXwSy0mpwll1TjoWWSgAwmCcSEHsYlremdMBcyhnG4EOLCYlr0hYn+ip3kpPZgrNC5IZqxkM+sjGr0V/kxHaCBEZsVMEJIXB0hOcstDimEFtTS6c1hLROM02phoxzVWFeGd9Im2yMCc+mRs05jPEl8PiEFYramTGByAKjkw6sI1iBMkaGi0WlS+2bICoxrKGhzjJCJSCByZ2zQFEW4khPSmQ5U2YfLqukHBcTJiJcl+ZkeJZn4gQsN1HQmJ1jaNpyiUnpNRmVGGiV+DCRyJ0WbvaWG1LLlWmNexPPT0KLexqefH4Kn4mYOnqyFscWVWrWsV0LjJmCw5LqnuzMJ3cEdrv020drlC0MDcSCnp6kvcxPgkPU/rezWhaaRErDamanb0f+nrxdQhQickpaobMw/GcCG1035+aOK41nelpooMb3LjiIpf+8jAs+OMy4K0PIZnfaOYZ+28HSWGVFNKwxCyyfjxz1t0diPj/Ilpct5/plFW5fCMyFKoMyPK/huVmBxCWcl9SRiqdEse9ek/lWUsZBihRipFrP23v8SfohYMudo4eLArIifdi72+fTOYyJZRcE244bxHJP7w30pc6xKalxB/Oc4nq4TvNkMeeB5f0s/7N+zj1mge61Y2DHIa3w2W8NseNT8wyksYTFgUbeYjYEnIm05gILp/ZzwWsewPp70AV97Lyvkx03DvLpv50l37zAebbG+XaAe8MCzuV0ec98CDyiD7ZxGCMsFqOy9kWU0cP9vft8YwGswboA0dDRGRcVN9onQXZ7+bVOQSx2l2fSKsJe/oceN+zrPIRYtvveDQd7nyIVhFCGNU0UNWu5j8h9ITK3MM53KRgLOb1Nyx+d1UN3/22EOTDBYnsXOPGijBu+Js6ZKchIEJEeCz3ekkbLDWknh7y5F+tvJdtlScxOBpbupH/ZUl78PxfYsjDNB/wcx7oKx1c7mUvqDJgGs7v9BO3u6152Xy3jiw5jHN5DUex/YZsLjVKcuAJwVJJkTx3iYsK5fl+qN62XjYfLok2VCW+LiMEXecDRxfKl3VQSz+TcDDt3LpR5XKadOGEMcyHns5M7aMVIYQ2WlE6XMvXQLj71sWHe+t9rSE1MainmLOuPm+fqF9W4+98KVlccloI5E9iVeuIukTyjl43PniTMtUgSTyiEqxi++MmcLZub1HwHoyHnm0XGN1tjdDhLQyUabSlj/2WPRMtATycD3UM0i8C2sVnyvFyL3eWH+8quKRV9yRbO+wNyQO3jm3KOotmGUVw7UOPM49tNziOJetrNG3/3JL5/2RFce2U/P/1JhRuvXM63LzmE//acNUge53xbHBrmZYnGUGqnFs1YcuAnPzdNa2oY5027RA9MNs0pvx24a7BG2Z4vkhtHmsNdVcvai6p4twO1U16NA4oaH7m4XMyCJsbkeGKZNBfLzVEW6VgUPc88cwOf/+QJXPuTFVx9VTfX/qSXH12xgv/+9oPp7+0ue704x16NF34GJReYgImuTaAWpt3+VovXsD/baL9sOnnxh4+VQqrZUaTc65P/NvCIDg3sKYIsf16zeqV+/L3TpFD2RteMlaYp27K2uqRsrT7+/iNUr/TIOitr/KO7LJDI+bINxtcuPkrKqsrHvcKkVRhLpLxXn/+tVbqZFbq6e1hf7B3QjWZQ/3nu4Qozq8sGnZNOxbiTWk4//f6gktTLWLOnhcfD9yoLRJ11cqauv3vXqdL8JinrlObbrWSnjDTjpdCn2366UZs2LhX4R3V42L0m7/mzU6TQVRbINhP94Bu9MvjHGgSw+KLP3Z+dnC5ACT5aCGLpkjJpbu/Wp8aU/sBg3yBf+vxaTj7javLRh4jTFuUpKhyxZSmm5yh23strLhrl/f+wEgXTnr/xM1xnirZPEPjXT86DBrAK5e+Mg3yOg1/X5OoegwmeqaTKt6tVKr/dja1sK+MvUhnPSGp87FMFeVYGiR7F3ybibEqIhj9/+7G87U8fJMzcRDE1R2x4YsuTRUPRtDTHZ9iw8Xa++uU669d0luLLPDrhYWRZAxQJrgBnGJ2qtBHhJ2H2mrZtfc89C6BKGVjK4OA1HfR0eSSHM+08VueIEf7oDw/mmBO20BjLcbUE4xugrO3Hll3IXeLIJid47e+M8rznDVGEiHf+EU6ZpD1lAN+5YitbbqxhOxwxOqzL0Lxh47EtRs8u2JG3WDEzT/Wobo4/ZyeazbHt9hK+Zpi8z/PlrzbK8vgQ26an2fOW1lqKkHHScet5+9tnCeMPgPM4Z7EmYgikUXhbUPEVFqYNaw7eyrv+oocYbbs0w2FIUDQ438HGQ5uQL+AiYBMeeCBrpwO5J06Q2JZ/m2/LoVnDWxHyyMo1DTYd3oUxtvS0jacoAoP9Q7zqwhzNjJEmFqvSO8WUvsbDBmWkVEcTXPS6BENapvz/jHTd3SB5Yb7g05+pQrUPKS/zbQkkyQLHvtxwaWeNLzpD90sq9HWOldkrJpSldB2GL15i2TpucN6WuuIREIbab+95/auGSDruQoCzoY3fluHbslWpwDSoOYg7A+c/p8Wh67rLDH4nXLtTzrpVgxxxcBWawquMjt5yi90LD36iBFEJJVxz8ww7xlJsFYpgsB1TvOB5aduZUnvEkeGojf0sXbqTmLV3exTosbEuYw2mITYdkdHX7UvxZx7L9BaGgk99fju7tg3hUrWrpEScDZzxzBY3r5zjlnqN57wwp2hM4dq70LpAPtPJxz7bKqGfxzCLjIFQBBJX54STZlBjvrQS3T7gRhOIeaSza5anHVcD0vb4joAknntuN7Wl2ykKcInIpmpcdU3bTQhPImIoAtYlTE7k/PDHXaizUi70bODClxqGe7uRLNaWmVTDgy2ULBCtiDbsB9os81+7uw19/bHNzuaxM16854Ht03z1Pzyms0qIQgaKzFPrLTjrXDjsecMMrZ1GjdKRDQLTafnxZQnX3pBhbZkN+ZiCWVCrio7uDBPbeNY+05oshS1bqq9YWupZ2+bySrWbV72iD1pj5X6sWW66EW6/ewacXzSIaR8vfFsqrHk+/4UWJnTjEaHhWL5ujje/uUaIpt2sJafRFGWrsYiLZk+dymMnQRiwkLUymgvtrqKPswhWZdrfRz69izjfhzNCxpP4CLNzvP71vbzjD3M0s5XEW+RVfkYpH/pkVlZv7Qdfz4LIs2RP6HtfBDEmYpVgbMau+TJKaH1BEeC1r17DsSdsI8wKExNMzfPZSwJFEfB28Rm+j8MhhhACznm+8X9GueXqYUynRR7C/AxveZPh1BP6aDUKrHXcuqXB3K5eSGh3vYn7jB0ohXvv9YxN5hiTPs4aGGIMOOf4ydVTXPmTHmxnSiwAa1BRZcnIVtau2gK5IZqyx5atO+7Y3M1XvpVjjUeh4LGiHlIp+5vNeW6/PUEVv6eVyL4SGpyJxEYf19/awhhoNXIOWb+Mv/iTOnH+HiDFVS0P3d3Dpz/XKJc4FBi5J+MYQiRgjZhvTPHu9y5g0l6IBSoS6uk4n/hEhVXLO4nRcM/9u7j8Bwmus0ooxF7b7ZHOowxFAJN08fkvFeTB4dzji7jdz1CEWT72mSakPQ8X0xAgBGKRoLb9qcJANeFTl7RYaDRwNj6m0bA3sgCGL31hBsMIYc9QOfOYYfYiGlwXXHe95/obCqSc3q4hPvXRgxkaug6yUmTabsf7/kmMT5bJhGVa0eIjL/ts+FVOR0j19c8cJRVlX/NiHKlR13U/3KQ1S3sF6PjjhzW7a7006ZWNojhpFCdMeZ00ChNOzW1ealR185VD6uuuK7HdbQfL7rNnPKD+ni7ds2Wt4pxRMeEUJ9v3aF/DhFXY5TS9rUeHrul4xGd5vLkoxsm6RDXfoW98eZMUa2o+VFUxYRUnnOKEbZ9O+Q6nMGGlRo9ecG7ZGai3a0iXfuXZUrO/7CK0w0mNiq797nJ1VZ2sM/t6hic2pW33yLlVS3p13x0bpHmrYhzlo0jNVLdft0HHbVohQC9+0Uo1pg6WmlXFnWWLo3zMqBhDmkKKHbrr5iEduSFp9zw0cj87hmIfyMFfv2uDFDqVjT1M6N1nPmql4PWZj/e0ezqaRXUTtc4Jk2jJ0j5d+YNDJPVLu8pnzkfLM4wjLRgp69UfvqFEKw5eu1w//s45UqtDxQ4Uxq3ijNH0aL+O39jR9ubtvpr6P/Gxed5WBVannTyiqbGDpOlyofMxL82nmtxxkH7rNQcJvI7d2K/vfm2N8olBqdEp5RWp2aWpB/r1rx/o1/Il9bLbpysbURr238jf2rIz6cZDl2hmYoXCpC938G6CTDiFMasw16Wnn95ZEtu5RRHE4GXaxOvq6tXf/s1ajd69XFrok7IOKetU3NWrq787oPPOqAqMXnjBMXrgjqdJWaJsh1exo1Nx0qqYH9B/e05ve7P5x+3aypOfY2j3tH195lkrNDO2Xpo1KsZMyd4zSI0l+tJnjtLK5X1lM//1vXr1i/v0e7/Vo+c/t09rVnQJ6uWAFOsOaOafATlb9kb80sWHS62q8rGHiZGPWcUGuvayQSV+d2/fA5kp2G5BixXUtXSoS895xhK94bf79PpX9erEI0oR2NMzqI+872xp9jBpurxvNm6kKadidlCveclwydGexQyyfHKDJa018u2JlmedtkTb7j5EalXUGkPFhFE2kUh5VTPbDtNfvuNw9XR2thtMVvYMaPQ+lXPsPSFg0WfiyubM55+7XlpYrjBOW7575WNIRad+/zdLceUrblFTDXjEZIhU1hl5n7Z/5x9uA5v06i1vOkbb7jpdygaU7UTZTqNs1EvzVc2Ojeglz+9u9+f1i50q+iQIsnsYC05JUrbh27CuVz+87CCp6FIcMyrGU7V2+pJbij49dPuR+os/3qB1Kwb3dP20zsn7antSqH3EJFAWMQ7VGK96taZbf7RBmvXKx42KSaM45bT9tiUaGUhkqMq46p4ZJfs+XYkAGytrrRJXl3OVPWOWBof69dY3HqPbbzxJykekaavWhFM+7pVPOCmmuvUnq3Xy0T17iGExe9aL/7LRq22ZW6t26a/etVKt6SVSq6JiLFUx4VRMWGnOS7FXo3cfon/8myN1wtEr2iJr94S1RM6XDYYXfV9fXt/6xkOlvE/5DqvWaE0qKnrvewYErg3d28VxhbNyiW9zxe4FTLXx0LX6qz8/SffcclIZSpg3KkZRGK+rGLfSfE1a6NcH/nlYQz31dsvcxd7350CQPYrWltbPqaf06bJL15TDgucTFaNO+Whd2aSXphMpH1S282B94z+O1KtffqhGhvraoqzaHstn9mciPqJD9Yrlg9p5/zppqjSBs12dOvaYDpm2ZWOM2+cOtdbs2VS7u1kP9g7oZRccoa9+5kTNP3C0FIaleZSNo2K0S8WYkxasFHt03Y+Hdf6zegQdwjp55/f0nl/sAOSnnCCAnLGqJHbPAOHXXbhcN1+zWsoHpXmnfMKqNVlVPuqlCSs1E6k1oB13HKaP/OtxOv95K9Xb272XeDHyrpyUYx4RADJ7cWe5iz/83iOlrCY1rb75+SXCpG2fpgxE7T2GqWyWX5Hz7hHf2dHRp2c94xB94H+fqntuOkVqrpSaVWmybbLvSEqOaBgpdOmuzX164+/2qJqUgwKqSdJuIL17OpD5xRKEvbs7tx+ss6Oq33nNKl13xWqpMSBlFYVdqRpjVbV2mFIBTxupqEnNZbp38+H68AeP1Auec4iG+wb2KFOH3WMx7S0KyhZWRqecuFLFxDqp1aWXPL+r5DT/s5aTb4/Pe1hn9HYN6ZnPOFzv/YfjtOWnx0izB0t5rzTd9j3GUGvMK0xWyg2U9er264b0Rxf1a0lfXdApg5O35smu21MzLfpxY+rG43wsR44qUPMdnP/sLl7zas/Z5wQqfTMw3yA0IlGGYAzeWnzqoG6gGOLBu/u4/PLIF/9zgcuummBu1wzgSlTZqERtDVjjMTL84PK1rBzeyWFHTzOXR4xCu9HNbsS4hECq1S5OP2kpL3hBH+eePVt2VE1GoTVFaEIRy+bjzgZc1UK9Tpjz/PBHKR/7dOArX20wvbAAVPFpJBYRxTJK/2TyzHmyw4n3nXFSdniwpuxI2ooqu1jj2bSxxoUvqfLC5xkO2zgPfgEWCoo8oQhl7pNzAV+NUE2g6OWezSN84ZuRz31+F9ffNAFkGFvB2qwcCpNb3vh7h7FiZJY/fucDVJIEBShM3m7lmrBh3TJe+pJ+LnxBjcOP3FF2224GirwFhSeasoG/TwvoFMQ6999e48vfhIv/vcXV15eZMradQ5YHQ1DYaxuHX16CPGa6qIMouwdF7eioccYp3bzo/IRnnl2w+uB5cA1oQJFFQihTe5wRtgpUe2jO9HPpd3r40Men+cY3RxELuCTBKtLT0YFxnqmZObCx3cq1xlmnLef1vznEc589R+/gKOSTxEZBCCASrBU+NdBpgQpb76lx+eXw1a9mfO+KnImZ+Xacpoz5hPBzWZ4nOpz4qdAxtnQqrd8zGq+nt67nP3eJ/u0Dw7rv1mVSY1gqOqRZq3wMZaNGrVGvfKeVsorUXK7Lv320nvv8dYLucuCLT2UT37bYUp192gZ9/UsnSNMHS40uaSfKR52yHa6tu2wJ5TQGtO2OYX3uo3165QuGtGyo3n6utO3AJuUo2T3K+ueyLj8/pb5f56v9Ys5YeZe2Fe3uMRFe3Z11PefcPn3ofav04O1LpVaP1HQKk1bZKGqNejUnTTnteWGtvv3lo3XSCcva32F0xGGr9blPnK5ifoPU6lAcRfkOp3zUK0wmUtNLRYfG7xnWJz88rBdf0Keh/tpe1p2Vc6m8c+1RFHavgZn/tQT5uYqs/SUn71a+pUgoc4gHB2o875w6L72wyllPL6h2T8NMkxAsxBTj5rE9NbLmMv7ubyOzU4P89z9J6Bm8hbhrFhWeaCM2Fa7LwUKdK66scfHnMr7xzZwHdjTLJDvKNiG7U2f1X78KvziRtX8cyck52560ads7t6pTjhrQB9+7RpPbRyTVpSmjfNIqH0+knUZqdUutfmkKZaNOxWiiMEEZ1xjr08Uf6daZp3a2RVGtLY4qShL3sM/yi3v3X5TI2j9B2EtEOJvKJb6N7pbi5KB1db3vPes0O75cKioqxhLlE3UV41UVo4mKCafWeCI1qsp2LtW/fWC5Nm2st0ViOdfWey/f1gvGss+RFv8/J8i+Hc6HxyolOurwfn3hs8ukbESasiVuNl4p0z3zbn3nP4d0xnF9bY5A1rGosXe/JsgBE8bIJ0l7R1f0ypeu1rb7VksLXdJ8VTPjw/rD3xuUMSXMnyT+l5kQv/oEKYNUVtb6Pajq2vWDuvLSw3Xb1Wt1wtFdZcjU+/b4O/er8E6/XFbWk4FpUm/ICsdARzdpGti+q4VPmoTcPKJK65f8eEwry/MreBRFgvWByYVpWDB4L0Jhf5WIceB5Wb+8h5DJobA4Itbk5Tglmd0dc36lj19JDpEiIturu9Bi+rT/mkN+ffyaIL/6h///BqP/Sh6PWfDvecq6Rv36eALSyTwWQYpfr80v1A/RI70sWPvrtfmFiSwDbAeav16OX1oc4teW1i+D6Pr18evj18eijv8LG+CiiIFi8fEAAAAASUVORK5CYII=" alt="Victoria" style="width:90px;height:auto;object-fit:contain;margin:0 auto 1.25rem;display:block">
+    <div style="font-size:18px;font-weight:700;color:#F4633A;margin-bottom:4px;font-family:sans-serif">Victoria Heren 1</div>
+    <div style="font-size:12px;color:#555;margin-bottom:24px;font-family:sans-serif">Zomerschema 2026 &nbsp;&middot;&nbsp; Eleven Rotterdam</div>
+    <input id="pwi" type="password" placeholder="Wachtwoord" maxlength="30"
+      onkeydown="if(event.key==='Enter')chkPW()"
+      style="width:100%;padding:12px;border:1px solid #2a2a2a;border-radius:8px;background:#1a1a1a;color:#e8e8e8;font-size:16px;outline:none;font-family:sans-serif;text-align:center;letter-spacing:2px;margin-bottom:12px;box-sizing:border-box">
+    <button type="button" onclick="chkPW()"
+      style="width:100%;background:#F4633A;color:#fff;border:none;border-radius:8px;padding:13px;font-size:15px;font-weight:600;cursor:pointer;font-family:sans-serif;box-sizing:border-box">Inloggen</button>
+    <div id="pwe" style="font-size:11px;color:#E24B4A;margin-top:10px;display:none;font-family:sans-serif">Onbekend wachtwoord. Vraag het na bij Daan.</div>
+  </div>
+</div>
+<div id="mainwrap">
+<div class="wrap">
+
+<div class="hdr">
+  <div class="hic"><img src="data:image/png;base64,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" alt="Victoria logo"></div>
+  <div>
+    <div class="ht">Victoria Heren 1 — Zomerschema 2026</div>
+    <div class="hs">23 juni – 3 augustus 2026 · 6 weken · gepersonaliseerd</div>
+  </div>
+</div>
+
+<div class="physio" id="physiobar" class="physio-speler">Klachten tijdens de training? Neem contact op met Daan (fysiotherapeut).</div>
+<div id="schema-sections"><div class="stepbar" id="SB"></div>
+
+<!-- STAP 0: PROFIEL -->
+<div id="P0" class="pane show">
+  <div class="card"><div class="card-title">Profiel</div>
+    <div class="fl"><label>Naam</label><input class="fi" placeholder="Voornaam achternaam" oninput="D.naam=this.value"></div>
+    <div class="g2">
+      <div class="fl"><label>Geboortedatum</label><input class="fi" type="date" oninput="D.gbd=this.value"></div>
+      <div class="fl"><label>Positie</label><div class="chips" id="CP">
+        <button class="chip" onclick="p1('pos','Aanvaller')">Aanvaller</button>
+        <button class="chip" onclick="p1('pos','Middenvelder')">Middenvelder</button>
+        <button class="chip" onclick="p1('pos','Verdediger')">Verdediger</button>
+        <button class="chip" onclick="p1('pos','Keeper')">Keeper</button>
+      </div></div>
+    </div>
+    <div class="g2">
+      <div class="fl"><label>Lengte (cm)</label><input class="fi" type="number" placeholder="180" oninput="D.len=this.value"></div>
+      <div class="fl"><label>Gewicht (kg)</label><input class="fi" type="number" placeholder="75" oninput="D.gew=this.value"></div>
+    </div>
+    <div class="fl"><label>Rusthartslag (spm) — voor nauwkeurige hartslagzones</label><input class="fi" type="number" placeholder="60" oninput="D.rust=this.value"></div>
+  </div>
+  <div class="brow"><button type="button" ontouchstart="" class="btn" onclick="go(1)">Volgende →</button></div>
+</div>
+
+<!-- STAP 1: ACHTERGROND -->
+<div id="P1" class="pane">
+  <div class="card"><div class="card-title">Achtergrond</div>
+    <div class="fl"><label>Vorig seizoen gespeeld bij</label><div class="chips" id="CVS">
+      <button class="chip" onclick="p1('vs','Hoofdklasse')">Hoofdklasse</button>
+      <button class="chip" onclick="p1('vs','Promotieklasse')">Promotieklasse</button>
+      <button class="chip" onclick="p1('vs','JO19')">JO19</button>
+      <button class="chip" onclick="p1('vs','Pauze')">Pauze</button>
+      <button class="chip" onclick="p1('vs','Overig')">Overig</button>
+    </div>
+    <div id="VS_overig" style="display:none;margin-top:6px">
+      <input class="fi" placeholder="Licht toe..." oninput="D.vs_overig=this.value">
+    </div></div>
+    <div class="fl"><label>Krachtervarng</label><div class="chips" id="CK">
+      <button class="chip" onclick="p1('kra','Beginner')">Beginner</button>
+      <button class="chip" onclick="p1('kra','Gemiddeld')">Gemiddeld</button>
+      <button class="chip" onclick="p1('kra','Gevorderd')">Gevorderd</button>
+    </div>
+    <div id="beginner-warn" style="display:none;margin-top:6px;background:#F4633A12;border-left:3px solid #F4633A;padding:7px 10px;border-radius:0 7px 7px 0;font-size:11px;color:#e8e8e8;line-height:1.6">
+      Wij adviseren je contact op te nemen met Daan voordat je start met de krachttrainingen. Hij helpt je op weg met de techniek.
+    </div></div>
+    <div class="fl"><label>Trainingsdoel</label><div class="chips" id="CD">
+      <button class="chip" onclick="pm('doe','Conditie')">Conditie</button>
+      <button class="chip" onclick="pm('doe','Kracht')">Kracht</button>
+      <button class="chip" onclick="pm('doe','Snelheid')">Snelheid</button>
+      <button class="chip" onclick="pm('doe','Explosiviteit')">Explosiviteit</button>
+    </div></div>
+  </div>
+  <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(0)">← Terug</button><button type="button" ontouchstart="" class="btn" onclick="go(2)">Volgende →</button></div>
+</div>
+
+<!-- STAP 2: BLESSURES -->
+<div id="P2" class="pane">
+  <div class="card"><div class="card-title">Blessurehistorie</div>
+    <div class="fl"><label>Heb je op dit moment klachten?</label><div class="chips" id="CN">
+      <button class="chip" onclick="setNu('j')">Ja</button>
+      <button class="chip" onclick="setNu('n')">Nee</button>
+    </div></div>
+    <div id="klacht-warn" style="display:none;margin-top:6px;background:#F4633A12;border-left:3px solid #F4633A;padding:7px 10px;border-radius:0 7px 7px 0;font-size:11px;color:#e8e8e8;line-height:1.6">
+      Neem contact op met Daan (fysiotherapeut) voordat je start met trainen. Hij beoordeelt of het veilig is om het schema te volgen.
+    </div>
+    <div id="NB" style="display:none" class="fl">
+      <label>Welke regio?</label>
+      <div class="chips" id="CKN">
+        <button class="chip" onclick="pm('kln','Hamstring')">Hamstring</button>
+        <button class="chip" onclick="pm('kln','Knie')">Knie</button>
+        <button class="chip" onclick="pm('kln','Enkel')">Enkel</button>
+        <button class="chip" onclick="pm('kln','Lies')">Lies</button>
+        <button class="chip" onclick="pm('kln','Lage rug')">Lage rug</button>
+        <button class="chip" onclick="pm('kln','Bovenrug')">Bovenrug</button>
+        <button class="chip" onclick="pm('kln','Schouder')">Schouder</button>
+      </div>
+    </div>
+    <div class="fl" style="margin-top:8px">
+      <label>Regelmatig terugkerende blessures <span style="font-size:9px;color:#555">(meerdere mogelijk)</span></label>
+      <div class="chips" id="CH">
+        <button class="chip" onclick="pm('his','Hamstring')">Hamstring</button>
+        <button class="chip" onclick="pm('his','Knie')">Knie</button>
+        <button class="chip" onclick="pm('his','Enkel')">Enkel</button>
+        <button class="chip" onclick="pm('his','Lies')">Lies</button>
+        <button class="chip" onclick="pm('his','Lage rug')">Lage rug</button>
+        <button class="chip" onclick="pm('his','Bovenrug')">Bovenrug</button>
+        <button class="chip" onclick="pm('his','Schouder')">Schouder</button>
+        <button class="chip" onclick="p1H()">Geen</button>
+      </div>
+    </div>
+    <div class="fl" style="margin-top:8px"><label>Aanvullende toelichting (optioneel)</label>
+      <textarea class="fi" rows="2" placeholder="Bijv. linker knie, 2 maanden geleden..." oninput="D.not=this.value" style="resize:vertical"></textarea>
+    </div>
+  </div>
+  <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(1)">← Terug</button><button type="button" ontouchstart="" class="btn" onclick="go(3)">Volgende →</button></div>
+</div>
+
+<!-- STAP 3: TESTWAARDEN -->
+<div id="P3" class="pane">
+  <div class="card"><div class="card-title">10RM Testwaarden</div>
+    <div class="tip"><strong style="color:#e8e8e8">Wat is een 10RM?</strong><br>
+    Het gewicht dat je maximaal ~10 keer kunt uitvoeren met goede techniek — niet 15×, niet 6×. Gebruik het gewicht dat je de afgelopen weken voor een zwaar setje van ~10 reps gebruikte. Laat leeg als je de oefening niet hebt getest.</div>
+    <div id="RF"></div>
+  </div>
+  <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(2)">← Terug</button><button type="button" class="btn" onclick="go(4)">Genereer schema →</button></div>
+</div>
+
+<!-- STAP 4: SCHEMA -->
+<div id="P4" class="pane"><div id="SO"></div></div>
+
+</div><!-- schema-sections end -->
+<div id="dashwrap">
+  <div class="db-header">
+    <div>
+      <div class="db-title">Victoria H1 <span style="color:#F4633A">·</span> Zomerschema 2026</div>
+      <div class="db-subtitle" id="db-sub">Laden...</div>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <button type="button" class="refresh-btn" onclick="loadDashboard()">↻ Verversen</button>
+      <button type="button" class="uitlogbtn" onclick="uitloggen()">Uitloggen</button>
+      <div style="font-size:11px;color:#B1A2CA;font-weight:600;letter-spacing:.05em">ELEVEN</div>
+    </div>
+  </div>
+  <div class="dtab-bar" id="dtabs"></div>
+  <div class="alertbar" id="alertbar">
+    <div style="font-size:18px">⚑</div>
+    <div><div class="alert-text" id="alert-text"></div><div class="alert-sub" id="alert-sub"></div></div>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:1rem" id="dmetrics"></div>
+  <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:10px;margin-bottom:10px">
+    <div class="dcard">
+      <div class="dsh">Teamoverzicht</div>
+      <div id="teamtable"><div style="padding:2rem;text-align:center;color:rgba(255,255,255,.3);font-size:13px">Data laden...</div></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:10px">
+      <div class="dcard"><div class="dsh">Klachten actief</div><div id="klachten-list"></div></div>
+      <div class="dcard"><div class="dsh">Load-signalen</div><div id="signalen-list"></div></div>
+    </div>
+  </div>
+  <div class="dcard" id="profiel-card" style="margin-bottom:10px;display:none">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px"><div class="dsh" style="margin-bottom:0" id="profiel-title">Individueel profiel</div><button type="button" onclick="document.getElementById('profiel-card').style.display='none'" style="background:transparent;border:1px solid #2a2a2a;border-radius:6px;color:#555;font-size:12px;padding:4px 10px;cursor:pointer;font-family:'DM Sans',sans-serif">✕ Sluiten</button></div>
+    <div id="profiel-content"></div>
+  </div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+    <div class="dcard"><div class="dsh">Klachten per regio — team</div><div id="regio-table"></div></div>
+    <div class="dcard">
+      <div class="dsh">Legenda load-signaal</div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px">
+        <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbg">goed</span><span style="color:rgba(255,255,255,.4)">Borg 5–7, aanwezigheid ok</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbo">oranje</span><span style="color:rgba(255,255,255,.4)">Borg ≥8 (2×) of 1–2 trainingen gemist</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbr">hoog</span><span style="color:rgba(255,255,255,.4)">Borg ≥9 of 3+ gemist (verplicht)</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbgr">onder</span><span style="color:rgba(255,255,255,.4)">Borg ≤4 herhaaldelijk</span></div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="dbadge dbbl">opt.</span><span style="color:rgba(255,255,255,.4)">Week 1 — volledig optioneel</span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- wrap -->
+
+<!-- MODAL -->
+<div id="MO" class="modal">
+  <div class="mbox">
+    <div class="mhead"><div class="mtitle" id="MT"></div><button type="button" class="mclose" onclick="cM()">×</button></div>
+    <div id="MC"></div>
+  </div>
+</div>
+
+<script>
+const D={naam:'',gbd:'',pos:'',len:'',gew:'',rust:'',kra:'',vs:'',vs_overig:'',doe:[],nu:'',kln:[],his:[],not:'',rm:{},_w:0};
+const WP=[55,60,65,70,72,58];
+const OE=['Squat','RDL','Reverse lunge','Suspension strap pull','Overhead press'];
+
+function t(k){const NL={open_hint:'↓ Klik op een sessie om het volledige trainingsschema te openen',aanpassen:'← Aanpassen',herhaal:'Herhaal dit blok',extra_lbl:'Persoonlijk extra blok — op basis van jouw blessurehistorie',borg_lbl:'Hoe zwaar was deze training? (Borg CR-10)',borg_hint:'0 = rust · 5 = matig · 10 = maximaal',gedaan:'Markeer als gedaan',gedaan_done:'✓ Gedaan',wu:'Warming-up',oefeningen:'Oefeningen',cooldown:'Cool down',keep_ka:'Kracht A — Keeper',keep_kb:'Kracht B — Keeper',keep_mob:'Mobiliteit + Activatie',keep_loop:'Keepersspecifieke Loopinterval',veld_ka:'Kracht A — Onderlichaam + Explosief',veld_kb:'Kracht B — Bovenlichaam + Functioneel + Core',veld_en:'Duurtraining — Endurance',veld_vo:'Loopintervaltraining — VO2max',veld_hi:'HIIT — Explosieve sprints',mob_inhoud:'Heup 90/90 stretch · thoracale rotatie · hip flexor stretch · ankle mobility · schouder capsule stretch · frog stretch · active leg swings',kracht_a:'Kracht A',kracht_b:'Kracht B',mobiliteit:'Mobiliteit',keeper_loop:'Keepersinterval',rust_dag:'Rust',wk_label:'Wk'};return NL[k]||k;}
+
+function updateLangUI(){
+  const tl=T[LANG];
+  document.getElementById('physiobar').textContent=tl.physio;
+  rsb(currentStep);
+  // Update static labels - rebuild panes
+  updateStaticLabels();
+}
+
+function p1(k,v){D[k]=D[k]===v?'':v;rc();
+  if(k==='vs'){const el=document.getElementById('VS_overig');if(el)el.style.display=v==='Overig'&&D.vs==='Overig'?'block':'none';}
+  if(k==='kra'){const w=document.getElementById('beginner-warn');if(w)w.style.display=v==='Beginner'?'block':'none';}
+}
+function pm(k,v){if(!D[k])D[k]=[];const i=D[k].indexOf(v);if(i>-1)D[k].splice(i,1);else D[k].push(v);rc();}
+function p1H(){D.his=D.his.includes('Geen')?[]:['Geen'];rc();}
+function setNu(v){D.nu=v;document.getElementById('NB').style.display=v==='j'?'block':'none';const kw=document.getElementById('klacht-warn');if(kw)kw.style.display=v==='j'?'block':'none';rc();}
+
+function rc(){
+  // Single-select chips
+  [['CP','pos'],['CK','kra'],['CVS','vs']].forEach(([id,k])=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.querySelectorAll('.chip').forEach(x=>{
+      x.className='chip'+(D[k]===x.textContent.trim()?' on':'');
+    });
+  });
+  // Ja/Nee
+  const cn=document.getElementById('CN');
+  if(cn)cn.querySelectorAll('.chip').forEach(x=>{
+    const map={Ja:'j',Nee:'n'};
+    x.className='chip'+(D.nu===(map[x.textContent.trim()]||x.textContent.trim())?' on':'');
+  });
+  // Multi-select chips
+  [['CD','doe'],['CKN','kln'],['CH','his']].forEach(([id,k])=>{
+    const el=document.getElementById(id);if(!el)return;
+    el.querySelectorAll('.chip').forEach(x=>{
+      x.className='chip'+((D[k]||[]).includes(x.textContent.trim())?' on':'');
+    });
+  });
+}
+
+function bl(){return new Set([...(D.kln||[]),...(D.his||[])]);}
+
+function buildRM(){
+  const b=bl(),oes=OE.map(o=>b.has('Knie')?o.replace('Squat','Goblet squat'):o);
+  document.getElementById('RF').innerHTML=oes.map(o=>`
+    <div style="display:grid;grid-template-columns:1fr 70px 70px;gap:6px;align-items:center;margin-bottom:7px;padding-bottom:7px;border-bottom:1px solid #141414">
+      <div style="font-size:12px;color:#ddd">${o}</div>
+      <input type="number" placeholder="kg" value="${D.rm[o+'_kg']||''}" class="fi" style="padding:5px 8px" oninput="D.rm['${o}_kg']=this.value">
+      <input type="number" placeholder="reps" value="${D.rm[o+'_reps']||''}" class="fi" style="padding:5px 8px" oninput="D.rm['${o}_reps']=this.value">
+    </div>`).join('');
+}
+
+function go(n){
+  if(n===3)buildRM();
+  ['P0','P1','P2','P3','P4'].forEach((id,i)=>document.getElementById(id).className='pane'+(i===n?' show':''));
+  rsb(n);if(n===4){bSch();syncIntake();}
+}
+
+function rsb(c){
+  const L=['Profiel','Achtergrond','Blessures','Testwaarden','Schema'];
+  document.getElementById('SB').innerHTML=L.map((l,i)=>`<div class="step${i<c?' done':''}${i===c?' active':''}" onclick="${i<=c?'go('+i+')':''}">${l}</div>`).join('');
+}
+
+
+
+function kv(hm,hr,p){return Math.round(hr+(hm-hr)*p);}
+function brz(w,r){return(!w||!r||r<1)?null:Math.round(w/(1.0278-0.0278*r));}
+function tkg(o,p){return o?Math.round(o*p/100/2.5)*2.5:null;}
+
+function wkNote(wk,keeper=false){
+  if(wk===0||wk===1){
+    const msg=keeper?'Week '+(wk+1)+' is volledig optioneel.':'Week '+(wk+1)+' is volledig optioneel — train als je wil, sla over als je rust nodig hebt of op vakantie bent.';
+    return`<div class="wknote opt">${msg}</div>`;
+  }
+  if(wk===2||wk===3){
+    const sessie=keeper?'de mobiliteitssessie (dinsdag)':'de duurtraining (dinsdag)';
+    const sport=keeper?'actieve zomersport (padel, tennis e.d.)':'actieve zomersport (padel, tennis, zwemmen e.d.)';
+    return`<div class="wknote vrij"><strong>Week ${wk+1}:</strong> Je mag ${sessie} vervangen door een ${sport}. De overige sessies zijn verplicht.</div>`;
+  }
+  return`<div class="wknote verp"><strong>Week ${wk+1}:</strong> Alle sessies zijn verplicht.</div>`;
+}
+
+function bSch(){
+  const nm=D.naam||'Speler',leef=D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):25;
+  const hr=parseInt(D.rust)||60,hm=220-leef,pos=D.pos||'Middenvelder';
+  const z2l=kv(hm,hr,.6),z2h=kv(hm,hr,.7),z4l=kv(hm,hr,.8),z4h=kv(hm,hr,.9);
+  const wk=D._w||0;
+  const isKeeper=pos==='Keeper';
+  const WT=['Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht','Verplicht'];
+  const WC=['#888','#888','#888','#F4633A','#F4633A','#F4633A'];
+  if(isKeeper){bSchKeeper(nm,leef,wk,WT,WC);return;}
+  const hard=(wk>=4)||(pos==='Aanvaller'&&wk>=3);
+  const eS=hard?'6×[2,5min@70%·1min@80%·30s@90%·2,5min herstel]':'6×[2,5min@70%·1,5min@80%·2,5min herstel]';
+  const vF=wk>=3;let vR=vF?12:21;
+  if(!vF&&pos==='Aanvaller')vR=24;if(!vF&&pos==='Verdediger')vR=18;
+  const vRs=pos==='Verdediger'&&vF?'2,5min':'2min';
+  const vS=vF?`${vR}×60s/30s · 3 blokken · ${vRs} rust · 90%`:`${vR}×40s/20s · 3 blokken · 2min rust · 90%`;
+  const hS=wk<=1?4:wk<=3?5:6;
+
+  document.getElementById('SO').innerHTML=`
+    <div class="card">
+      <div class="card-title">${nm} · ${pos} · ${leef} jaar</div>
+      <div class="st2">
+        <div class="sc"><div class="sv">${z2l}–${z2h}</div><div class="sl">Zone 2 · duurloop (spm)</div></div>
+        <div class="sc"><div class="sv">${z4l}–${z4h}</div><div class="sl">Zone 4 · interval (spm)</div></div>
+      </div>
+      <div class="wtabs">${[0,1,2,3,4,5].map(i=>`<div class="wt${i===wk?' active':''}" onclick="D._w=${i};bSch()"><div style="font-size:11px;font-weight:600">Wk ${i+1}</div><div style="font-size:9px;margin-top:2px;color:${i<=1?'#888':i<=3?'#378ADD':'#F4633A'}">${WT[i]}</div></div>`).join('')}</div>
+      ${wkNote(wk,false)}
+      <div class="open-hint">${'↓ Klik op een training om het volledige schema te openen'}</div>
+      <div class="daygrid">
+        <div class="dayrow"><div class="daylbl">Ma</div><div class="daycont" onclick="oM('ka',${wk})"><span class="dtag ta">Kracht A</span><div class="dsub">Onderlichaam + explosief</div></div></div>
+        <div class="dayrow"><div class="daylbl">Di</div><div class="daycont" onclick="oM('en',${wk})"><span class="dtag tl">Duurtraining</span><div class="dsub">${eS}</div></div></div>
+        <div class="dayrow"><div class="daylbl">Wo</div><div class="daycont rest"><span class="dtag tr">Rust</span></div></div>
+        <div class="dayrow"><div class="daylbl">Do</div><div class="daycont" onclick="oM('kb',${wk})"><span class="dtag ta">Kracht B</span><div class="dsub">Bovenlichaam + functioneel + core</div></div></div>
+        <div class="dayrow"><div class="daylbl">Vr</div><div class="daycont" onclick="oM('vo',${wk})"><span class="dtag tl">Loopintervaltraining</span><div class="dsub">${vS}</div></div></div>
+        <div class="dayrow"><div class="daylbl">Za</div><div class="daycont rest"><span class="dtag tr">Rust</span></div></div>
+        <div class="dayrow"><div class="daylbl" style="color:#378ADD">Zo</div><div class="daycont" onclick="oM('hi',${wk})"><span class="dtag th">HIIT</span><div class="dsub">3×6 sprints van ${hS}s · 100% effort · 30s rust</div></div></div>
+      </div>
+    </div>
+    <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(3)">← Aanpassen</button><button type=\"button\" onclick=\"downloadPDF()\" style=\"background:#111;border:1.5px solid #F4633A;color:#F4633A;margin-left:8px\">&#11015; Download schema</button></div>`;
+}
+
+function oM(tp,wk){
+  const leef=D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):25;
+  const hr=parseInt(D.rust)||60,hm=220-leef,pos=D.pos||'Middenvelder';
+  const z2l=kv(hm,hr,.6),z2h=kv(hm,hr,.7),z4l=kv(hm,hr,.8),z4h=kv(hm,hr,.9);
+  const p=WP[wk],b=bl();
+  const isK=D.pos==='Keeper';
+  const TT={ka:isK?t('keep_ka'):t('veld_ka'),kb:isK?t('keep_kb'):t('veld_kb'),en:isK?t('keep_mob'):t('veld_en'),vo:isK?t('keep_loop'):t('veld_vo'),hi:t('veld_hi')};
+  document.getElementById('MT').textContent=TT[tp]||tp;
+  let h='';
+  if(tp==='ka')h=isK?mKA_keeper(b,wk,p):mKA(b,wk,p);
+  else if(tp==='kb')h=isK?mKB_keeper(b,wk,p):mKB(b,wk,p);
+  else if(tp==='en')h=isK?mMob_keeper():mEN(wk,pos,z2l,z2h);
+  else if(tp==='vo')h=isK?mKeepLoop(wk):mVO(wk,pos,z4l,z4h);
+  else if(tp==='hi')h=mHI(wk);
+  document.getElementById('MC').innerHTML=h+mBG(tp+'_'+wk);
+  document.getElementById('MO').className='modal show';
+}
+
+function eR(n,s,i){return`<div class="exrow"><div class="exdot">·</div><div style="flex:1"><div><span class="exname">${n}</span><span class="exsets">${s}</span></div><div class="exinfo">${i}</div></div></div>`;}
+function eRK(n,s,i,ek,p){
+  const kg=parseFloat(D.rm[ek+'_kg']),rp=parseFloat(D.rm[ek+'_reps']);
+  let kS='';if(kg&&rp){const o=brz(kg,rp);const t=tkg(o,p);if(t)kS=`<div class="exkg">Wk${D._w+1}: ~${t} kg · (${p}% van 1RM)</div>`;}
+  return`<div class="exrow"><div class="exdot">·</div><div style="flex:1"><div><span class="exname">${n}</span><span class="exsets">${s}</span></div>${kS}<div class="exinfo">${i}</div></div></div>`;
+}
+
+// ============================================================
+// KEEPER SCHEMA
+// ============================================================
+function bSchKeeper(nm,leef,wk,WT,WC){
+  const kLoopSub=[
+    '2 blokken: 6× sprint 10m + 6× shuffle 5m · 30s rust',
+    '2 blokken: 6× sprint 12m + 6× shuffle 5m · 30s rust',
+    '3 blokken: 6× sprint 12m + 6× shuffle 5m · 30s rust',
+    '3 blokken: 6× sprint 15m + 8× shuffle 5m · 30s rust',
+    '3 blokken: 8× sprint 15m + 8× shuffle 5m · 30s rust',
+    '3 blokken: 8× sprint 15m + 8× shuffle 5m · 30s rust',
+  ];
+
+  const loopSub=kLoopSub[wk];
+  document.getElementById('SO').innerHTML=`
+    <div class="card">
+      <div class="card-title">${nm} · Keeper · ${leef} jaar</div>
+      <div class="wtabs">${[0,1,2,3,4,5].map(i=>`<div class="wt${i===wk?' active':''}" onclick="D._w=${i};bSch()"><div style="font-size:11px;font-weight:600">Wk ${i+1}</div><div style="font-size:9px;margin-top:2px;color:${i<=1?'#888':i<=3?'#378ADD':'#F4633A'}">${WT[i]}</div></div>`).join('')}</div>
+      ${wkNote(wk,true)}
+      <div class="open-hint">${'↓ Klik op een training om het volledige schema te openen'}</div>
+      <div class="daygrid">
+        <div class="dayrow"><div class="daylbl">Ma</div><div class="daycont" onclick="oM('ka',${wk})"><span class="dtag ta">${t('kracht_a')}</span><div class="dsub">Onderlichaam + explosief + hamstring</div></div></div>
+        <div class="dayrow"><div class="daylbl">Di</div><div class="daycont" onclick="oM('en',${wk})"><span class="dtag tl">${t('mobiliteit')}</span><div class="dsub">Heup, schouder, enkel mobiliteit</div></div></div>
+        <div class="dayrow"><div class="daylbl">Wo</div><div class="daycont rest"><span class="dtag tr">${t('rust_dag')}</span></div></div>
+        <div class="dayrow"><div class="daylbl">Do</div><div class="daycont" onclick="oM('kb',${wk})"><span class="dtag ta">${t('kracht_b')}</span><div class="dsub">Bovenlichaam + core + rotatie</div></div></div>
+        <div class="dayrow"><div class="daylbl">Vr</div><div class="daycont rest"><span class="dtag tr">${t('rust_dag')}</span></div></div>
+        <div class="dayrow"><div class="daylbl">Za</div><div class="daycont" onclick="oM('vo',${wk})"><span class="dtag tl">${t('keeper_loop')}</span><div class="dsub">${loopSub}</div></div></div>
+        <div class="dayrow"><div class="daylbl">Zo</div><div class="daycont rest"><span class="dtag tr">${t('rust_dag')}</span></div></div>
+      </div>
+    </div>
+    <div class="brow"><button type="button" ontouchstart="" class="btn2" onclick="go(3)">← Aanpassen</button><button type=\"button\" onclick=\"downloadPDF()\" style=\"background:#111;border:1.5px solid #F4633A;color:#F4633A;margin-left:8px\">&#11015; Download schema</button></div>`;
+}
+
+function mKA_keeper(b,wk,p){
+  let h=`<div class="mbl">${t('wu')} (~10 min)</div>
+  <div style="font-size:11px;color:#bbb;margin-bottom:10px;line-height:1.7">Touwtjespringen 2min · heupopeners 10× · ankle circles 10× · thoracale rotatie 8× · glute bridge 15× · lateral band walk 10×</div>
+  <div class="mbl">${t('oefeningen')}</div>`;
+  h+=eRK('Hang high pull','3×6 · 60-90s rust','Triple extension explosief. Essentieel voor keepersuitstap en springmoment.','Hang high pull',p);
+  h+=eRK('Goblet squat','3×8','Knie-vriendelijke squat. Diepere positie mogelijk — sluit aan bij keepershouding.','Squat',p);
+  h+=eR('Nordic hamstring curl','3×5 eccentrisch','Excentrisch zakken met gecontroleerde snelheid. Beste hamstringpreventie voor keepers.');
+  h+=eRK('Hamstring catch','3×6/been','Kniel, val gecontroleerd naar voren, vang jezelf op. Maximale hamstring-activatie.','RDL',p);
+  h+=eR('Lateral bounds','3×8/kant','Explosief zijwaarts springen op 1 been, landen op het andere. Traint de keepersduik-afzet.');
+  h+=eR('Single leg RDL','3×10/been','1 been, stang/DB naar de grond. Balans + hamstring + heupstabiliteit.');
+  h+=eR('Copenhagen plank','3×20-30s','Zijligging op elleboog, bovenste been op bank. Liespreventie.');
+  const ex=[];
+  if(b.has('Lies'))ex.push(['Dead bug','3×10/kant','Ruglig, armen omhoog, benen 90°.']);
+  if(b.has('Knie'))ex.push(['TKE band','3×15/been','Band om knie, strek volledig door.'],['Step downs','3×10/been','Langzaam zakken op 1 been.']);
+  if(b.has('Lage rug'))ex.push(['Bekkenkantelingen ruglig','3×30s','Rug plat drukken op de grond.'],['Dead bug','3×30s','30s stabiel houden.']);
+  if(b.has('Bovenrug'))ex.push(['Bird dog','3×10/kant','Strek arm+been, houd 2s.'],['Prone Y-T-W','3×10','Y, T en W in buikligging.']);
+  if(b.has('Schouder'))ex.push(['Externe rotatie band','3×15/arm','Rotatorcuff.'],['Shoulder taps push-up','3×10/kant','Core stabiel.']);
+  if(b.has('Hamstring'))ex.push(['Nordic hamstring curl','3×5','Extra set eccentrisch.'],['Single leg RDL band','3×10/been','Gecontroleerd met band.']);
+  if(b.has('Enkel'))ex.push(['Calf raises SL','3×15/been','Single leg, gecontroleerd.'],['Band eversie/inversie','3×15/kant','Enkelmobiliteit en -kracht.']);
+  if(ex.length)h+=`<div class="extra-blok"><div class="extra-lbl">${t('extra_lbl')}</div>${ex.map(e=>eR(e[0],e[1],e[2])).join('')}</div>`;
+  return h;
+}
+
+function mKB_keeper(b,wk,p){
+  let h=`<div class="mbl">${t('wu')} (~10 min)</div>
+  <div style="font-size:11px;color:#bbb;margin-bottom:10px;line-height:1.7">Touwtjespringen 2min · schouderrotaties 10× · cat-cow 10× · thoracale rotatie 8× · dead bug 10× · wrist circles 10×</div>
+  <div class="mbl">${t('oefeningen')}</div>`;
+  h+=eRK('Suspension strap pull','3×12','Trek vanuit volle extensie naar borst. Schouderstabilisatoren essentieel voor keeper.','Suspension strap pull',p);
+  h+=eR('Half kneeling MB overhead throw','3×10','Gooi de bal boven het hoofd weg — specifiek voor keepersgooi en uitworp.');
+  h+=eR('Pallof press staand','3×12/kant','Weerstand bieden aan rotatie. Rotatoire core — keeperskritisch.');
+  h+=eR('Dead bug','3×10/kant','Ruglig, armen omhoog, benen 90°. Core stabiliteit in lage keeperspositie.');
+  h+=eR('Prone Y-T-W','3×10','Buikligging, armen in Y, T en W. Schouder stabiliteit bij bal vangen.');
+  h+=eR('Push-up positie shoulder taps','3×10/kant','Hoge plank, tik schouder aan. Core stabiel.');
+  h+=eR('Wrist curls + extensions','3×15','Licht gewicht. Polsstabiliteit voor keeperstips bij schoten.');
+  const ex=[];
+  if(b.has('Lies'))ex.push(['Copenhagen plank','3×20-30s','Liespreventie.'],['Dead bug','3×10/kant','Extra core.']);
+  if(b.has('Knie'))ex.push(['TKE band','3×15/been','VMO.'],['Step downs','3×10/been','Excentrisch.']);
+  if(b.has('Lage rug'))ex.push(['Bekkenkantelingen','3×30s','Ruglig.'],['Dead bug','3×30s','Stabiel houden.']);
+  if(b.has('Bovenrug'))ex.push(['Bird dog','3×10/kant','Strek arm+been.'],['Prone Y-T-W','3×10','Extra set.']);
+  if(b.has('Schouder'))ex.push(['Externe rotatie band','3×15/arm','Rotatorcuff.'],['Shoulder taps','3×10/kant','Stabiel.']);
+  if(b.has('Hamstring'))ex.push(['Nordic hamstring curl','3×5','Excentrisch.'],['SL RDL band','3×10/been','Hamstring.']);
+  if(b.has('Enkel'))ex.push(['Calf raises SL','3×15/been','Enkels.'],['Band inversie/eversie','3×15','Enkel kracht.']);
+  if(ex.length)h+=`<div class="extra-blok"><div class="extra-lbl">${t('extra_lbl')}</div>${ex.map(e=>eR(e[0],e[1],e[2])).join('')}</div>`;
+  return h;
+}
+
+function mMob_keeper(){
+  return`<div style="font-size:11px;color:#bbb;margin-bottom:10px;line-height:1.7">${t('mob_inhoud')}</div>
+  <div class="mbl">${t('oefeningen')}</div>
+  ${eR('Heup 90/90 stretch','2×60s/kant','Sit op de grond, beide knieën 90°. Roteer actief voor- en achterwaarts.')}
+  ${eR('Thoracale rotatie','2×10/kant','Viervoets of ruglig. Roteer de bovenrug maximaal.')}
+  ${eR('Hip flexor stretch (half kneel)','2×45s/kant','Diepe lunge, achterste been op de grond. Leun licht naar voren.')}
+  ${eR('Ankle circles + dorsiflexie','2×10/kant','Cirkelend beweging + diep door de knie.')}
+  ${eR('Schouder capsule stretch','2×30s/kant','Arm horizontaal, met andere hand zachte druk naar het lichaam.')}
+  ${eR('Frog stretch','2×30s','Viervoets, knieën wijd. Langzaam heen en weer bewegen.')}
+  ${eR('Active leg swings','2×15/kant','Voor-achter en lateraal. Controle in eindpositie.')}`;
+}
+
+function mKeepLoop(wk){
+  const blokken=wk<=1?2:3;
+  const sprintM=wk<=1?10:wk<=2?12:15;
+  const sprintN=wk>=4?8:6;
+  const shuffleN=wk>=3?8:6;
+  const rpe=wk===0?6:wk<=1?7:wk<=2?7:wk===3?8:9;
+  let h=`<div style="font-size:11px;color:#bbb;margin-bottom:8px">Keepersspecifiek · RPE ${rpe} · Geen aerobe duurbelasting</div>
+  <table class="rtbl">`;
+  h+=rr('Warming-up','3 min','50%','#777');
+  h+=rr('','3 min','60%','#5DCAA5');
+  h+=rr('','3 min','65%','#5DCAA5');
+  h+=rr('','2 min','40%','#555');
+  h+=`<tr><td colspan="3" style="padding-top:6px;font-size:11px;font-weight:600;color:#ccc">${t('herhaal')} ${blokken}×:</td></tr>`;
+  h+=`<tr><td class="lbl">${sprintN}× sprint</td><td>${sprintM}m</td><td style="color:#E24B4A;font-weight:500">100%</td></tr>`;
+  h+=`<tr><td class="lbl">Na elke sprint</td><td>30 sec</td><td style="color:#555">10% (rust)</td></tr>`;
+  h+=`<tr><td class="lbl">${shuffleN}× shuffle</td><td>5m L+R</td><td style="color:#F4633A;font-weight:500">100%</td></tr>`;
+  h+=`<tr><td class="lbl">Na elke shuffle</td><td>20 sec</td><td style="color:#555">10% (rust)</td></tr>`;
+  if(blokken>1)h+=rr('Rust tussen blokken','2 min','40%','#555');
+  h+=rr('Cool down','3 min','40%','#555');
+  h+='</table>';
+  return h;
+}
+
+
+function mKA(b,wk,p){
+  const sq=b.has('Knie')?'Goblet squat':'Back squat + miniband',sqk=b.has('Knie')?'Goblet squat':'Squat';
+  let h=`<div class="mbl">Warming-up (~10 min)</div>
+  <div style="font-size:11px;color:#bbb;margin-bottom:10px;line-height:1.7">Touwtjespringen 2min · heupopeners 10× · ankle circles 10× · thoracale rotatie 8× · glute bridge 15× · bodyweight squat 10× · lateral band walk 10×</div>
+  <div class="mbl">Oefeningen</div>`;
+  h+=eRK('Hang high pull','3×6 · 60-90s rust','Explosief naar kinhoogte met triple extension (heup-knie-enkel). Elke herhaling 100% effort, hoog gewicht.','Hang high pull',p);
+  h+=eRK(sq,'3×8','Miniband activeert heupen. Knieën volgen de tenen. Gecontroleerd naar beneden, explosief omhoog.',sqk,p);
+  h+=eRK('Romanian deadlift','3×8','Rug recht, stang langs de benen omlaag. Voelen in de hamstrings.','RDL',p);
+  h+=eRK('Lunge snapdown + sprong','3×8','Stap naar voren, explosief omhoog springen. Land gecontroleerd op beide voeten. Simuleert de acceleratiestap in hockey.','Reverse lunge',p);
+  h+=eRK('Reverse lunge hiplock','3×12','Stap achteruit, sluit been terug met een kniehef. Balans en controle.','Reverse lunge',p);
+  h+=eR('Pogojumps','3×20','Zo kort mogelijk op de grond. Stijve enkels, minimale kniebeuging. Traint pees-elasticiteit.');
+  const ex=[];
+  if(b.has('Lies'))ex.push(['Copenhagen plank','3×20-30s','Zijligging op elleboog, bovenste been op een bank. Til het onderste been op. Liespreventie.'],['Dead bug','3×10/kant','Ruglig, armen omhoog, benen 90°. Strek arm en tegenovergesteld been terwijl rug plat blijft.']);
+  if(b.has('Knie'))ex.push(['TKE band','3×15/been','Band om knie, been licht gebogen. Strek volledig door. Versterkt VMO.'],['Step downs','3×10/been','Sta op een laag trapje. Zak langzaam op 1 been, raak de grond met de hiel, kom terug.']);
+  if(b.has('Lage rug'))ex.push(['Bekkenkantelingen ruglig','3×30s','Ruglig, knieën gebogen. Druk rug plat op de grond door het bekken te kantelen.'],['Dead bug','3×30s','Ruglig, armen omhoog, benen 90°. Houd positie 30s stabiel, core actief.']);
+  if(b.has('Bovenrug'))ex.push(['Bird dog','3×10/kant','Viervoets, strek arm en tegenovergesteld been tegelijk. Houd 2s vast.'],['Prone Y-T-W','3×10','Buikligging, armen in Y-, T- en W-positie. Activeert midden- en bovenrug.']);
+  if(b.has('Schouder'))ex.push(['Externe rotatie band','3×15/arm','Elleboog 90° naast het lichaam, draai de onderarm naar buiten. Traint rotatorcuff.'],['Push-up positie shoulder taps','3×10/kant','Hoge plank, tik afwisselend de tegenovergestelde schouder aan. Core stabiel, geen rotatie.']);
+  if(ex.length)h+=`<div class="extra-blok"><div class="extra-lbl">Persoonlijk extra blok — op basis van jouw blessurehistorie</div>${ex.map(e=>eR(e[0],e[1],e[2])).join('')}</div>`;
+  return h;
+}
+
+function mKB(b,wk,p){
+  let h=`<div class="mbl">Warming-up (~10 min)</div>
+  <div style="font-size:11px;color:#bbb;margin-bottom:10px;line-height:1.7">Touwtjespringen 2min · schouderrotaties 10× · cat-cow 10× · thoracale rotatie 8× · dead bug 10× · bird dog 10× · push-up scapula 10×</div>
+  <div class="mbl">Oefeningen</div>`;
+  h+=eRK('Suspension strap pull','3×12','Trek vanuit volle armextensie naar borst. Romp stabiel. Activeert meer schouderstabilisatoren dan seated row.','Suspension strap pull',p);
+  h+=eR('Half kneeling MB lateral throw','3×10 (binnenste been omhoog)','Knie op de grond, stoot de medicijnbal zijwaarts weg. Traint rotatiesnelheid — essentieel voor de hockeyslag.');
+  h+=eR('Pallof lunges','3×12','Band op borsthoogte, stap naar voren in lunge terwijl je weerstand biedt aan rotatie. Core én benen samen.');
+  h+=eR('Bird dog row','3×10/kant','Viervoets: strek arm (met DB) en tegenovergesteld been tegelijk. Row met de arm naar de heup.');
+  h+=eR('Crabwalk zijwaarts','3×10m','Miniband om enkels of knieën. Licht gehurkt, stap zijwaarts. Activeert heupabductoren.');
+  h+=eR('Crabwalk achteruit','3×10m','Zelfde als zijwaarts maar achteruit. Traint deceleratiekracht.');
+  h+=eRK('Box jumps','3×6 · 60-90s rust','Spring op de box, land zacht. Stap af (niet springen). Explosiviteit én landingscontrole.','Box jumps',p);
+  const ex=[];
+  if(b.has('Lies'))ex.push(['Copenhagen plank','3×20-30s','Zijligging op elleboog, bovenste been op een bank.'],['Dead bug','3×10/kant','Ruglig, armen omhoog, benen 90°. Arm+been strekken.']);
+  if(b.has('Knie'))ex.push(['TKE band','3×15/been','Strek volledig door. VMO activatie.'],['Step downs','3×10/been','Langzaam zakken op 1 been, gecontroleerd omhoog.']);
+  if(b.has('Lage rug'))ex.push(['Bekkenkantelingen ruglig','3×30s','Rug plat drukken op de grond.'],['Dead bug','3×30s','Positie 30s stabiel houden.']);
+  if(b.has('Bovenrug'))ex.push(['Bird dog','3×10/kant','Strek arm+been, houd 2s.'],['Prone Y-T-W','3×10','Y, T en W in buikligging.']);
+  if(b.has('Schouder'))ex.push(['Externe rotatie band','3×15/arm','Elleboog 90°, draai onderarm naar buiten.'],['Push-up positie shoulder taps','3×10/kant','Core stabiel, geen rotatie van de romp.']);
+  if(ex.length)h+=`<div class="extra-blok"><div class="extra-lbl">Persoonlijk extra blok — op basis van jouw blessurehistorie</div>${ex.map(e=>eR(e[0],e[1],e[2])).join('')}</div>`;
+  return h;
+}
+
+function rr(lbl,dur,pct,col){return`<tr><td class="lbl">${lbl}</td><td class="dur">${dur}</td><td style="color:${col};font-weight:500">${pct}</td></tr>`;}
+
+function mEN(wk,pos,z2l,z2h){
+  const hard=(wk>=4)||(pos==='Aanvaller'&&wk>=3);
+  let h=`<div style="font-size:11px;color:#bbb;margin-bottom:8px">Zone 2: <strong style="color:#e8e8e8">${z2l}–${z2h} spm</strong> · Geen rust tussen de blokken · RPE ${hard?9:8}</div><table class="rtbl">`;
+  h+=rr('Warming-up','3 min','50%','#777');
+  h+=rr('','3 min','60%','#5DCAA5');
+  h+=rr('Blok 1–6 (×6)','2,5 min','70%','#378ADD');
+  if(hard){h+=rr('','1 min','80%','#F4633A');h+=rr('','30 sec','90%','#E24B4A');}
+  else h+=rr('','1,5 min','80%','#F4633A');
+  h+=rr('','2,5 min','40% (herstel)','#555');
+  h+=rr('Cool down','3 min','40%','#555');
+  h+='</table>';
+  if(pos==='Verdediger'&&wk>=3&&wk<5)h+=`<div style="font-size:10px;color:#378ADD;margin-top:6px">Verdediger: de intensieve variant (met 30s op 90%) pas in week 6.</div>`;
+  if(pos==='Aanvaller'&&wk===3)h+=`<div style="font-size:10px;color:#F4633A;margin-top:6px">Aanvaller: je start al in week 4 met de intensievere sessie.</div>`;
+  return h;
+}
+
+function mVO(wk,pos,z4l,z4h){
+  const f2=wk>=3;let r=f2?12:21,pb=f2?4:7;
+  if(!f2&&pos==='Aanvaller'){r=24;pb=8;}if(!f2&&pos==='Verdediger'){r=18;pb=6;}
+  const rs=(pos==='Verdediger'&&f2)?'2,5 min':'2 min';
+  const iv=f2?{on:'60 sec',off:'30 sec'}:{on:'40 sec',off:'20 sec'};
+  const note=pos==='Aanvaller'&&!f2?`Aanvaller: ${r} reps (${pb} per blok) — hogere stimulus`:pos==='Verdediger'&&!f2?`Verdediger: ${r} reps (${pb} per blok) — focus op kwaliteit`:pos==='Verdediger'&&f2?`Verdediger: rustpauze verlengd naar 2,5 min`:'';
+  let h=`<div style="font-size:11px;color:#bbb;margin-bottom:8px">Zone 4: <strong style="color:#e8e8e8">${z4l}–${z4h} spm</strong> · RPE ${pos==='Verdediger'?8:9}${note?` · <span style="color:#F4633A">${note}</span>`:''}</div><table class="rtbl">`;
+  h+=rr('Warming-up','3 min','50%','#777');h+=rr('','3 min','60%','#5DCAA5');h+=rr('','3 min','65%','#5DCAA5');h+=rr('','2 min','40%','#555');
+  for(let bl=1;bl<=3;bl++){
+    h+=`<tr><td colspan="3" style="padding-top:7px;font-size:11px;font-weight:600;color:#ccc;letter-spacing:.3px">Blok ${bl}</td></tr>`;
+    for(let i=0;i<pb;i++){h+=rr('',iv.on,'90%','#E24B4A');h+=rr('',iv.off,'10% (rust)','#555');}
+    if(bl<3)h+=rr('',rs,'40% (rust tussen blokken)','#555');
+  }
+  h+=rr('Cool down','3 min','40%','#555')+'</table>';
+  return h;
+}
+
+function mHI(wk){
+  const sc=wk<=1?4:wk<=3?5:6,rpe=wk<=1?7:wk<=3?8:9;
+  let h=`<div style="font-size:11px;color:#bbb;margin-bottom:8px">${sc}-seconden sprints · 18 sprints totaal · 100% effort · RPE ${rpe}</div><table class="rtbl">`;
+  h+=rr('Warming-up','3 min','50%','#777');h+=rr('','3 min','60%','#5DCAA5');h+=rr('','3 min','65%','#5DCAA5');h+=rr('','2 min','40%','#555');
+  for(let bs=1;bs<=3;bs++){
+    h+=`<tr><td colspan="3" style="padding-top:7px;font-size:11px;font-weight:600;color:#ccc;letter-spacing:.3px">Set ${bs} (6 sprints)</td></tr>`;
+    for(let i=0;i<6;i++){h+=rr('',sc+' sec','100%','#E24B4A');h+=rr('','30 sec','10% (rust)','#555');}
+    if(bs<3)h+=rr('','2 min','40% (rustig joggen)','#555');
+  }
+  h+=rr('Cool down','3 min','40%','#555')+'</table>';
+  return h;
+}
+
+function mBG(key){
+  const s=D['bo_'+key]??null;
+  return`<div class="borg-wrap">
+    <div class="borg-lbl">${t('borg_lbl')}</div>
+    <div class="borg-nums">${[0,1,2,3,4,5,6,7,8,9,10].map(n=>`<div class="borg-num${s===n?' on':''}" onclick="sBo('${key}',${n})">${n}</div>`).join('')}</div>
+    <div class="borg-hint">${t('borg_hint')}</div>
+    <div class="done-btn${D['dn_'+key]?' done':''}" onclick="sDn('${key}')">${D['dn_'+key]?t('gedaan_done'):t('gedaan')}</div>
+  </div>`;
+}
+
+function sBo(k,n){D['bo_'+k]=n;const[t,w]=k.split('_');oM(t,parseInt(w));}
+function sDn(k){D['dn_'+k]=!D['dn_'+k];const[t,w]=k.split('_');const wk=parseInt(w);oM(t,wk);if(D['dn_'+k]){const tmap={ka:'Kracht A',kb:'Kracht B',en:'Duurtraining',vo:'Loopintervaltraining',hi:'HIIT'};syncCheckin(tmap[t]||t,D['bo_'+k]??null,true,wk);}}
+function cM(){document.getElementById('MO').className='modal';}
+
+function downloadPDF(){
+  if(!window.jspdf){alert('PDF bibliotheek laadt nog, probeer opnieuw.');return;}
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  var nm=D.naam||'Speler';
+  var pos=D.pos||'Middenvelder';
+  var leef=D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):25;
+  var isK=pos==='Keeper';
+  var WT=['Optioneel','Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht'];
+  var bl_set=new Set([].concat(D.kln||[]).concat(D.his||[]));
+  var W=210,M=14;
+  var y=0;
+
+  function newPage(){doc.addPage();y=0;}
+  function check(n){if(y+n>282)newPage();}
+
+  function secHeader(txt,r,g,b){
+    check(10);
+    doc.setFillColor(r,g,b);
+    doc.rect(M,y,W-M*2,8,'F');
+    doc.setTextColor(255,255,255);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(9);
+    doc.text(txt,M+3,y+5.5);
+    y+=10;
+  }
+
+  function exRow(num,naam,sets){
+    check(8);
+    if(num%2===0){doc.setFillColor(248,248,248);}else{doc.setFillColor(255,255,255);}
+    doc.rect(M,y,W-M*2,7,'F');
+    doc.setTextColor(80,80,80);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.text(String(num),M+2,y+5);
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(20,20,20);
+    doc.text(naam,M+9,y+5);
+    doc.setTextColor(244,99,58);
+    doc.setFont('helvetica','bold');
+    doc.text(sets,W-M-2,y+5,{align:'right'});
+    y+=7.5;
+  }
+
+  function extraRow(naam,sets){
+    check(7);
+    doc.setFillColor(245,240,255);
+    doc.rect(M,y,W-M*2,6.5,'F');
+    doc.setTextColor(140,100,180);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(7.5);
+    doc.text('+ '+naam,M+9,y+4.5);
+    doc.setFont('helvetica','bold');
+    doc.text(sets,W-M-2,y+4.5,{align:'right'});
+    y+=7;
+  }
+
+  function loopSection(title,lines){
+    var needed=10+lines.length*7;
+    check(needed);
+    doc.setFillColor(235,243,255);
+    doc.rect(M,y,W-M*2,8,'F');
+    doc.setTextColor(55,138,221);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(9);
+    doc.text(title,M+3,y+5.5);
+    y+=9;
+    for(var i=0;i<lines.length;i++){
+      doc.setFillColor(i%2===0?252:255,i%2===0?252:255,i%2===0?252:255);
+      doc.rect(M,y,W-M*2,6.5,'F');
+      doc.setTextColor(50,50,50);
+      doc.setFont('helvetica','normal');
+      doc.setFontSize(8);
+      doc.text(lines[i],M+5,y+4.5);
+      y+=7;
+    }
+    y+=3;
+  }
+
+  // ═══════════════════════════════════════
+  // PAGINA 1 — SCHEMA
+  // ═══════════════════════════════════════
+  doc.setFillColor(17,17,17);
+  doc.rect(0,0,W,26,'F');
+  doc.setTextColor(244,99,58);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(14);
+  doc.text('Victoria Heren 1 — Zomerschema 2026',M,11);
+  doc.setTextColor(200,200,200);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8.5);
+  doc.text(nm+'  ·  '+pos+'  ·  '+leef+' jaar  ·  23 juni – 3 augustus',M,19);
+  y=32;
+
+  // Weekschema
+  secHeader('WEEKSCHEMA',30,30,30);
+  var dagL=['Ma','Di','Wo','Do','Vr','Za','Zo'];
+  var sessV=['Kracht A','Duurtraining','Rust','Kracht B','Loopintervaltraining','Rust','HIIT'];
+  var sessK=['Kracht A','Mobiliteit','Rust','Kracht B','Rust','Loopinterval','Rust'];
+  var sess=isK?sessK:sessV;
+  var tagR={'Kracht A':244,'Kracht B':244,'Duurtraining':55,'Loopintervaltraining':55,'Loopinterval':55,'HIIT':55,'Mobiliteit':55,'Rust':200};
+  var tagG={'Kracht A':99,'Kracht B':99,'Duurtraining':138,'Loopintervaltraining':138,'Loopinterval':138,'HIIT':138,'Mobiliteit':138,'Rust':200};
+  var tagB={'Kracht A':58,'Kracht B':58,'Duurtraining':221,'Loopintervaltraining':221,'Loopinterval':221,'HIIT':221,'Mobiliteit':221,'Rust':200};
+
+  for(var i=0;i<7;i++){
+    check(9);
+    var isRust=sess[i]==='Rust';
+    doc.setFillColor(isRust?245:250,isRust?245:250,isRust?245:255);
+    doc.rect(M,y,W-M*2,8,'F');
+    doc.setFillColor(tagR[sess[i]]||200,tagG[sess[i]]||200,tagB[sess[i]]||200);
+    doc.rect(M,y,3,8,'F');
+    doc.setTextColor(80,80,80);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8.5);
+    doc.text(dagL[i],M+5,y+5.5);
+    doc.setFont('helvetica','normal');
+    doc.setTextColor(20,20,20);
+    doc.text(sess[i],M+18,y+5.5);
+    y+=9;
+  }
+  y+=5;
+
+  // Kracht A
+  var squat=bl_set.has('Knie')?'Goblet squat':'Back squat + miniband';
+  var oefsA=isK
+    ?[['Hang high pull','3×6 · 60-90s rust'],['Goblet squat','3×8'],['Nordic hamstring curl','3×5 excentrisch'],['Hamstring catch','3×6/been'],['Lateral bounds','3×8/kant'],['Single leg RDL','3×10/been'],['Copenhagen plank','3×20-30s']]
+    :[[squat==='Goblet squat'?'Goblet squat':'Hang high pull','3×6 · 60-90s rust'],[squat,'3×8'],['Romanian deadlift','3×8'],['Lunge snapdown + sprong','3×8'],['Reverse lunge hiplock','3×12'],['Pogojumps','3×20']];
+  // correct: first item should always be hang high pull
+  if(!isK){
+    oefsA[0]=['Hang high pull','3×6 · 60-90s rust'];
+    oefsA[1]=[squat,'3×8'];
+  }
+
+  secHeader(isK?'KRACHT A — KEEPER':'KRACHT A — ONDERLICHAAM + EXPLOSIEF',244,99,58);
+  for(var i=0;i<oefsA.length;i++){exRow(i+1,oefsA[i][0],oefsA[i][1]);}
+
+  var extrasA=[];
+  if(bl_set.has('Lies')){extrasA.push(['Copenhagen plank','3×20-30s'],['Dead bug','3×10/kant']);}
+  if(bl_set.has('Knie')){extrasA.push(['TKE band','3×15/been'],['Step downs','3×10/been']);}
+  if(bl_set.has('Lage rug')){extrasA.push(['Bekkenkantelingen ruglig','3×30s'],['Dead bug','3×30s']);}
+  if(bl_set.has('Bovenrug')){extrasA.push(['Bird dog','3×10/kant'],['Prone Y-T-W','3×10']);}
+  if(bl_set.has('Schouder')){extrasA.push(['Ext. rotatie band','3×15/arm'],['Shoulder taps','3×10/kant']);}
+  if(bl_set.has('Hamstring')){extrasA.push(['Nordic hamstring curl','3×5'],['Single leg RDL','3×10/been']);}
+  if(bl_set.has('Enkel')){extrasA.push(['Calf raises SL','3×15/been'],['Band eversie/inversie','3×15/kant']);}
+  if(extrasA.length>0){
+    check(8);
+    doc.setFillColor(235,225,255);
+    doc.rect(M,y,W-M*2,7,'F');
+    doc.setTextColor(120,80,180);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.text('PERSOONLIJK EXTRA BLOK — blessurehistorie',M+3,y+5);
+    y+=8;
+    for(var i=0;i<extrasA.length;i++){extraRow(extrasA[i][0],extrasA[i][1]);}
+  }
+  y+=4;
+
+  // Kracht B
+  check(20);
+  var oefsB=isK
+    ?[['Suspension strap pull','3×12'],['MB overhead throw','3×10'],['Pallof press staand','3×12/kant'],['Dead bug','3×10/kant'],['Prone Y-T-W','3×10'],['Shoulder taps push-up','3×10/kant'],['Wrist curls + extensions','3×15']]
+    :[['Suspension strap pull','3×12'],['Half kneeling MB lateral throw','3×10'],['Pallof lunges','3×12'],['Bird dog row','3×10/kant'],['Crabwalk zijwaarts','3×10m'],['Crabwalk achteruit','3×10m'],['Box jumps','3×6 · 60-90s rust']];
+  secHeader(isK?'KRACHT B — KEEPER':'KRACHT B — BOVENLICHAAM + FUNCTIONEEL + CORE',244,99,58);
+  for(var i=0;i<oefsB.length;i++){exRow(i+1,oefsB[i][0],oefsB[i][1]);}
+  if(extrasA.length>0){
+    check(8);
+    doc.setFillColor(235,225,255);
+    doc.rect(M,y,W-M*2,7,'F');
+    doc.setTextColor(120,80,180);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.text('PERSOONLIJK EXTRA BLOK — blessurehistorie',M+3,y+5);
+    y+=8;
+    for(var i=0;i<extrasA.length;i++){extraRow(extrasA[i][0],extrasA[i][1]);}
+  }
+
+  // ═══════════════════════════════════════
+  // PAGINA 2 — LOOPTRAININGEN
+  // ═══════════════════════════════════════
+  newPage();
+  doc.setFillColor(17,17,17);
+  doc.rect(0,0,W,22,'F');
+  doc.setTextColor(55,138,221);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(13);
+  doc.text('Looptrainingen',M,11);
+  doc.setTextColor(200,200,200);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.text(nm+'  ·  '+pos,M,18);
+  y=28;
+
+  if(!isK){
+    var posNoteV1=pos==='Aanvaller'?'aanvaller: 24 reps (8/blok)':pos==='Verdediger'?'verdediger: 18 reps (6/blok)':'middenvelder: 21 reps (7/blok)';
+    var posNoteV2=pos==='Aanvaller'?'aanvaller: kortere intervallen':pos==='Verdediger'?'verdediger: rustpauze 2,5 min':'middenvelder: standaard';
+    loopSection('DUURTRAINING — dinsdag',[
+      'Warming-up:  3 min @ 50%  ·  3 min @ 60%',
+      'Herhaal 6× (geen rust tussen blokken):',
+      '   2,5 min @ 70%',
+      '   1,5 min @ 80%  (week 5-6 ook: + 30 sec @ 90%)',
+      '   2,5 min @ 40%  (herstel)',
+      'Cool down:  3 min @ 40%'
+    ]);
+    loopSection('LOOPINTERVALTRAINING — vrijdag ('+posNoteV1+')',[
+      'Warming-up:  3 min @ 50%  ·  3 min @ 60%  ·  3 min @ 65%  ·  2 min @ 40%',
+      'Week 1-3:  Herhaal 3×',
+      '   40 sec @ 90%  ·  20 sec @ 10%',
+      '   2 min @ 40% rust tussen blokken',
+      'Week 4-6:  Herhaal 3×  ('+posNoteV2+')',
+      '   60 sec @ 90%  ·  30 sec @ 10%',
+      '   2 min @ 40% rust tussen blokken',
+      'Cool down:  3 min @ 40%'
+    ]);
+    loopSection('HIIT — zondag',[
+      'Warming-up:  3 min @ 50%  ·  3 min @ 60%  ·  3 min @ 65%  ·  2 min @ 40%',
+      'Week 1-2: sprints van 4 sec  |  Week 3-4: sprints van 5 sec  |  Week 5-6: sprints van 6 sec',
+      'Herhaal 3×:',
+      '   6 × sprint  ·  30 sec rust na elke sprint',
+      '   2 min @ 40% rustig joggen tussen sets',
+      'Cool down:  3 min @ 40%'
+    ]);
+  } else {
+    loopSection('MOBILITEIT — dinsdag',[
+      'Heup 90/90 stretch  ·  2×60s per kant',
+      'Thoracale rotatie  ·  2×10 per kant',
+      'Hip flexor stretch (half kneeling)  ·  2×45s per kant',
+      'Ankle circles + dorsiflexie  ·  2×10 per kant',
+      'Schouder capsule stretch  ·  2×30s per kant',
+      'Frog stretch  ·  2×30s',
+      'Active leg swings  ·  2×15 per kant'
+    ]);
+    loopSection('KEEPERSLOOPINTERVAL — zaterdag',[
+      'Warming-up:  3 min @ 50%  ·  3 min @ 60%  ·  3 min @ 65%  ·  2 min @ 40%',
+      'Week 1:  2 blokken — 6× sprint 10m + 6× shuffle 5m · 30s rust · RPE 6',
+      'Week 2:  2 blokken — 6× sprint 12m + 6× shuffle 5m · 30s rust · RPE 7',
+      'Week 3:  3 blokken — 6× sprint 12m + 6× shuffle 5m · 30s rust · RPE 7',
+      'Week 4:  3 blokken — 6× sprint 15m + 8× shuffle 5m · 30s rust · RPE 8',
+      'Week 5-6:  3 blokken — 8× sprint 15m + 8× shuffle 5m · 30s rust · RPE 9',
+      'Cool down:  3 min @ 40%'
+    ]);
+  }
+
+  // ═══════════════════════════════════════
+  // PAGINA 3 — 6 WEKEN PROGRESSIE
+  // ═══════════════════════════════════════
+  newPage();
+  doc.setFillColor(17,17,17);
+  doc.rect(0,0,W,22,'F');
+  doc.setTextColor(244,99,58);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(13);
+  doc.text('6-weken progressie',M,11);
+  doc.setTextColor(200,200,200);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(8);
+  doc.text(nm+'  ·  '+pos,M,18);
+  y=28;
+
+  var colW=(W-M*2)/7;
+  var wkCR=[120,55,55,244,244,244];
+  var wkCG=[120,138,138,99,99,99];
+  var wkCB=[120,221,221,58,58,58];
+
+  // Header
+  check(12);
+  doc.setFillColor(25,25,25);
+  doc.rect(M,y,W-M*2,10,'F');
+  doc.setTextColor(150,150,150);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(8);
+  doc.text('',M+2,y+7);
+  for(var i=0;i<6;i++){
+    doc.setTextColor(wkCR[i],wkCG[i],wkCB[i]);
+    doc.text('Week '+(i+1),M+colW+i*colW+colW/2,y+7,{align:'center'});
+  }
+  y+=11;
+
+  var tableRows=isK
+    ?[['Type'].concat(WT),
+      ['% kracht','55%','60%','65%','70%','72%','58%'],
+      ['Kracht A','Keeper A','Keeper A','Keeper A','Keeper A','Keeper A','Keeper A'],
+      ['Kracht B','Keeper B','Keeper B','Keeper B','Keeper B','Keeper B','Keeper B'],
+      ['Interval','2 blok 6x10m','2 blok 6x12m','3 blok 6x12m','3 blok 6x15m','3 blok 8x15m','3 blok 8x15m']]
+    :[['Type'].concat(WT),
+      ['% kracht','55%','60%','65%','70%','72%','58%'],
+      ['Duurloop','6x[70-80%]','6x[70-80%]','6x[70-80%]','6x[70-80-90%]','6x[70-80-90%]','6x[70-80-90%]'],
+      ['Interval','21x40s/20s','21x40s/20s','21x40s/20s','12x60s/30s','12x60s/30s','12x60s/30s'],
+      ['HIIT','4 sec','4 sec','5 sec','5 sec','6 sec','6 sec']];
+
+  for(var ri=0;ri<tableRows.length;ri++){
+    var r=tableRows[ri];
+    check(12);
+    if(ri%2===0){doc.setFillColor(248,248,248);}else{doc.setFillColor(255,255,255);}
+    doc.rect(M,y,W-M*2,10,'F');
+    doc.setDrawColor(230,230,230);
+    doc.rect(M,y,W-M*2,10,'S');
+    doc.setTextColor(60,60,60);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(8);
+    doc.text(r[0],M+2,y+7);
+    for(var ci=0;ci<6;ci++){
+      var val=r[ci+1]||'';
+      if(ri===0){doc.setTextColor(wkCR[ci],wkCG[ci],wkCB[ci]);doc.setFont('helvetica','bold');doc.setFontSize(7.5);}
+      else{doc.setTextColor(30,30,30);doc.setFont('helvetica','normal');doc.setFontSize(8);}
+      doc.text(val,M+colW+ci*colW+colW/2,y+7,{align:'center'});
+    }
+    y+=10;
+  }
+  y+=8;
+
+  // Legenda
+  check(20);
+  doc.setFillColor(245,245,245);
+  doc.rect(M,y,W-M*2,18,'F');
+  doc.setTextColor(80,80,80);
+  doc.setFont('helvetica','bold');
+  doc.setFontSize(8);
+  doc.text('Toelichting:',M+3,y+6);
+  doc.setFont('helvetica','normal');
+  doc.setFontSize(7.5);
+  doc.text('Week 1: volledig optioneel  |  Week 2-3: duurtraining mag ingeruild voor zomersport  |  Week 4-6: alles verplicht',M+3,y+12);
+  doc.text('% kracht = percentage van 1RM  |  Klachten? Neem contact op met Daan (fysiotherapeut)',M+3,y+17);
+
+  // Footer
+  var appURL='https://daanvandervlies.github.io/Victoria-Heren-1-zomerschema-2026/';
+  var nPages=doc.getNumberOfPages();
+  for(var p=1;p<=nPages;p++){
+    doc.setPage(p);
+    doc.setFillColor(17,17,17);
+    doc.rect(0,286,W,11,'F');
+    doc.setTextColor(100,100,100);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(6.5);
+    doc.text('Victoria Heren 1  ·  Zomerschema 2026  ·  Eleven Rotterdam',M,291);
+    doc.setTextColor(244,99,58);
+    doc.textWithLink('Volledig schema: '+appURL,M,295,{url:appURL});
+    doc.setTextColor(100,100,100);
+    doc.text(p+' / '+nPages,W-M,291,{align:'right'});
+  }
+
+  doc.save('VIC_H1_Schema_'+nm.replace(/ /g,'_')+'.pdf');
+}
+
+function chkPW(){
+  var v=document.getElementById('pwi').value;
+  if(v==='VictoriaH1@2026'){
+    document.getElementById('pwpage').style.display='none';
+    document.getElementById('mainwrap').style.display='block';
+    try{localStorage.setItem('vich1_ok','speler');}catch(e){}
+  } else if(v==='ElevenVicH1!'){
+    document.getElementById('pwpage').style.display='none';
+    document.getElementById('mainwrap').style.display='block';
+    document.getElementById('dashwrap').style.display='block';
+    document.getElementById('schema-sections').style.display='none';
+    document.body.classList.add('dash-active');
+    try{localStorage.setItem('vich1_ok','dashboard');}catch(e){}
+    loadDashboard();
+  } else {
+    document.getElementById('pwe').style.display='block';
+    document.getElementById('pwi').value='';
+  }
+}
+(function(){
+  try{
+    var ok=localStorage.getItem('vich1_ok');
+    if(ok==='speler'){
+      document.getElementById('pwpage').style.display='none';
+      document.getElementById('mainwrap').style.display='block';
+    } else if(ok==='dashboard'){
+      document.getElementById('pwpage').style.display='none';
+      document.getElementById('mainwrap').style.display='block';
+      document.getElementById('dashwrap').style.display='block';
+      document.getElementById('schema-sections').style.display='none';
+      document.body.classList.add('dash-active');
+      loadDashboard();
+    }
+  }catch(e){}
+})();
+
+
+var WEBHOOK='https://script.google.com/macros/s/AKfycbxZf5VcXlozuEAthdHZYzsZ2SC-V1DEp5AIz0xZAjs0GADntbanfaaKrQrhCoNbbkvv/exec';
+
+function syncIntake(){
+  var leef=D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):'';
+  var payload={type:'intake',naam:D.naam||'',leeftijd:leef,positie:D.pos||'',krachtervarng:D.kra||'',vorig_seizoen:(D.vs||'')+(D.vs_overig?' - '+D.vs_overig:''),trainingsdoel:(D.doe||[]).join(', '),actieve_klacht:D.nu==='j'?'Ja':'Nee',klacht_regio:(D.kln||[]).join(', '),terugkerende_blessures:(D.his||[]).join(', '),toelichting:D.not||'',rm_squat:D.rm['Squat_kg']||D.rm['Goblet squat_kg']||'',rm_rdl:D.rm['RDL_kg']||'',rm_reverse_lunge:D.rm['Reverse lunge_kg']||'',rm_strap_pull:D.rm['Suspension strap pull_kg']||'',rm_overhead:D.rm['Overhead press_kg']||''};
+  try{fetch(WEBHOOK,{method:'POST',body:JSON.stringify(payload)});}catch(e){}
+}
+
+function syncCheckin(trainingstype,borg,gedaan,week){
+  var payload={type:'checkin',naam:D.naam||'',positie:D.pos||'',week:week+1,trainingstype:trainingstype,gedaan:gedaan?'Ja':'Nee',borg:borg!==null?borg:'',datum:new Date().toLocaleDateString('nl-NL'),notitie:''};
+  try{fetch(WEBHOOK,{method:'POST',body:JSON.stringify(payload)});}catch(e){}
+}
+
+var dWk=0,dIntake=[],dCheckins=[];
+
+function uitloggen(){try{localStorage.removeItem('vich1_ok');}catch(e){}location.reload();}
+
+function loadDashboard(){
+  document.getElementById('db-sub').textContent='Data laden...';
+  fetch(WEBHOOK+'?action=getIntake')
+    .then(function(r){return r.json();})
+    .then(function(d){dIntake=d.data||[];return fetch(WEBHOOK+'?action=getCheckins');})
+    .then(function(r){return r.json();})
+    .then(function(d){dCheckins=d.data||[];renderDash();})
+    .catch(function(){dIntake=[];dCheckins=[];renderDash();});
+}
+
+function renderDash(){
+  var n=dIntake.length;
+  document.getElementById('db-sub').textContent=n+' spelers ingeschreven \xb7 fysio & trainer dashboard';
+  
+  // Tabs
+  var tabs='';
+  for(var i=0;i<6;i++) tabs+='<button type="button" class="dtab'+(dWk===i?' on':'')+'" onclick="dSetWk('+i+')">W'+(i+1)+'</button>';
+  tabs+='<button type="button" class="dtab totaal'+(dWk==='all'?' on':'')+'" onclick="dSetAll()">Totaal</button>';
+  document.getElementById('dtabs').innerHTML=tabs;
+
+  var checkins=dWk==='all'?dCheckins:dCheckins.filter(function(c){return parseInt(c.week)===(dWk+1);});
+  var vp=[0,0,4,4,5,5];
+  var verp=dWk==='all'?24:(vp[dWk]||0);
+
+  // Stats per speler
+  var stats={};
+  dIntake.forEach(function(s){
+    if(!s.naam)return;
+    stats[s.naam]={naam:s.naam,positie:s.positie||'',actieve_klacht:s.actieve_klacht||'',klacht_regio:s.klacht_regio||'',intake:s,bk:[],bl:[],gedaan:0};
+  });
+  checkins.forEach(function(c){
+    if(!stats[c.naam])return;
+    var b=parseFloat(c.borg);var t=c.trainingstype||'';
+    if(!isNaN(b)){if(t==='Kracht A'||t==='Kracht B')stats[c.naam].bk.push(b);else stats[c.naam].bl.push(b);}
+    if(c.gedaan==='Ja')stats[c.naam].gedaan++;
+  });
+
+  var kla=dIntake.filter(function(s){return s.actieve_klacht==='Ja';});
+  var ab=document.getElementById('alertbar');
+  if(kla.length>0){
+    ab.className='alertbar show';
+    document.getElementById('alert-text').textContent='\u2691 '+kla.length+' speler'+(kla.length>1?'s':'')+' meld'+(kla.length>1?'en':'')+' actieve klachten';
+    document.getElementById('alert-sub').textContent=kla.map(function(s){return s.naam+' \u2014 '+(s.klacht_regio||'onbekend');}).join(' \xb7 ');
+  } else {ab.className='alertbar';}
+
+  var namen=Object.keys(stats);
+  var totC=0,totK=[],totL=[],nR=0,nO=0;
+  namen.forEach(function(nm){
+    var s=stats[nm];
+    var totSessVerp=verp>0?verp:(s.bk.length+s.bl.length);totC+=totSessVerp>0?s.gedaan/totSessVerp*100:100;
+    totK=totK.concat(s.bk);totL=totL.concat(s.bl);
+    var sg=dSig(s,verp);
+    if(sg.l==='rood')nR++;else if(sg.l==='oranje')nO++;
+  });
+  var gc=namen.length>0?Math.round(totC/namen.length):0;
+  var gk=totK.length>0?(totK.reduce(function(a,b){return a+b;},0)/totK.length).toFixed(1):'—';
+  var gl=totL.length>0?(totL.reduce(function(a,b){return a+b;},0)/totL.length).toFixed(1):'—';
+
+  document.getElementById('dmetrics').innerHTML=
+    '<div class="metric"><div class="label">Aanwezigheid</div><div class="val">'+gc+'%</div><div class="sub">'+namen.length+' ingeschreven</div></div>'+
+    '<div class="metric"><div class="label">Load kracht</div><div class="val">'+gk+'</div><div class="sub">Borg gem.</div></div>'+
+    '<div class="metric"><div class="label">Load loop</div><div class="val">'+gl+'</div><div class="sub">Borg gem.</div></div>'+
+    '<div class="metric"><div class="label">Signalen</div><div class="val" style="color:#F4633A">'+(nR+nO)+'</div><div class="sub">'+nR+' rood \xb7 '+nO+' oranje</div></div>'+
+    '<div class="metric"><div class="label">Klachten</div><div class="val" style="color:#C63527">'+kla.length+'</div><div class="sub">actief gemeld</div></div>';
+
+  // Team tabel
+  if(namen.length===0){
+    document.getElementById('teamtable').innerHTML='<div style="padding:2rem;text-align:center;color:rgba(255,255,255,.3);font-size:13px">Nog geen spelers ingeschreven.<br>Spelers verschijnen hier zodra ze het intake-formulier invullen.</div>';
+  } else {
+    var rows='';
+    namen.sort().forEach(function(nm){
+      var s=stats[nm];
+      var compVerp=verp>0?verp:(s.bk.length+s.bl.length);var comp=compVerp>0?s.gedaan+'/'+compVerp:'—';
+      var gkr=s.bk.length>0?(s.bk.reduce(function(a,b){return a+b;},0)/s.bk.length).toFixed(1):'—';
+      var glp=s.bl.length>0?(s.bl.reduce(function(a,b){return a+b;},0)/s.bl.length).toFixed(1):'—';
+      var sg=dSig(s,verp);
+      var sb=sg.l==='rood'?'<span class="dbadge dbr">hoog</span>':sg.l==='oranje'?'<span class="dbadge dbo">oranje</span>':sg.l==='goed'?'<span class="dbadge dbg">goed</span>':sg.l==='onder'?'<span class="dbadge dbgr">laag</span>':sg.l==='opt'?'<span class="dbadge dbbl">opt.</span>':'<span class="dbadge dbgr">—</span>';
+      var hk=s.actieve_klacht==='Ja';
+      var pos=(s.positie||'').substring(0,2).toUpperCase();
+      rows+='<tr><td><a class="plink" data-nm="'+encodeURIComponent(nm)+'" href="#">'+nm+(hk?' <span class="dflag">\u2691</span>':'')+'</a></td><td style="color:rgba(255,255,255,.4)">'+pos+'</td><td style="text-align:center">'+comp+'</td><td style="text-align:center">'+gkr+'</td><td style="text-align:center">'+glp+'</td><td style="text-align:center">'+sb+'</td></tr>';
+    });
+    document.getElementById('teamtable').innerHTML='<table style="border:1px solid #2a2a2a;border-radius:8px;overflow:hidden"><thead><tr style="background:#1a1a1a"><th>Speler</th><th>Pos.</th><th style="text-align:center">Aanwezigheid</th><th style="text-align:center">Load K</th><th style="text-align:center">Load L</th><th style="text-align:center">Signaal</th></tr></thead><tbody>'+rows+'</tbody></table>';
+  }
+
+  // Klachten
+  var kh=kla.length===0?'<div style="color:rgba(255,255,255,.25);font-size:12px">Geen actieve klachten</div>':'';
+  kla.forEach(function(s){
+    kh+='<div class="dsig dsig-red"><a class="plink" data-nm="'+encodeURIComponent(s.naam)+'" href="#" style="color:#f87171">'+s.naam+'</a><div style="font-size:11px;color:rgba(248,113,113,.7);margin-top:2px">'+(s.klacht_regio||'onbekend')+'</div></div>';
+  });
+  document.getElementById('klachten-list').innerHTML=kh;
+
+  // Signalen
+  var sh='';var hs=false;
+  namen.sort().forEach(function(nm){
+    var s=stats[nm];var sg=dSig(s,verp);
+    if(sg.l==='rood'){hs=true;sh+='<div class="dsig dsig-red"><a class="plink" data-nm="'+encodeURIComponent(nm)+'" href="#" style="color:#f87171">'+nm+'</a><div style="font-size:11px;color:rgba(248,113,113,.7);margin-top:2px">'+sg.r+'</div></div>';}
+    else if(sg.l==='oranje'){hs=true;sh+='<div class="dsig dsig-ora"><a class="plink" data-nm="'+encodeURIComponent(nm)+'" href="#" style="color:#fb923c">'+nm+'</a><div style="font-size:11px;color:rgba(251,146,60,.7);margin-top:2px">'+sg.r+'</div></div>';}
+    else if(sg.l==='onder'){hs=true;sh+='<div class="dsig dsig-gray"><a class="plink" data-nm="'+encodeURIComponent(nm)+'" href="#" style="color:rgba(255,255,255,.4)">'+nm+'</a><div style="font-size:11px;color:rgba(255,255,255,.25);margin-top:2px">'+sg.r+'</div></div>';}
+  });
+  document.getElementById('signalen-list').innerHTML=hs?sh:'<div style="color:rgba(255,255,255,.25);font-size:12px">Geen signalen</div>';
+
+  // Regio tabel
+  var rc={};
+  dIntake.forEach(function(s){
+    [(s.terugkerende_blessures||''),(s.actieve_klacht==='Ja'?s.klacht_regio||'':'')].forEach(function(str){
+      str.split(',').forEach(function(r){r=r.trim();if(r&&r!=='Geen'){if(!rc[r])rc[r]=[];if(rc[r].indexOf(s.naam)===-1)rc[r].push(s.naam);}});
+    });
+  });
+  var rr='';
+  Object.keys(rc).sort().forEach(function(r){
+    var cn=rc[r].length;
+    var b=cn>=3?'<span class="dbadge dbr">'+cn+'</span>':cn>=2?'<span class="dbadge dbo">'+cn+'</span>':'<span class="dbadge dbgr">'+cn+'</span>';
+    rr+='<tr><td>'+r+'</td><td style="text-align:center">'+b+'</td><td style="color:rgba(255,255,255,.5)">'+rc[r].join(', ')+'</td></tr>';
+  });
+  document.getElementById('regio-table').innerHTML=rr?'<table><thead><tr><th>Regio</th><th style="text-align:center">Spelers</th><th>Namen</th></tr></thead><tbody>'+rr+'</tbody></table>':'<div style="color:rgba(255,255,255,.25);font-size:12px">Geen blessures</div>';
+
+  // Event delegation for player links
+  document.getElementById('mainwrap').onclick=function(e){
+    var el=e.target.closest('.plink');
+    if(el){e.preventDefault();var nm=decodeURIComponent(el.getAttribute('data-nm')||'');if(nm)showProfiel(nm);}
+  };
+}
+
+function dSig(s,verp){
+  if(dWk===0)return{l:'opt',r:'Week 1 optioneel'};
+  var all=s.bk.concat(s.bl);
+  var h9=all.filter(function(b){return b>=9;}).length;
+  var h8=all.filter(function(b){return b>=8;}).length;
+  var l4=all.filter(function(b){return b<=4;}).length;
+  var gem=verp>0?Math.max(0,verp-s.gedaan):0;
+  if(h9>=1)return{l:'rood',r:'Borg \u22659 gescoord'};
+  if(h8>=3)return{l:'rood',r:'Borg \u22658 bij 3+ trainingen'};
+  if(gem>=3&&verp>0)return{l:'rood',r:gem+'x verplichte training gemist'};
+  if(h8>=2)return{l:'oranje',r:'Borg \u22658 bij 2+ trainingen'};
+  if(gem>=1&&verp>0)return{l:'oranje',r:gem+'x training gemist'};
+  if(l4>=2)return{l:'onder',r:'Borg \u22644 meerdere keren'};
+  if(all.length===0)return{l:'geen',r:'Nog geen data'};
+  return{l:'goed',r:'Aanwezigheid en load ok'};
+}
+
+function dSetWk(wk){dWk=wk;document.getElementById('profiel-card').style.display='none';renderDash();}
+function sluitProfiel(){document.getElementById('profiel-card').style.display='none';}
+function dSetAll(){dWk='all';document.getElementById('profiel-card').style.display='none';renderDash();}
+
+function showProfiel(naam){
+  var s=dIntake.find(function(x){return x.naam===naam;});
+  if(!s)return;
+  var checkins=dCheckins.filter(function(c){return c.naam===naam;});
+  var titel='Individueel profiel \u2014 <span style="color:rgba(255,255,255,.5);font-size:11px;text-transform:none;letter-spacing:0;font-weight:400">'+naam+'</span>';
+  document.getElementById('profiel-title').innerHTML=titel;
+  var hk=s.actieve_klacht==='Ja';
+  var ih='<div style="background:#0a0a0a;border-radius:8px;padding:12px;margin-bottom:8px">';
+  function ir(l,v){return '<div class="dir"><span class="dil">'+l+'</span><span class="div2">'+v+'</span></div>';}
+  ih+=ir('Positie',s.positie||'—');
+  ih+=ir('Leeftijd',s.leeftijd||'—');
+  ih+=ir('Doel',s.trainingsdoel||'—');
+  ih+=ir('Kracht exp.',s.krachtervarng||'—');
+  ih+=ir('Vorig seizoen',s.vorig_seizoen||'—');
+  ih+=ir('Blessureregio',s.terugkerende_blessures||'Geen');
+  ih+='<div class="dir" style="border:none"><span class="dil">Actieve klacht</span>'+(hk?'<span class="dbadge dbr">Ja \u2014 '+(s.klacht_regio||'onbekend')+'</span>':'<span class="dbadge dbg">Nee</span>')+'</div></div>';
+  if(s.rm_squat||s.rm_rdl||s.rm_reverse_lunge||s.rm_strap_pull||s.rm_overhead){
+    ih+='<div style="background:#0a0a0a;border-radius:8px;padding:10px 12px"><div style="font-size:10px;color:rgba(255,255,255,.3);margin-bottom:6px;text-transform:uppercase;letter-spacing:.05em">10RM testwaarden</div>';
+    if(s.rm_squat)ih+=ir('Squat/Goblet',s.rm_squat+' kg');
+    if(s.rm_rdl)ih+=ir('RDL',s.rm_rdl+' kg');
+    if(s.rm_reverse_lunge)ih+=ir('Reverse lunge',s.rm_reverse_lunge+' kg');
+    if(s.rm_strap_pull)ih+=ir('Strap pull',s.rm_strap_pull+' kg');
+    if(s.rm_overhead)ih+='<div class="dir" style="border:none"><span class="dil">Overhead press</span><span class="div2">'+s.rm_overhead+' kg</span></div>';
+    ih+='</div>';
+  }
+  var wkd={};for(var w=1;w<=6;w++)wkd[w]={ka:null,kb:null,en:null,vo:null,hi:null,gedaan:0};
+  checkins.forEach(function(c){
+    var w=parseInt(c.week);if(!wkd[w])return;
+    var b=parseFloat(c.borg);var t=c.trainingstype||'';
+    if(c.gedaan==='Ja')wkd[w].gedaan++;
+    if(!isNaN(b)){if(t==='Kracht A')wkd[w].ka=b;else if(t==='Kracht B')wkd[w].kb=b;else if(t==='Duurtraining')wkd[w].en=b;else if(t==='Loopintervaltraining')wkd[w].vo=b;else if(t==='HIIT')wkd[w].hi=b;}
+  });
+  function bc(v){if(v===null)return '<td style="text-align:center;color:rgba(255,255,255,.15)">—</td>';var cl=v>=9?'color:#f87171;font-weight:700':v>=8?'color:#fb923c;font-weight:600':'';return '<td style="text-align:center;'+cl+'">'+v+'</td>';}
+  var vp=[0,0,4,4,5,5];var br='';
+  for(var w=1;w<=6;w++){
+    var d=wkd[w];var vr=vp[w-1];
+    var totW=([d.ka,d.kb,d.en,d.vo,d.hi].filter(function(x){return x!==null;}).length);var cb=totW===0?'—':'<span class="dbadge '+(d.gedaan>=totW?'dbg':d.gedaan>=totW-1?'dbo':'dbr')+'">'+(d.gedaan+'/'+totW)+'</span>';
+    br+='<tr><td>W'+w+(w===1?' <span style="color:rgba(255,255,255,.25);font-size:10px">(opt.)</span>':'')+'</td>'+bc(d.ka)+bc(d.kb)+bc(d.en)+bc(d.vo)+bc(d.hi)+'<td style="text-align:center">'+cb+'</td></tr>';
+  }
+  var th='<div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px">Load per training \xb7 alle weken</div><table style="font-size:11px"><thead><tr><th>Week</th><th style="text-align:center">Kr. A</th><th style="text-align:center">Kr. B</th><th style="text-align:center">Duur</th><th style="text-align:center">Interval</th><th style="text-align:center">HIIT</th><th style="text-align:center">Aanwezigheid</th></tr></thead><tbody>'+br+'</tbody></table>';
+  document.getElementById('profiel-content').innerHTML='<div style="display:grid;grid-template-columns:1fr 2fr;gap:16px"><div>'+ih+'</div><div>'+th+'</div></div>';
+  document.getElementById('profiel-card').style.display='block';
+  document.getElementById('profiel-card').scrollIntoView({behavior:'smooth'});
+}
+
+function downloadPDF(){
+  if(!window.jspdf){alert('PDF bibliotheek laadt nog, probeer opnieuw.');return;}
+  var jsPDF=window.jspdf.jsPDF;
+  var doc=new jsPDF({orientation:'p',unit:'mm',format:'a4'});
+  var nm=D.naam||'Speler';
+  var pos=D.pos||'Middenvelder';
+  var leef=D.gbd?Math.floor((new Date()-new Date(D.gbd))/31557600000):25;
+  var isK=pos==='Keeper';
+  var WP=[55,60,65,70,72,58];
+  var WT=['Optioneel','Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht'];
+  var bl_set=new Set([].concat(D.kln||[]).concat(D.his||[]));
+  var W=210,M=12;
+  var appURL='https://daanvandervlies.github.io/Victoria-Heren-1-zomerschema-2026/';
+
+  function addFooter(wk){
+    doc.setFillColor(17,17,17);
+    doc.rect(0,286,W,11,'F');
+    doc.setTextColor(100,100,100);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(6);
+    doc.text('Victoria Heren 1  ·  Zomerschema 2026  ·  Eleven Rotterdam  ·  '+nm,M,291);
+    doc.setTextColor(244,99,58);
+    doc.textWithLink('Schema openen: '+appURL,M,295,{url:appURL});
+    doc.setTextColor(100,100,100);
+    doc.text((wk+1)+' / 6',W-M,291,{align:'right'});
+  }
+
+  var bl_set=new Set([].concat(D.kln||[]).concat(D.his||[]));
+  var squat=bl_set.has('Knie')?'Goblet squat':'Back squat + miniband';
+
+  var oefsA=isK
+    ?[['Hang high pull','3×6'],['Goblet squat','3×8'],['Nordic hamstring curl','3×5 exc.'],['Hamstring catch','3×6/been'],['Lateral bounds','3×8/kant'],['Single leg RDL','3×10/been'],['Copenhagen plank','3×20-30s']]
+    :[['Hang high pull','3×6 · 60-90s'],[squat,'3×8'],['Romanian deadlift','3×8'],['Lunge snapdown + sprong','3×8'],['Reverse lunge hiplock','3×12'],['Pogojumps','3×20']];
+
+  var oefsB=isK
+    ?[['Suspension strap pull','3×12'],['MB overhead throw','3×10'],['Pallof press staand','3×12/kant'],['Dead bug','3×10/kant'],['Prone Y-T-W','3×10'],['Shoulder taps push-up','3×10/kant'],['Wrist curls+extensions','3×15']]
+    :[['Suspension strap pull','3×12'],['Half kneeling MB lateral throw','3×10'],['Pallof lunges','3×12'],['Bird dog row','3×10/kant'],['Crabwalk zijwaarts','3×10m'],['Crabwalk achteruit','3×10m'],['Box jumps','3×6 · 60-90s']];
+
+  var extras=[];
+  if(bl_set.has('Lies')){extras.push('Copenhagen plank 3×20-30s','Dead bug 3×10/kant');}
+  if(bl_set.has('Knie')){extras.push('TKE band 3×15/been','Step downs 3×10/been');}
+  if(bl_set.has('Lage rug')){extras.push('Bekkenkantelingen ruglig 3×30s','Dead bug 3×30s');}
+  if(bl_set.has('Bovenrug')){extras.push('Bird dog 3×10/kant','Prone Y-T-W 3×10');}
+  if(bl_set.has('Schouder')){extras.push('Ext. rotatie band 3×15/arm','Shoulder taps 3×10/kant');}
+  if(bl_set.has('Hamstring')){extras.push('Nordic hamstring curl 3×5','Single leg RDL 3×10/been');}
+  if(bl_set.has('Enkel')){extras.push('Calf raises SL 3×15/been','Band eversie/inversie 3×15/kant');}
+
+  for(var wk=0;wk<6;wk++){
+    if(wk>0)doc.addPage();
+    var y=0;
+    var p=WP[wk];
+    var hard=(wk>=4)||(pos==='Aanvaller'&&wk>=3);
+    var vF=wk>=3;
+    var vReps=vF?4:7;
+    if(!vF&&pos==='Aanvaller')vReps=8;
+    if(!vF&&pos==='Verdediger')vReps=6;
+    var vRust=(pos==='Verdediger'&&vF)?'2,5min':'2min';
+    var vOn=vF?'60s':'40s';
+    var vOff=vF?'30s':'20s';
+    var hiitSec=wk<=1?4:wk<=3?5:6;
+    var hiitRpe=wk<=1?7:wk<=3?8:9;
+
+    // ── HEADER ──
+    doc.setFillColor(17,17,17);
+    doc.rect(0,0,W,18,'F');
+    doc.setTextColor(244,99,58);
+    doc.setFont('helvetica','bold');
+    doc.setFontSize(13);
+    doc.text('Week '+(wk+1)+'  —  '+WT[wk],M,10);
+    doc.setTextColor(180,180,180);
+    doc.setFont('helvetica','normal');
+    doc.setFontSize(7.5);
+    doc.text(nm+'  ·  '+pos+'  ·  Kracht: '+p+'% van 1RM',M,16);
+    y=21;
+
+    // ── WEEKINDELING (alleen wk 0, of altijd compact) ──
+    if(wk===0){
+      // Toon weekindeling als kleine tabel
+      var dagL=isK?['Ma','Di','Wo','Do','Vr','Za','Zo']:['Ma','Di','Wo','Do','Vr','Za','Zo'];
+      var sessL=isK?['Kracht A','Mobiliteit','Rust','Kracht B','Rust','Loopinterval','Rust']:['Kracht A','Duurtraining','Rust','Kracht B','Loopinterval','Rust','HIIT'];
+      var cW=(W-M*2-4)/2;
+      for(var i=0;i<7;i++){
+        var ci=i<4?0:1;
+        var ri=i<4?i:i-4;
+        var gx=M+ci*(cW+4);
+        var gy=y+ri*6.5;
+        var isRust=sessL[i]==='Rust';
+        var r2=isRust?200:sessL[i].indexOf('Kracht')>-1?244:55;
+        var g2=isRust?200:sessL[i].indexOf('Kracht')>-1?99:138;
+        var b2=isRust?200:sessL[i].indexOf('Kracht')>-1?58:221;
+        doc.setFillColor(isRust?245:252,isRust?245:252,isRust?245:255);
+        doc.rect(gx,gy,cW,6,'F');
+        doc.setFillColor(r2,g2,b2);
+        doc.rect(gx,gy,2,6,'F');
+        doc.setFont('helvetica','bold');doc.setFontSize(7);doc.setTextColor(80,80,80);
+        doc.text(dagL[i],gx+3,gy+4.5);
+        doc.setFont('helvetica','normal');doc.setTextColor(isRust?160:20,isRust?160:20,isRust?160:20);
+        doc.text(sessL[i],gx+13,gy+4.5);
+      }
+      y+=30;
+      // Note week 1
+      doc.setFillColor(255,245,240);doc.rect(M,y,W-M*2,5,'F');
+      doc.setTextColor(200,80,30);doc.setFont('helvetica','italic');doc.setFontSize(6.5);
+      doc.text('Week 1 volledig optioneel. Bovenstaande weekindeling geldt voor alle 6 weken.',M+2,y+3.5);
+      y+=6;
+    } else if(wk===1||wk===2){
+      var sn=isK?'mobiliteit (di)':'duurtraining (di)';
+      doc.setFillColor(240,247,255);doc.rect(M,y,W-M*2,5,'F');
+      doc.setTextColor(30,100,180);doc.setFont('helvetica','italic');doc.setFontSize(6.5);
+      doc.text('De '+sn+' mag je ruilen voor een actieve zomersport. Overige sessies verplicht.',M+2,y+3.5);
+      y+=6;
+    }
+    y+=2;
+
+    // ── KRACHT A + B naast elkaar ──
+    var kW=(W-M*2-4)/2;
+
+    // Kracht A header
+    doc.setFillColor(244,99,58);doc.rect(M,y,kW,6,'F');
+    doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(7.5);
+    doc.text(isK?'KRACHT A — KEEPER':'KRACHT A — ONDERLICHAAM',M+2,y+4.5);
+    // Kracht B header
+    doc.setFillColor(244,99,58);doc.rect(M+kW+4,y,kW,6,'F');
+    doc.text(isK?'KRACHT B — KEEPER':'KRACHT B — BOVENLICHAAM',M+kW+6,y+4.5);
+    y+=6;
+
+    // WU rij
+    doc.setFillColor(242,242,242);doc.rect(M,y,kW,5,'F');
+    doc.setTextColor(100,100,100);doc.setFont('helvetica','italic');doc.setFontSize(6);
+    doc.text('WU: touwtjespringen · heupopeners · glute bridge',M+2,y+3.5);
+    doc.setFillColor(242,242,242);doc.rect(M+kW+4,y,kW,5,'F');
+    doc.text('WU: touwtjespringen · schouderrotaties · dead bug',M+kW+6,y+3.5);
+    y+=5;
+
+    // Oefeningen naast elkaar
+    var maxOefs=Math.max(oefsA.length,oefsB.length);
+    for(var i=0;i<maxOefs;i++){
+      var bg=i%2===0?248:255;
+      doc.setFillColor(bg,bg,bg);doc.rect(M,y,kW,6.5,'F');
+      doc.setFillColor(bg,bg,bg);doc.rect(M+kW+4,y,kW,6.5,'F');
+      // Kracht A
+      if(i<oefsA.length){
+        var kg='';
+        var keyMap={'Hang high pull':'Hang high pull','Goblet squat':'Goblet squat','Back squat':'Squat','Romanian deadlift':'RDL','Reverse lunge hiplock':'Reverse lunge','Suspension strap pull':'Suspension strap pull','Box jumps':'Box jumps'};
+        var ek=Object.keys(keyMap).find(function(k){return oefsA[i][0].indexOf(k)===0;});
+        if(ek){var w2=parseFloat(D.rm[keyMap[ek]+'_kg']),r2=parseFloat(D.rm[keyMap[ek]+'_reps']);if(w2&&r2){var orm=Math.round(w2/(1.0278-0.0278*r2));var t=Math.round(orm*p/100/2.5)*2.5;if(t)kg=' ~'+t+'kg';}}
+        doc.setTextColor(60,60,60);doc.setFont('helvetica','bold');doc.setFontSize(6.5);
+        doc.text((i+1)+'.',M+1,y+4.5);
+        doc.setFont('helvetica','normal');doc.setTextColor(20,20,20);
+        doc.text(oefsA[i][0],M+6,y+4.5);
+        doc.setTextColor(244,99,58);doc.setFont('helvetica','bold');
+        doc.text(oefsA[i][1]+kg,M+kW-1,y+4.5,{align:'right'});
+      }
+      // Kracht B
+      if(i<oefsB.length){
+        var kg2='';
+        var ek2=Object.keys(keyMap).find(function(k){return oefsB[i][0].indexOf(k)===0;});
+        if(ek2){var w3=parseFloat(D.rm[keyMap[ek2]+'_kg']),r3=parseFloat(D.rm[keyMap[ek2]+'_reps']);if(w3&&r3){var orm2=Math.round(w3/(1.0278-0.0278*r3));var t2=Math.round(orm2*p/100/2.5)*2.5;if(t2)kg2=' ~'+t2+'kg';}}
+        doc.setTextColor(60,60,60);doc.setFont('helvetica','bold');doc.setFontSize(6.5);
+        doc.text((i+1)+'.',M+kW+5,y+4.5);
+        doc.setFont('helvetica','normal');doc.setTextColor(20,20,20);
+        doc.text(oefsB[i][0],M+kW+10,y+4.5);
+        doc.setTextColor(244,99,58);doc.setFont('helvetica','bold');
+        doc.text(oefsB[i][1]+kg2,M+2*kW+3,y+4.5,{align:'right'});
+      }
+      y+=6.5;
+    }
+
+    // Blessure extras (compact, 1 regel per 2 oefeningen)
+    if(extras.length>0){
+      doc.setFillColor(235,225,255);doc.rect(M,y,W-M*2,5.5,'F');
+      doc.setTextColor(120,80,180);doc.setFont('helvetica','bold');doc.setFontSize(6.5);
+      doc.text('EXTRA (blessurehistorie):',M+2,y+4);
+      doc.setFont('helvetica','normal');
+      var extStr=extras.join('  ·  ');
+      doc.text(extStr,M+38,y+4);
+      y+=6;
+    }
+    y+=3;
+
+    // ── LOOPTRAININGEN ──
+    if(!isK){
+      // Headers naast elkaar
+      var lW=(W-M*2-8)/3;
+      var lTitles=['DUURTRAINING — di','LOOPINTERVAL — vr','HIIT — zo'];
+      var lX=[M, M+lW+4, M+2*(lW+4)];
+      for(var j=0;j<3;j++){
+        doc.setFillColor(55,138,221);doc.rect(lX[j],y,lW,6,'F');
+        doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(7);
+        doc.text(lTitles[j],lX[j]+2,y+4.5);
+      }
+      y+=6;
+
+      // WU rij (alle 3 gelijk voor interval en HIIT, duur iets anders)
+      var wuDuur='3min@50% · 3min@60%';
+      var wuInterval='3min@50%·3min@60%·3min@65%·2min@40%';
+      var wuLines=[wuDuur,wuInterval,wuInterval];
+      for(var j=0;j<3;j++){
+        doc.setFillColor(242,242,242);doc.rect(lX[j],y,lW,5,'F');
+        doc.setTextColor(100,100,100);doc.setFont('helvetica','italic');doc.setFontSize(5.5);
+        doc.text('WU: '+wuLines[j],lX[j]+2,y+3.5);
+      }
+      y+=5;
+
+      // Hoofdblok
+      var duurBlok=hard?'6×: 2,5min@70%\n      1min@80%\n      30s@90%\n      2,5min@40%':'6×: 2,5min@70%\n      1,5min@80%\n      2,5min@40%';
+      var intBlok='3×'+vReps+'× '+vOn+'@90%\n'+vOff+'@10%\n'+vRust+' rust tussen';
+      var hiitBlok='3× 6 sprints '+hiitSec+'s\n30s rust/sprint\n2min@40% tussen\nRPE '+hiitRpe;
+      var blokken=[duurBlok,intBlok,hiitBlok];
+
+      for(var j=0;j<3;j++){
+        var lines=blokken[j].split('\n');
+        var bH=lines.length*5.5+2;
+        doc.setFillColor(245,250,255);doc.rect(lX[j],y,lW,bH,'F');
+        doc.setTextColor(55,138,221);doc.setFont('helvetica','bold');doc.setFontSize(7);
+        for(var li=0;li<lines.length;li++){
+          if(li===0)doc.setFont('helvetica','bold');else doc.setFont('helvetica','normal');
+          doc.setTextColor(li===0?55:60,li===0?138:60,li===0?221:60);
+          doc.text(lines[li],lX[j]+2,y+5+li*5.5);
+        }
+        y_loop_end=y+bH;
+      }
+      y=y_loop_end;
+
+      // CD rij
+      y+=1;
+      for(var j=0;j<3;j++){
+        doc.setFillColor(242,242,242);doc.rect(lX[j],y,lW,5,'F');
+        doc.setTextColor(100,100,100);doc.setFont('helvetica','italic');doc.setFontSize(5.5);
+        doc.text('CD: 3min@40%',lX[j]+2,y+3.5);
+      }
+      y+=5;
+
+    } else {
+      // Keeper loop
+      var blokken2=wk<=1?2:3;
+      var sprintM=wk<=1?10:wk<=2?12:15;
+      var sprintN=wk>=4?8:6;
+      var shuffleN=wk>=3?8:6;
+      var kRpe=wk===0?6:wk<=1?7:wk<=2?7:wk===3?8:9;
+      var lW2=(W-M*2-4)/2;
+
+      doc.setFillColor(55,138,221);doc.rect(M,y,lW2,6,'F');
+      doc.setTextColor(255,255,255);doc.setFont('helvetica','bold');doc.setFontSize(7);
+      doc.text('MOBILITEIT — di',M+2,y+4.5);
+      doc.setFillColor(55,138,221);doc.rect(M+lW2+4,y,lW2,6,'F');
+      doc.text('LOOPINTERVAL — za',M+lW2+6,y+4.5);
+      y+=6;
+
+      var mobItems=['Heup 90/90  2×60s/kant','Thoracale rotatie  2×10/kant','Hip flexor  2×45s/kant','Ankle circles  2×10/kant','Schouder capsule  2×30s/kant','Frog stretch  2×30s','Active leg swings  2×15/kant'];
+      var loopItems=['WU: 3min@50%·3min@60%·3min@65%·2min@40%',blokken2+'× blok:',sprintN+'× sprint '+sprintM+'m · 30s rust',shuffleN+'× shuffle 5m · 20s rust','2min@40% tussen blokken','RPE '+kRpe,'CD: 3min@40%'];
+      var maxK=Math.max(mobItems.length,loopItems.length);
+      for(var i=0;i<maxK;i++){
+        doc.setFillColor(i%2===0?248:255,i%2===0?248:255,i%2===0?248:255);
+        doc.rect(M,y,lW2,5.5,'F');doc.rect(M+lW2+4,y,lW2,5.5,'F');
+        doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(40,40,40);
+        if(i<mobItems.length)doc.text(mobItems[i],M+2,y+4);
+        if(i<loopItems.length)doc.text(loopItems[i],M+lW2+6,y+4);
+        y+=5.5;
+      }
+    }
+
+    addFooter(wk);
+  }
+
+  doc.save('VIC_H1_Schema_'+nm.replace(/ /g,'_')+'.pdf');
+}
+
+
+// Auto-bepaal huidige week op basis van startdatum 23 juni 2026
+(function(){
+  var start=new Date('2026-06-23');
+  var nu=new Date();
+  var diff=Math.floor((nu-start)/(1000*60*60*24*7));
+  var huidig=Math.max(0,Math.min(5,diff));
+  // Stel dWk in op verlopen weken (voor aanwezigheidsberekening)
+  window.dHuidigeWeek=huidig;
+})();
+
+rsb(0);
+</script>
+</div>
+</body>
+</html>

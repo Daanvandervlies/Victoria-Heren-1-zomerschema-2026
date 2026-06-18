@@ -1303,9 +1303,9 @@ function showProfiel(naam){
   for(var w=1;w<=6;w++){
     var d=wkd[w];var vr=vp[w-1];
     var vr2=vp[w-1];
-    var totW2=[d.ka,d.kb,d.en,d.vo,d.hi].filter(function(x){return x!==null;}).length+d.gedaan;
+    var nBorg=[d.ka,d.kb,d.en,d.vo,d.hi].filter(function(x){return x!==null;}).length;
     var cbCount=d.gedaan;
-    var cbDenom=vr2>0?vr2:totW2;
+    var cbDenom=vr2>0?vr2:nBorg;
     var cb=cbDenom===0?'—':vr2===0?('<span class="dbadge dbg">'+cbCount+'/'+cbDenom+'</span>'):('<span class="dbadge '+(cbCount>=cbDenom?'dbg':cbCount>=cbDenom-1?'dbo':'dbr')+'">'+(cbCount+'/'+cbDenom)+'</span>');
     br+='<tr><td>W'+w+(w===1?' <span style="color:rgba(255,255,255,.25);font-size:10px">(opt.)</span>':'')+'</td>'+bc(d.ka)+bc(d.kb)+bc(d.en)+bc(d.vo)+bc(d.hi)+'<td style="text-align:center">'+cb+'</td></tr>';
   }

@@ -1296,7 +1296,7 @@ function showProfiel(naam){
     if(!isNaN(b)){if(t==='Kracht A')wkd[w].ka=b;else if(t==='Kracht B')wkd[w].kb=b;else if(t==='Duurtraining')wkd[w].en=b;else if(t==='Loopintervaltraining')wkd[w].vo=b;else if(t==='HIIT')wkd[w].hi=b;}
   });
   function bc(v){if(v===null)return '<td style="text-align:center;color:rgba(255,255,255,.15)">—</td>';var cl=v>=9?'color:#f87171;font-weight:700':v>=8?'color:#fb923c;font-weight:600':'';return '<td style="text-align:center;'+cl+'">'+v+'</td>';}
-  var vp=[0,0,4,4,5,5];var br='';
+  var isKp=(s.positie||'').toLowerCase().indexOf('keeper')>-1;var vp=isKp?[0,0,4,4,4,4]:[0,0,4,4,5,5];var br='';
   for(var w=1;w<=6;w++){
     var d=wkd[w];var vr=vp[w-1];
     var vr2=vp[w-1];var cb=vr2===0?'<span class="dbadge dbbl">opt.</span>':('<span class="dbadge '+(d.gedaan>=vr2?'dbg':d.gedaan>=vr2-1?'dbo':'dbr')+'">'+(d.gedaan+'/'+vr2)+'</span>');

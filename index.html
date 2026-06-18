@@ -310,7 +310,7 @@ body{font-family:'DM Sans',sans-serif;background:#0a0a0a;color:#e8e8e8;min-heigh
     <div style="font-size:18px">⚑</div>
     <div><div class="alert-text" id="alert-text"></div><div class="alert-sub" id="alert-sub"></div></div>
   </div>
-  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:1rem" id="dmetrics"></div>
+  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:1rem" id="dmetrics"></div>
   <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:10px;margin-bottom:10px">
     <div class="dcard">
       <div class="dsh">Teamoverzicht</div>
@@ -1180,6 +1180,7 @@ function renderDash(){
 
   document.getElementById('dmetrics').innerHTML=
     
+    '<div class="metric"><div class="label">Aanwezigheid</div><div class="val">'+gc+'%</div><div class="sub">'+namen.length+' ingeschreven</div></div>'+
     '<div class="metric"><div class="label">Load kracht</div><div class="val">'+gk+'</div><div class="sub">Borg gem.</div></div>'+
     '<div class="metric"><div class="label">Load loop</div><div class="val">'+gl+'</div><div class="sub">Borg gem.</div></div>'+
     '<div class="metric"><div class="label">Signalen</div><div class="val" style="color:#F4633A">'+(nR+nO)+'</div><div class="sub">'+nR+' rood \xb7 '+nO+' oranje</div></div>'+
@@ -1192,18 +1193,21 @@ function renderDash(){
     var rows='';
     namen.sort().forEach(function(nm){
       var s=stats[nm];
+      var isKpS=(s.positie||'').toLowerCase().indexOf('keeper')>-1;
       var totSessAll=s.bk.length+s.bl.length;
-      var verpPS=dWk==='all'?(s.positie&&s.positie.toLowerCase().indexOf('keeper')>-1?14:18):verp;
-      var comp=verpPS===0?('<span class="dbadge dbg">'+s.gedaan+'/'+totSessAll+'</span>'):s.gedaan+'/'+verpPS;
+      var verpPS;
+      if(dWk==='all') verpPS=isKpS?14:18;
+      else verpPS=dWk<=1?0:dWk<=3?(isKpS?3:4):isKpS?4:5;
+      var comp=verpPS===0?('<span class="dbadge dbg">'+s.gedaan+'/'+totSessAll+'</span>'):('<span class="dbadge '+(s.gedaan>=verpPS?'dbg':s.gedaan>=verpPS-1?'dbo':'dbr')+'">'+(s.gedaan+'/'+verpPS)+'</span>');
       var gkr=s.bk.length>0?(s.bk.reduce(function(a,b){return a+b;},0)/s.bk.length).toFixed(1):'—';
       var glp=s.bl.length>0?(s.bl.reduce(function(a,b){return a+b;},0)/s.bl.length).toFixed(1):'—';
       var sg=dSig(s,verp);
       var sb=sg.l==='rood'?'<span class="dbadge dbr">hoog</span>':sg.l==='oranje'?'<span class="dbadge dbo">oranje</span>':sg.l==='goed'?'<span class="dbadge dbg">goed</span>':sg.l==='onder'?'<span class="dbadge dbgr">laag</span>':sg.l==='opt'?'<span class="dbadge dbbl">opt.</span>':'<span class="dbadge dbgr">—</span>';
       var hk=s.actieve_klacht==='Ja';
       var pos=(s.positie||'').substring(0,2).toUpperCase();
-      rows+='<tr><td><a class="plink" data-nm="'+encodeURIComponent(nm)+'" href="#">'+nm+(hk?' <span class="dflag">\u2691</span>':'')+'</a></td><td style="color:rgba(255,255,255,.4)">'+pos+'</td><td style="text-align:center">'+gkr+'</td><td style="text-align:center">'+glp+'</td><td style="text-align:center">'+sb+'</td></tr>';
+      rows+='<tr><td><a class="plink" data-nm="'+encodeURIComponent(nm)+'" href="#">'+nm+(hk?' <span class="dflag">\u2691</span>':'')+'</a></td><td style="color:rgba(255,255,255,.4)">'+pos+'</td><td style="text-align:center">'+comp+'</td><td style="text-align:center">'+gkr+'</td><td style="text-align:center">'+glp+'</td><td style="text-align:center">'+sb+'</td></tr>';
     });
-    document.getElementById('teamtable').innerHTML='<table style="border:1px solid #2a2a2a;border-radius:8px;overflow:hidden"><thead><tr style="background:#1a1a1a"><th>Speler</th><th>Pos.</th><th style="text-align:center">Load K</th><th style="text-align:center">Load L</th><th style="text-align:center">Signaal</th></tr></thead><tbody>'+rows+'</tbody></table>';
+    document.getElementById('teamtable').innerHTML='<table style="border:1px solid #2a2a2a;border-radius:8px;overflow:hidden"><thead><tr style="background:#1a1a1a"><th>Speler</th><th>Pos.</th><th style="text-align:center">Aanw.</th><th style="text-align:center">Load K</th><th style="text-align:center">Load L</th><th style="text-align:center">Signaal</th></tr></thead><tbody>'+rows+'</tbody></table>';
   }
 
   // Klachten
@@ -1316,9 +1320,9 @@ function showProfiel(naam){
     else if(cbCount>=cbDenom){cb='<span class="dbadge dbg">'+cbCount+'/'+cbDenom+'</span>';}
     else if(cbCount>=cbDenom-1){cb='<span class="dbadge dbo">'+cbCount+'/'+cbDenom+'</span>';}
     else{cb='<span class="dbadge dbr">'+cbCount+'/'+cbDenom+'</span>';}
-    br+='<tr><td>W'+w+(w===1?' <span style="color:rgba(255,255,255,.25);font-size:10px">(opt.)</span>':'')+'</td>'+bc(d.ka)+bc(d.kb)+bc(d.en)+bc(d.vo)+bc(d.hi)+'</tr>';
+    br+='<tr><td>W'+w+(w===1?' <span style="color:rgba(255,255,255,.25);font-size:10px">(opt.)</span>':'')+'</td>'+bc(d.ka)+bc(d.kb)+bc(d.en)+bc(d.vo)+bc(d.hi)+'<td style="text-align:center">'+cb+'</td></tr>';
   }
-  var th='<div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px">Load per training \xb7 alle weken</div><table style="font-size:11px"><thead><tr><th>Week</th><th style="text-align:center">Kr. A</th><th style="text-align:center">Kr. B</th><th style="text-align:center">Duur</th><th style="text-align:center">Interval</th><th style="text-align:center">HIIT</th></tr></thead><tbody>'+br+'</tbody></table>';
+  var th='<div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px">Load per training \xb7 alle weken</div><table style="font-size:11px"><thead><tr><th>Week</th><th style="text-align:center">Kr. A</th><th style="text-align:center">Kr. B</th><th style="text-align:center">Duur</th><th style="text-align:center">Interval</th><th style="text-align:center">HIIT</th><th style="text-align:center">Aanw.</th></tr></thead><tbody>'+br+'</tbody></table>';
   document.getElementById('profiel-content').innerHTML='<div style="display:grid;grid-template-columns:1fr 2fr;gap:16px"><div>'+ih+'</div><div>'+th+'</div></div>';
   document.getElementById('profiel-card').style.display='block';
   document.getElementById('profiel-card').scrollIntoView({behavior:'smooth'});

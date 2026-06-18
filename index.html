@@ -1141,7 +1141,7 @@ function renderDash(){
 
   var checkins=dWk==='all'?dCheckins:dCheckins.filter(function(c){return parseInt(c.week)===(dWk+1);});
   var vp=[0,0,4,4,5,5];
-  var verp=dWk==='all'?24:(vp[dWk]||0);
+  var verp=dWk==='all'?0:(vp[dWk]||0);
 
   // Stats per speler
   var stats={};
@@ -1168,7 +1168,8 @@ function renderDash(){
   var totC=0,totK=[],totL=[],nR=0,nO=0;
   namen.forEach(function(nm){
     var s=stats[nm];
-    totC+=verp>0?s.gedaan/verp*100:100;
+    var verpPerSpeler=dWk==='all'?(s.positie&&s.positie.toLowerCase().indexOf('keeper')>-1?14:18):verp;
+    if(verpPerSpeler>0)totC+=Math.min(100,s.gedaan/verpPerSpeler*100);
     totK=totK.concat(s.bk);totL=totL.concat(s.bl);
     var sg=dSig(s,verp);
     if(sg.l==='rood')nR++;else if(sg.l==='oranje')nO++;
@@ -1191,7 +1192,9 @@ function renderDash(){
     var rows='';
     namen.sort().forEach(function(nm){
       var s=stats[nm];
-      var comp=verp===0?'<span class="dbadge dbbl">opt.</span>':s.gedaan+'/'+verp;
+      var totSessAll=s.bk.length+s.bl.length;
+      var verpPS=dWk==='all'?(s.positie&&s.positie.toLowerCase().indexOf('keeper')>-1?14:18):verp;
+      var comp=verpPS===0?('<span class="dbadge dbg">'+s.gedaan+'/'+totSessAll+'</span>'):s.gedaan+'/'+verpPS;
       var gkr=s.bk.length>0?(s.bk.reduce(function(a,b){return a+b;},0)/s.bk.length).toFixed(1):'—';
       var glp=s.bl.length>0?(s.bl.reduce(function(a,b){return a+b;},0)/s.bl.length).toFixed(1):'—';
       var sg=dSig(s,verp);
@@ -1296,10 +1299,14 @@ function showProfiel(naam){
     if(!isNaN(b)){if(t==='Kracht A')wkd[w].ka=b;else if(t==='Kracht B')wkd[w].kb=b;else if(t==='Duurtraining')wkd[w].en=b;else if(t==='Loopintervaltraining')wkd[w].vo=b;else if(t==='HIIT')wkd[w].hi=b;}
   });
   function bc(v){if(v===null)return '<td style="text-align:center;color:rgba(255,255,255,.15)">—</td>';var cl=v>=9?'color:#f87171;font-weight:700':v>=8?'color:#fb923c;font-weight:600':'';return '<td style="text-align:center;'+cl+'">'+v+'</td>';}
-  var isKp=(s.positie||'').toLowerCase().indexOf('keeper')>-1;var vp=isKp?[0,0,4,4,4,4]:[0,0,4,4,5,5];var br='';
+  var isKp2=(s.positie||'').toLowerCase().indexOf('keeper')>-1;var vp=isKp2?[0,0,3,3,4,4]:[0,0,4,4,5,5];var br='';
   for(var w=1;w<=6;w++){
     var d=wkd[w];var vr=vp[w-1];
-    var vr2=vp[w-1];var cb=vr2===0?'<span class="dbadge dbbl">opt.</span>':('<span class="dbadge '+(d.gedaan>=vr2?'dbg':d.gedaan>=vr2-1?'dbo':'dbr')+'">'+(d.gedaan+'/'+vr2)+'</span>');
+    var vr2=vp[w-1];
+    var totW2=[d.ka,d.kb,d.en,d.vo,d.hi].filter(function(x){return x!==null;}).length+d.gedaan;
+    var cbCount=d.gedaan;
+    var cbDenom=vr2>0?vr2:totW2;
+    var cb=cbDenom===0?'—':vr2===0?('<span class="dbadge dbg">'+cbCount+'/'+cbDenom+'</span>'):('<span class="dbadge '+(cbCount>=cbDenom?'dbg':cbCount>=cbDenom-1?'dbo':'dbr')+'">'+(cbCount+'/'+cbDenom)+'</span>');
     br+='<tr><td>W'+w+(w===1?' <span style="color:rgba(255,255,255,.25);font-size:10px">(opt.)</span>':'')+'</td>'+bc(d.ka)+bc(d.kb)+bc(d.en)+bc(d.vo)+bc(d.hi)+'<td style="text-align:center">'+cb+'</td></tr>';
   }
   var th='<div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px">Load per training \xb7 alle weken</div><table style="font-size:11px"><thead><tr><th>Week</th><th style="text-align:center">Kr. A</th><th style="text-align:center">Kr. B</th><th style="text-align:center">Duur</th><th style="text-align:center">Interval</th><th style="text-align:center">HIIT</th><th style="text-align:center">Aanwezigheid</th></tr></thead><tbody>'+br+'</tbody></table>';

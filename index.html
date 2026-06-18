@@ -444,7 +444,7 @@ function bSch(){
   const z2l=kv(hm,hr,.6),z2h=kv(hm,hr,.7),z4l=kv(hm,hr,.8),z4h=kv(hm,hr,.9);
   const wk=D._w||0;
   const isKeeper=pos==='Keeper';
-  const WT=['Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht','Verplicht'];
+  const WT=['Optioneel','Optioneel','Deels verplicht','Deels verplicht','Verplicht','Verplicht'];
   const WC=['#888','#888','#888','#F4633A','#F4633A','#F4633A'];
   if(isKeeper){bSchKeeper(nm,leef,wk,WT,WC);return;}
   const hard=(wk>=4)||(pos==='Aanvaller'&&wk>=3);
@@ -1168,7 +1168,7 @@ function renderDash(){
   var totC=0,totK=[],totL=[],nR=0,nO=0;
   namen.forEach(function(nm){
     var s=stats[nm];
-    var totSessVerp=verp>0?verp:(s.bk.length+s.bl.length);totC+=totSessVerp>0?s.gedaan/totSessVerp*100:100;
+    totC+=verp>0?s.gedaan/verp*100:100;
     totK=totK.concat(s.bk);totL=totL.concat(s.bl);
     var sg=dSig(s,verp);
     if(sg.l==='rood')nR++;else if(sg.l==='oranje')nO++;
@@ -1191,7 +1191,7 @@ function renderDash(){
     var rows='';
     namen.sort().forEach(function(nm){
       var s=stats[nm];
-      var compVerp=verp>0?verp:(s.bk.length+s.bl.length);var comp=compVerp>0?s.gedaan+'/'+compVerp:'—';
+      var comp=verp===0?'<span class="dbadge dbbl">opt.</span>':s.gedaan+'/'+verp;
       var gkr=s.bk.length>0?(s.bk.reduce(function(a,b){return a+b;},0)/s.bk.length).toFixed(1):'—';
       var glp=s.bl.length>0?(s.bl.reduce(function(a,b){return a+b;},0)/s.bl.length).toFixed(1):'—';
       var sg=dSig(s,verp);

@@ -1299,7 +1299,7 @@ function showProfiel(naam){
   var vp=[0,0,4,4,5,5];var br='';
   for(var w=1;w<=6;w++){
     var d=wkd[w];var vr=vp[w-1];
-    var totW=([d.ka,d.kb,d.en,d.vo,d.hi].filter(function(x){return x!==null;}).length);var cb=totW===0?'—':'<span class="dbadge '+(d.gedaan>=totW?'dbg':d.gedaan>=totW-1?'dbo':'dbr')+'">'+(d.gedaan+'/'+totW)+'</span>';
+    var vr2=vp[w-1];var cb=vr2===0?'<span class="dbadge dbbl">opt.</span>':('<span class="dbadge '+(d.gedaan>=vr2?'dbg':d.gedaan>=vr2-1?'dbo':'dbr')+'">'+(d.gedaan+'/'+vr2)+'</span>');
     br+='<tr><td>W'+w+(w===1?' <span style="color:rgba(255,255,255,.25);font-size:10px">(opt.)</span>':'')+'</td>'+bc(d.ka)+bc(d.kb)+bc(d.en)+bc(d.vo)+bc(d.hi)+'<td style="text-align:center">'+cb+'</td></tr>';
   }
   var th='<div style="font-size:11px;color:rgba(255,255,255,.3);margin-bottom:8px">Load per training \xb7 alle weken</div><table style="font-size:11px"><thead><tr><th>Week</th><th style="text-align:center">Kr. A</th><th style="text-align:center">Kr. B</th><th style="text-align:center">Duur</th><th style="text-align:center">Interval</th><th style="text-align:center">HIIT</th><th style="text-align:center">Aanwezigheid</th></tr></thead><tbody>'+br+'</tbody></table>';
@@ -1480,11 +1480,14 @@ function downloadPDF(){
     if(extras.length>0){
       doc.setFillColor(235,225,255);doc.rect(M,y,W-M*2,5.5,'F');
       doc.setTextColor(120,80,180);doc.setFont('helvetica','bold');doc.setFontSize(6.5);
-      doc.text('EXTRA (blessurehistorie):',M+2,y+4);
-      doc.setFont('helvetica','normal');
-      var extStr=extras.join('  ·  ');
-      doc.text(extStr,M+38,y+4);
+      doc.text('EXTRA BLOK (blessurehistorie):',M+2,y+4);
       y+=6;
+      for(var ei=0;ei<extras.length;ei++){
+        doc.setFillColor(245,240,255);doc.rect(M,y,W-M*2,5,'F');
+        doc.setFont('helvetica','normal');doc.setFontSize(6.5);doc.setTextColor(120,80,180);
+        doc.text('+ '+extras[ei],M+4,y+3.5);
+        y+=5.5;
+      }
     }
     y+=3;
 

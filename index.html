@@ -1168,7 +1168,7 @@ function renderDash(){
   var totC=0,totK=[],totL=[],nR=0,nO=0;
   namen.forEach(function(nm){
     var s=stats[nm];
-    var totSess=s.bk.length+s.bl.length;totC+=totSess>0?s.gedaan/totSess*100:100;
+    var totSessVerp=verp>0?verp:(s.bk.length+s.bl.length);totC+=totSessVerp>0?s.gedaan/totSessVerp*100:100;
     totK=totK.concat(s.bk);totL=totL.concat(s.bl);
     var sg=dSig(s,verp);
     if(sg.l==='rood')nR++;else if(sg.l==='oranje')nO++;
@@ -1191,7 +1191,7 @@ function renderDash(){
     var rows='';
     namen.sort().forEach(function(nm){
       var s=stats[nm];
-      var totSess2=s.bk.length+s.bl.length;var comp=totSess2>0?s.gedaan+'/'+totSess2:'—';
+      var compVerp=verp>0?verp:(s.bk.length+s.bl.length);var comp=compVerp>0?s.gedaan+'/'+compVerp:'—';
       var gkr=s.bk.length>0?(s.bk.reduce(function(a,b){return a+b;},0)/s.bk.length).toFixed(1):'—';
       var glp=s.bl.length>0?(s.bl.reduce(function(a,b){return a+b;},0)/s.bl.length).toFixed(1):'—';
       var sg=dSig(s,verp);

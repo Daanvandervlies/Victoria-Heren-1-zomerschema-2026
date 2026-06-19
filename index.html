@@ -411,7 +411,7 @@ function buildRM(){
 function go(n){
   if(n===3)buildRM();
   ['P0','P1','P2','P3','P4'].forEach((id,i)=>document.getElementById(id).className='pane'+(i===n?' show':''));
-  rsb(n);if(n===4){bSch();syncIntake();}
+  rsb(n);if(n===4){bSch();syncIntake();saveSchema();}
 }
 
 function rsb(c){
@@ -1609,6 +1609,52 @@ function downloadPDF(){
   // Stel dWk in op verlopen weken (voor aanwezigheidsberekening)
   window.dHuidigeWeek=huidig;
 })();
+
+function resetSchema(){
+  if(confirm('Wil je je schema opnieuw invullen? Je huidige gegevens worden gewist.')){
+    try{
+      localStorage.removeItem('vich1_schema');
+      localStorage.removeItem('vich1_schema_saved');
+    }catch(e){}
+    go(0);
+  }
+}
+
+function saveSchema(){
+  try{
+    localStorage.setItem('vich1_schema', JSON.stringify(D));
+    localStorage.setItem('vich1_schema_saved','1');
+  }catch(e){}
+}
+
+function loadSchema(){
+  try{
+    var saved=localStorage.getItem('vich1_schema');
+    if(!saved)return false;
+    var d=JSON.parse(saved);
+    if(!d||!d.naam)return false;
+    // Restore D object
+    Object.assign(D,d);
+    return true;
+  }catch(e){return false;}
+}
+
+// On load: check if schema was saved, if so jump to schema directly
+(function(){
+  try{
+    var ok=localStorage.getItem('vich1_ok');
+    var schemaSaved=localStorage.getItem('vich1_schema_saved');
+    if((ok==='speler'||ok==='1') && schemaSaved==='1'){
+      if(loadSchema()){
+        document.getElementById('pwpage').style.display='none';
+        document.getElementById('mainwrap').style.display='block';
+        // Jump to schema tab
+        setTimeout(function(){go(4);},50);
+      }
+    }
+  }catch(e){}
+})();
+
 
 rsb(0);
 </script>
